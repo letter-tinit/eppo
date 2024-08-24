@@ -30,3 +30,7 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+
+### Xcode
+eppo.xcodeproj/project.xcworkspace/xcuserdata/letter.xcuserdatad/UserInterfaceState.xcuserstate
+
