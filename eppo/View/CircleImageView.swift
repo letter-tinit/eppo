@@ -6,26 +6,27 @@
 
 import SwiftUI
 
-struct CircleImage: View {
+struct CircleImageView: View {
     // MARK: - PROPERTY
-  var image: Image
-
+    var image: Image
+    var size: CGFloat
+    
     // MARK: - BODY
-
-  var body: some View {
-    image
-      .resizable()
-      .scaledToFill()
-      .frame(width: 40, height: 40)
-      .clipShape(
-        Circle()
-      )
-      .clipped()
-      .overlay(Circle().stroke(Color.gray.opacity(0.7), lineWidth: 0.5))
-  }
+    
+    var body: some View {
+        image
+            .resizable()
+            .scaledToFill()
+            .frame(width: size, height: size)
+            .clipShape(
+                Circle()
+            )
+            .clipped()
+            .overlay(Circle().stroke(Color.gray.opacity(0.7), lineWidth: 0.5))
+    }
 }
 
 // MARK: PREVIEW
 #Preview {
-  CircleImage(image: Image("avatar"))
+    CircleImageView(image: Image("avatar"), size: 40)
 }

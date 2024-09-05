@@ -30,17 +30,17 @@ struct CustomHeaderView: View {
             
             Spacer()
             
-            Text("Giỏ hàng")
+            Text(title)
                 .font(.system(size: 22, weight: .semibold))
                 .frame(alignment: .center)
                 .padding(.leading, -buttonWidth)
             
             Spacer()
         }
-        .foregroundStyle(.white)
-        .frame(width: .infinity, height: 70, alignment: .bottom)
-        .padding(.bottom, 10)
         .padding(.horizontal, 20)
+        .foregroundStyle(.white)
+        .frame(width: UIScreen.main.bounds.size.width, height: 70, alignment: .bottom)
+        .padding(.bottom, 10)
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
         )

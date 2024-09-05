@@ -11,7 +11,7 @@ import SwiftUI
 struct EppoApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginScreen()
+            ProfileScreen()
         }
     }
 }

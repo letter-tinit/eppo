@@ -21,7 +21,7 @@ struct CustomAvatarHeader: View {
     var body: some View {
         HStack {
             HStack {
-                CircleImage(image: image)
+                CircleImageView(image: image, size: 40)
                 
                 Text(name)
                     .font(.system(size: 22, weight: .medium))

@@ -11,16 +11,14 @@ struct BorderTextField<Content: View>: View {
     let content: () -> Content
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .leading) {
             Color(.textFieldBackground)
-            
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(.gray.opacity(0.6), lineWidth: 1)
             
             content()
                 .textInputAutocapitalization(.never)
                 .padding(.horizontal, 20)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 
@@ -28,4 +26,6 @@ struct BorderTextField<Content: View>: View {
     BorderTextField {
         TextField("placeholder", text: .constant("text field"))
     }
+    .frame(height: 50)
+    .padding(.horizontal)
 }
