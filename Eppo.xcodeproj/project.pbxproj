@@ -58,27 +58,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C7EDB462C8946EC005CCAEB /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				2CDC7E022C77F31100028AC8 /* ActiveScreen.swift */,
+				2CC5A2282C5A019300D0035D /* LoginScreen.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		2CA48EF32C76F2BF00569212 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2C7EDB462C8946EC005CCAEB /* Auth */,
 				2CED22DE2C7C34A50065025B /* General */,
 				2CED22DD2C7C34420065025B /* Profile */,
-				2CA48EF42C76F2DC00569212 /* BorderTextField.swift */,
-				2CDC7E022C77F31100028AC8 /* ActiveScreen.swift */,
-				2C2135582C7992DA0076D82F /* CustomHeaderView.swift */,
-				2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */,
-				2C21355E2C799F8E0076D82F /* CircleImageView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		2CA48EF62C76F7BB00569212 /* Screen */ = {
-			isa = PBXGroup;
-			children = (
-				2CC5A2282C5A019300D0035D /* LoginScreen.swift */,
-				2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */,
-			);
-			path = Screen;
 			sourceTree = "<group>";
 		};
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
@@ -116,7 +112,6 @@
 			children = (
 				2CBFCE6A2C79D51A00FB73CA /* Manager */,
 				2CBFCE682C79D50F00FB73CA /* Model */,
-				2CA48EF62C76F7BB00569212 /* Screen */,
 				2CA48EF32C76F2BF00569212 /* View */,
 				2CC5A2262C5A019300D0035D /* EppoApp.swift */,
 				2CC5A22A2C5A019500D0035D /* Assets.xcassets */,
@@ -136,6 +131,7 @@
 		2CED22DD2C7C34420065025B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */,
 				2CDD31542C871FB500B731E0 /* GenderRadioButton.swift */,
 				2CED22E12C7C358E0065025B /* BalanceBox.swift */,
 				2C78D6012C7D6C8E00204BFE /* CustomSettingNavigationLink.swift */,
@@ -148,6 +144,10 @@
 		2CED22DE2C7C34A50065025B /* General */ = {
 			isa = PBXGroup;
 			children = (
+				2CA48EF42C76F2DC00569212 /* BorderTextField.swift */,
+				2C2135582C7992DA0076D82F /* CustomHeaderView.swift */,
+				2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */,
+				2C21355E2C799F8E0076D82F /* CircleImageView.swift */,
 				2CED22DF2C7C34D70065025B /* ContentBox.swift */,
 				2C78D5FF2C7D662000204BFE /* CustomButtonImage.swift */,
 			);
