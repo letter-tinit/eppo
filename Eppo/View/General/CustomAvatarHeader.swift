@@ -12,6 +12,7 @@ struct CustomAvatarHeader: View {
     
     var name: String
     var image: Image
+    var withClose: Bool
     
     @Environment(\.dismiss) var dismiss
     
@@ -37,6 +38,7 @@ struct CustomAvatarHeader: View {
                 .fontWeight(.medium)
                 .padding(.trailing, 30)
                 .frame(width: 30, height: 30)
+                .opacity(withClose ? 1 : 0)
         }
         .foregroundStyle(.white)
         .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .bottom)
@@ -44,13 +46,14 @@ struct CustomAvatarHeader: View {
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
         )
+        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
     VStack {
-        CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"))
+        CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
         
         Spacer()
     }
