@@ -32,8 +32,8 @@ struct HomeHeader: View {
             .padding(.horizontal)
             
             HStack(spacing: 20) {
-                Button {
-                    
+                NavigationLink {
+                    ItemBuyScreen()
                 } label: {
                     VStack {
                         Image("bonsai")
@@ -46,7 +46,7 @@ struct HomeHeader: View {
                             .foregroundStyle(.black)
                     }
                 }
-                
+
                 Button {
                     
                 } label: {
@@ -92,8 +92,7 @@ struct HomeHeader: View {
                     }
                 }
             }
-            
-            Spacer()
+            .padding(.bottom)
         }
         .background(Color.white)
     }

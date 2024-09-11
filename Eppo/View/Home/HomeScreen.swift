@@ -13,22 +13,25 @@ struct HomeScreen: View {
     // MARK: - BODY
 
     var body: some View {
-        VStack {
-            HomeHeader()
-                .frame(height: 300)
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    
-                    FlashSale()
-                        .frame(height: 250)
-                    
-                    RecomendGrid()
+        NavigationView {
+            VStack(spacing: 0) {
+                HomeHeader()
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        FlashSale()
+                            .frame(height: 250)
+                        
+                        RecomendGrid()
+                    }
                 }
+                .padding(.bottom)
+                
+                Spacer()
             }
             .background(Color.init(uiColor: UIColor.systemGray5))
+            .ignoresSafeArea(.all)
         }
-        .ignoresSafeArea(.all)
     }
 }
 

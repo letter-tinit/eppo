@@ -23,40 +23,42 @@ struct MainTabView: View {
     
     // MARK: - BODY
     var body: some View {
-        TabView(selection: $selectedTab) {
-            AuctionScreen()
-                .tabItem {
-                    Image(selectedTab == .profile ? "selected-auction" : "auction")
-                    Text("Đấu giá")
-                }
-                .tag(Tab.profile)
-            
-            ProfileScreen()
-                .tabItem {
-                    Label("Tin nhắn", systemImage: "ellipsis.message")
-                }
-                .tag(Tab.chat)
-            
-            HomeScreen()
-                .tabItem {
-                    Label("Khám phá", systemImage: "house")
-                }
-                .tag(Tab.explore)
-            
-            ProfileScreen()
-                .tabItem {
-                    Label("Thông báo", systemImage: "bell")
-                }
-                .tag(Tab.notification)
-            
-            ProfileScreen()
-                .tabItem {
-                    Label("Tài khoản", systemImage: "person.fill")
-                }
-                .tag(Tab.profile)
+        NavigationStack {
+            TabView(selection: $selectedTab) {
+                AuctionScreen()
+                    .tabItem {
+                        Image(selectedTab == .profile ? "selected-auction" : "auction")
+                        Text("Đấu giá")
+                    }
+                    .tag(Tab.profile)
+                
+                ProfileScreen()
+                    .tabItem {
+                        Label("Tin nhắn", systemImage: "ellipsis.message")
+                    }
+                    .tag(Tab.chat)
+                
+                HomeScreen()
+                    .tabItem {
+                        Label("Khám phá", systemImage: "house")
+                    }
+                    .tag(Tab.explore)
+                
+                ProfileScreen()
+                    .tabItem {
+                        Label("Thông báo", systemImage: "bell")
+                    }
+                    .tag(Tab.notification)
+                
+                ProfileScreen()
+                    .tabItem {
+                        Label("Tài khoản", systemImage: "person.fill")
+                    }
+                    .tag(Tab.profile)
 
+            }
+            .tint(.black)
         }
-        .tint(.black)
     }
 }
 
