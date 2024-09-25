@@ -18,14 +18,16 @@ struct HomeScreen: View {
                 HomeHeader()
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 0) {
+                    VStack(spacing: 10) {
                         FlashSale()
-                            .frame(height: 250)
+                            .frame(height: 220)
+                            .background(.clear)
                         
                         RecomendGrid()
+                        
                     }
                 }
-                .padding(.bottom)
+                .padding(.vertical, 10)
                 
                 Spacer()
             }

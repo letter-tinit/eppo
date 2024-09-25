@@ -30,8 +30,10 @@ struct FlashSale: View {
                 }
                 .padding(.horizontal, 10)
             }
+            
+            Spacer()
         }
-        .padding(.vertical)
+        .padding(.top)
         .background(Color.white)
     }
 }

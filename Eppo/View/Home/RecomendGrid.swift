@@ -6,21 +6,16 @@
 
 import SwiftUI
 
+
+
 struct RecomendGrid: View {
     // MARK: - PROPERTY
-    @State private var segment = 0
+    
+    
     private var data  = Array(1...10)
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
-    
-    
-    init() {
-        UISegmentedControl.appearance().selectedSegmentTintColor = .purple
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.purple], for: .normal)
-        UISegmentedControl.appearance().backgroundColor = .lightBlue
-    }
     
     // MARK: - BODY
     
@@ -39,7 +34,6 @@ struct RecomendGrid: View {
                             Text("Sen Đá Kim Cương Haworthia Cooperi")
                                 .font(.system(size: 12, weight: .regular, design: .rounded))
                                 .multilineTextAlignment(.leading)
-                            
                             
                             Text("50.000₫")
                                 .font(.system(size: 12, weight: .semibold, design: .rounded))
@@ -60,14 +54,7 @@ struct RecomendGrid: View {
                     .shadow(color: .black.opacity(0.5), radius: 2, y: 4)
                 }
             } header: {
-                Picker("Tab segments", selection: $segment) {
-                    Text("Dành cho bạn").tag(0)
-                    Text("Cho Thuê").tag(1)
-                }
-                .pickerStyle(.segmented)
-                .foregroundStyle(.red)
-                .padding(.horizontal, 50)
-                .padding(.top)
+                RecommendSectionHeader()
             }
         }
         .padding(.bottom, 100)

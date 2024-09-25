@@ -9,16 +9,20 @@ import SwiftUI
 
 enum Tab: String, CaseIterable {
     case auction
-    case chat
-    case explore
-    case profile
     case notification
+    case explore
+    case cart
+    case profile
 }
 
 struct MainTabView: View {
     // MARK: - PROPERTY
     
-    @State private var selectedTab: Tab = .explore
+    @State private var selectedTab: Tab = .profile
+    
+    init () {
+//        UITabBar.appearance().backgroundColor = UIColor.white
+    }
     
     
     // MARK: - BODY
@@ -27,16 +31,16 @@ struct MainTabView: View {
             TabView(selection: $selectedTab) {
                 AuctionScreen()
                     .tabItem {
-                        Image(selectedTab == .profile ? "selected-auction" : "auction")
+                        Image(selectedTab == .auction ? "selected-auction" : "auction")
                         Text("Đấu giá")
                     }
-                    .tag(Tab.profile)
+                    .tag(Tab.auction)
                 
-                ProfileScreen()
+                NotificationScreen()
                     .tabItem {
-                        Label("Tin nhắn", systemImage: "ellipsis.message")
+                        Label("Thông báo", systemImage: "bell")
                     }
-                    .tag(Tab.chat)
+                    .tag(Tab.notification)
                 
                 HomeScreen()
                     .tabItem {
@@ -44,11 +48,11 @@ struct MainTabView: View {
                     }
                     .tag(Tab.explore)
                 
-                ProfileScreen()
-                    .tabItem {
-                        Label("Thông báo", systemImage: "bell")
-                    }
-                    .tag(Tab.notification)
+//                ProfileScreen()
+//                    .tabItem {
+//                        Label("Giỏ hàng", systemImage: "cart")
+//                    }
+//                    .tag(Tab.notification)
                 
                 ProfileScreen()
                     .tabItem {
@@ -58,7 +62,9 @@ struct MainTabView: View {
 
             }
             .tint(.black)
+//            .foregroundStyle(.black)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
