@@ -13,9 +13,9 @@ struct CustomAvatarHeader: View {
     var name: String
     var image: Image
     var withClose: Bool
-    
+    var isReturnMain: Bool = false
+
     @Environment(\.dismiss) var dismiss
-    
     
     // MARK: - BODY
     
@@ -32,13 +32,33 @@ struct CustomAvatarHeader: View {
             
             Spacer()
             
-            Image(systemName: "rectangle.portrait.and.arrow.right")
-                .resizable()
-                .scaledToFill()
-                .fontWeight(.medium)
-                .padding(.trailing, 30)
-                .frame(width: 30, height: 30)
+            if isReturnMain {
+                NavigationLink {
+                    MainTabView()
+                } label: {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .resizable()
+                        .scaledToFill()
+                        .fontWeight(.medium)
+                        .padding(.trailing, 30)
+                        .frame(width: 30, height: 30)
+                }
                 .opacity(withClose ? 1 : 0)
+            } else {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .resizable()
+                        .scaledToFill()
+                        .fontWeight(.medium)
+                        .padding(.trailing, 30)
+                        .frame(width: 30, height: 30)
+                }
+                .opacity(withClose ? 1 : 0)
+            }
+            
+            
         }
         .foregroundStyle(.white)
         .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .bottom)
@@ -46,7 +66,6 @@ struct CustomAvatarHeader: View {
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
 

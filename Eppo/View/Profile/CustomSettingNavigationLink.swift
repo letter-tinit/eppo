@@ -22,7 +22,7 @@ struct CustomSettingNavigationLink<Destination: View>: View {
                 Image(systemName: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: 20)
+                    .frame(width: 20)
                 
                 Text(title)
                     .font(.system(size: 16))

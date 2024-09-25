@@ -47,7 +47,7 @@ struct HomeHeader: View {
                     }
                 }
 
-                Button {
+                NavigationLink {
                     
                 } label: {
                     VStack {
@@ -62,8 +62,8 @@ struct HomeHeader: View {
                     }
                 }
                 
-                Button {
-                    
+                NavigationLink {
+                    AuctionRoomScreen()
                 } label: {
                     VStack {
                         Image("auction-room")

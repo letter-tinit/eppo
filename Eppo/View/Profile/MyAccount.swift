@@ -41,8 +41,6 @@ struct MyAccount: View {
                             }
                         }
                     
-
-                    
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Tên Đăng Nhập")
                             .foregroundStyle(.textDarkBlue)

@@ -26,9 +26,7 @@ struct ProfileScreen: View {
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(.gray)
                         
-                        
                     } //: HEADER STACK
-                    
                     HStack(spacing: 20) {
                         BalanceBox(balance: "10.000.000")
                         
@@ -86,6 +84,14 @@ struct ProfileScreen: View {
                             
                             Divider()
                             
+                            CustomSettingNavigationLink(image: "message", title: "Nhắn tin với quản trị", destination: ChatScreen())
+                            
+                            Divider()
+                            
+                            CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: Text("Destination View"))
+                            
+                            Divider()
+                            
                             CustomSettingNavigationLink(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: Text("Destination View"))
                             
                             Divider()
@@ -95,13 +101,9 @@ struct ProfileScreen: View {
                             Divider()
                             
                             CustomSettingNavigationLink(image: "questionmark.bubble", title: "Hỗ trợ", destination: Text("Destination View"))
-                            
-                            Divider()
-                            
-                            CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: Text("Destination View"))
                         }
                     }
-                    .frame(height: 320)
+                    .frame(height: 360)
                     
                     Spacer(minLength: 80)
                     
