@@ -8,7 +8,12 @@ import SwiftUI
 
 struct ProfileScreen: View {
     // MARK: - PROPERTY
-    
+    @State private var isActiveWaitingForConfirmed = false
+    @State private var isActiveWaitingForPackage = false
+    @State private var isActiveWaitingForDelivered = false
+    @State private var isActiveRating = false
+
+    @State var selectedOrderState: OrderState = .delivered
     // MARK: - BODY
     
     var body: some View {
@@ -54,13 +59,45 @@ struct ProfileScreen: View {
                             .foregroundStyle(.settingBoxBackground)
                         
                         HStack(spacing: 14) {
-                            CustomButtonImage(imageName: "list.clipboard.fill", title: "Chờ xác nhận", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForConfirm)))
+                            Button {
+                                isActiveWaitingForConfirmed = true
+                                selectedOrderState = .waitingForConfirm
+                            } label: {
+                                CustomButtonImageLabel(imageName: "list.clipboard.fill", title: "Chờ xác nhận")
+                            }
+                            .navigationDestination(isPresented: $isActiveWaitingForConfirmed) {
+                                OrderHistoryScreen(selectedOrderState: $selectedOrderState)
+                            }
                             
-                            CustomButtonImage(imageName: "clock.arrow.circlepath", title: "Chờ đóng gói", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForPackage)))
+                            Button {
+                                isActiveWaitingForPackage = true
+                                selectedOrderState = .waitingForPackage
+                            } label: {
+                                CustomButtonImageLabel(imageName: "clock.arrow.circlepath", title: "Chờ đóng gói")
+                            }
+                            .navigationDestination(isPresented: $isActiveWaitingForPackage) {
+                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+                            }
+
+                            Button {
+                                isActiveWaitingForDelivered = true
+                                selectedOrderState = .waitingForDeliver
+                            } label: {
+                                CustomButtonImageLabel(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng")
+                            }
+                            .navigationDestination(isPresented: $isActiveWaitingForDelivered) {
+                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+                            }
                             
-                            CustomButtonImage(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForDeliver)))
-                            
-                            CustomButtonImage(imageName: "star.bubble.fill", title: "Đánh giá", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForPackage)))
+                            Button {
+                                isActiveRating = true
+                                selectedOrderState = .waitingForDeliver
+                            } label: {
+                                CustomButtonImageLabel(imageName: "star.bubble.fill", title: "Đánh giá")
+                            }
+                            .navigationDestination(isPresented: $isActiveRating) {
+                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+                            }
                         }
                     }
                     .frame(height: 90)
@@ -84,7 +121,7 @@ struct ProfileScreen: View {
                             
                             Divider()
                             
-                            CustomSettingNavigationLink(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: Text("Destination View"))
+                            CustomSettingNavigationLink(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: TransactionHistoryScreen())
                             
                             Divider()
                             

@@ -21,6 +21,8 @@
 		2C4888672CA3D0A7009E93E6 /* RecommendSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4888662CA3D0A6009E93E6 /* RecommendSectionHeader.swift */; };
 		2C5540612CA4032400F39C0E /* OrderHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */; };
 		2C5920ED2CA794FA004E996F /* DeliveredOrderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5920EC2CA794FA004E996F /* DeliveredOrderRowView.swift */; };
+		2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5920EF2CA7982C004E996F /* TransactionHistoryScreen.swift */; };
+		2C5920F22CA79913004E996F /* TransactionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5920F12CA79913004E996F /* TransactionHeader.swift */; };
 		2C605DE52C9AFF410030895B /* ChatScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C605DE42C9AFF410030895B /* ChatScreen.swift */; };
 		2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C605DE72C9B08880030895B /* MyChatBox.swift */; };
 		2C605DEA2C9B08FD0030895B /* PartnerChatBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C605DE92C9B08FD0030895B /* PartnerChatBox.swift */; };
@@ -40,7 +42,11 @@
 		2C7330E82C896E8500A0F092 /* FlashSaleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7330E72C896E8500A0F092 /* FlashSaleItem.swift */; };
 		2C78D6002C7D662000204BFE /* CustomButtonImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C78D5FF2C7D662000204BFE /* CustomButtonImage.swift */; };
 		2C78D6022C7D6C8E00204BFE /* CustomSettingNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C78D6012C7D6C8E00204BFE /* CustomSettingNavigationLink.swift */; };
+		2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900532CA79FA90015B320 /* OrderButtonLabel.swift */; };
+		2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */; };
+		2C7900582CA7A3E00015B320 /* TransactionTypeStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */; };
 		2C7EDB482C894A8B005CCAEB /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7EDB472C894A8B005CCAEB /* MainTabView.swift */; };
+		2C8BC30D2CA7D9A30082F075 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */; };
 		2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */; };
 		2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */; };
 		2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA48EF42C76F2DC00569212 /* BorderTextField.swift */; };
@@ -75,6 +81,8 @@
 		2C4888662CA3D0A6009E93E6 /* RecommendSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendSectionHeader.swift; sourceTree = "<group>"; };
 		2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryScreen.swift; sourceTree = "<group>"; };
 		2C5920EC2CA794FA004E996F /* DeliveredOrderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveredOrderRowView.swift; sourceTree = "<group>"; };
+		2C5920EF2CA7982C004E996F /* TransactionHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHistoryScreen.swift; sourceTree = "<group>"; };
+		2C5920F12CA79913004E996F /* TransactionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHeader.swift; sourceTree = "<group>"; };
 		2C605DE42C9AFF410030895B /* ChatScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatScreen.swift; sourceTree = "<group>"; };
 		2C605DE72C9B08880030895B /* MyChatBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatBox.swift; sourceTree = "<group>"; };
 		2C605DE92C9B08FD0030895B /* PartnerChatBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerChatBox.swift; sourceTree = "<group>"; };
@@ -94,7 +102,11 @@
 		2C7330E72C896E8500A0F092 /* FlashSaleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashSaleItem.swift; sourceTree = "<group>"; };
 		2C78D5FF2C7D662000204BFE /* CustomButtonImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonImage.swift; sourceTree = "<group>"; };
 		2C78D6012C7D6C8E00204BFE /* CustomSettingNavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettingNavigationLink.swift; sourceTree = "<group>"; };
+		2C7900532CA79FA90015B320 /* OrderButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderButtonLabel.swift; sourceTree = "<group>"; };
+		2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonImageLabel.swift; sourceTree = "<group>"; };
+		2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypeStack.swift; sourceTree = "<group>"; };
 		2C7EDB472C894A8B005CCAEB /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		2CA48EF42C76F2DC00569212 /* BorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTextField.swift; sourceTree = "<group>"; };
@@ -131,8 +143,20 @@
 			children = (
 				2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */,
 				2C5920EC2CA794FA004E996F /* DeliveredOrderRowView.swift */,
+				2C7900532CA79FA90015B320 /* OrderButtonLabel.swift */,
 			);
 			path = Order;
+			sourceTree = "<group>";
+		};
+		2C5920EE2CA7980F004E996F /* Transaction */ = {
+			isa = PBXGroup;
+			children = (
+				2C5920EF2CA7982C004E996F /* TransactionHistoryScreen.swift */,
+				2C5920F12CA79913004E996F /* TransactionHeader.swift */,
+				2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */,
+				2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */,
+			);
+			path = Transaction;
 			sourceTree = "<group>";
 		};
 		2C605DE62C9B07AD0030895B /* Chat */ = {
@@ -206,6 +230,7 @@
 		2CA48EF32C76F2BF00569212 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2C5920EE2CA7980F004E996F /* Transaction */,
 				2C55405F2CA4030800F39C0E /* Order */,
 				2C6B245D2CA3E8F80021CA98 /* Notification */,
 				2C605DE62C9B07AD0030895B /* Chat */,
@@ -281,6 +306,7 @@
 				2C78D6012C7D6C8E00204BFE /* CustomSettingNavigationLink.swift */,
 				2CDD314D2C87085900B731E0 /* MyAccount.swift */,
 				2CDD31562C87297000B731E0 /* EditAvatarButton.swift */,
+				2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -377,6 +403,7 @@
 				2C2135592C7992DA0076D82F /* CustomHeaderView.swift in Sources */,
 				2C5540612CA4032400F39C0E /* OrderHistoryScreen.swift in Sources */,
 				2C7330E62C896B9A00A0F092 /* FlashSale.swift in Sources */,
+				2C7900582CA7A3E00015B320 /* TransactionTypeStack.swift in Sources */,
 				2C37F6042C8ED898003D7468 /* AuctionDetailScreen.swift in Sources */,
 				2C6B24632CA3F3020021CA98 /* SingleHeaderView.swift in Sources */,
 				2CDD31552C871FB500B731E0 /* GenderRadioButton.swift in Sources */,
@@ -391,8 +418,10 @@
 				2C68E1F12C8C204900C8D0A0 /* AuctionScreen.swift in Sources */,
 				2C37F6082C8EDB41003D7468 /* ItemDetailScreen.swift in Sources */,
 				2C7330E22C8962E600A0F092 /* SearchBar.swift in Sources */,
+				2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */,
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
+				2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */,
 				2CB7EC032C9F0924000E1407 /* FooterToolBar.swift in Sources */,
 				2C37F60C2C8EEB85003D7468 /* RatingView.swift in Sources */,
 				2C68E1F62C8C366D00C8D0A0 /* ToBuyItem.swift in Sources */,
@@ -404,12 +433,14 @@
 				2C605DE52C9AFF410030895B /* ChatScreen.swift in Sources */,
 				2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */,
 				2CDB80992C9143AE0006D3E6 /* ToAuctionItem.swift in Sources */,
+				2C5920F22CA79913004E996F /* TransactionHeader.swift in Sources */,
 				2CDC7E032C77F31100028AC8 /* ActiveScreen.swift in Sources */,
 				2CC5A2272C5A019300D0035D /* EppoApp.swift in Sources */,
 				2C6B24612CA3F09D0021CA98 /* NotificationRow.swift in Sources */,
 				2C439FD92C97D99B00BE7DEE /* AuctionRoomDetailScreen.swift in Sources */,
 				2C7330DE2C89598100A0F092 /* HomeScreen.swift in Sources */,
 				2C7330E82C896E8500A0F092 /* FlashSaleItem.swift in Sources */,
+				2C8BC30D2CA7D9A30082F075 /* TransactionRow.swift in Sources */,
 				2C4888672CA3D0A7009E93E6 /* RecommendSectionHeader.swift in Sources */,
 				2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */,
 				2C37F60E2C8EF94B003D7468 /* RateItem.swift in Sources */,
@@ -421,6 +452,7 @@
 				2C439FD52C97D2A600BE7DEE /* AuctionRoomScreen.swift in Sources */,
 				2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */,
 				2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */,
+				2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */,
 				2C6B245F2CA3E9070021CA98 /* NotificationScreen.swift in Sources */,
 				2C439FD72C97D34400BE7DEE /* AuctionRoomItem.swift in Sources */,
 			);
