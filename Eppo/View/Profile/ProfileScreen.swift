@@ -54,21 +54,13 @@ struct ProfileScreen: View {
                             .foregroundStyle(.settingBoxBackground)
                         
                         HStack(spacing: 14) {
-                            CustomButtonImage(imageName: "list.clipboard.fill", title: "Chờ xác nhận") {
-                                //action
-                            }
+                            CustomButtonImage(imageName: "list.clipboard.fill", title: "Chờ xác nhận", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForConfirm)))
                             
-                            CustomButtonImage(imageName: "clock.arrow.circlepath", title: "Chờ lấy hàng") {
-                                //action
-                            }
+                            CustomButtonImage(imageName: "clock.arrow.circlepath", title: "Chờ đóng gói", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForPackage)))
                             
-                            CustomButtonImage(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng") {
-                                //action
-                            }
+                            CustomButtonImage(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForDeliver)))
                             
-                            CustomButtonImage(imageName: "star.bubble.fill", title: "Đánh giá") {
-                                //action
-                            }
+                            CustomButtonImage(imageName: "star.bubble.fill", title: "Đánh giá", destination: OrderHistoryScreen(selectedOrderState: .constant(.waitingForPackage)))
                         }
                     }
                     .frame(height: 90)

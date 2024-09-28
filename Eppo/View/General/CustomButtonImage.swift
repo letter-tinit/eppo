@@ -6,17 +6,17 @@
 
 import SwiftUI
 
-struct CustomButtonImage: View {
+struct CustomButtonImage<Destination: View>: View {
     // MARK: - PROPERTY
     let imageName: String
     let title: String
-    let action: () -> Void
+    let destination: Destination
 
     // MARK: - BODY
 
     var body: some View {
-        Button {
-            
+        NavigationLink {
+            destination
         } label: {
             VStack(spacing: 10) {
                 Image(systemName: imageName)
@@ -33,8 +33,8 @@ struct CustomButtonImage: View {
 }
 
 // MARK: - PREVIEW
-#Preview {
-    CustomButtonImage(imageName: "person", title: "Person") {
-        //action
-    }
-}
+//#Preview {
+//    CustomButtonImage(imageName: "person", title: "Person") {
+//        //action
+//    }
+//}

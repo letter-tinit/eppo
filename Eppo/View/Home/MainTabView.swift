@@ -48,11 +48,11 @@ struct MainTabView: View {
                     }
                     .tag(Tab.explore)
                 
-//                ProfileScreen()
-//                    .tabItem {
-//                        Label("Giỏ hàng", systemImage: "cart")
-//                    }
-//                    .tag(Tab.notification)
+                ProfileScreen()
+                    .tabItem {
+                        Label("Giỏ hàng", systemImage: "cart")
+                    }
+                    .tag(Tab.notification)
                 
                 ProfileScreen()
                     .tabItem {
