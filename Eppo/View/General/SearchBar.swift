@@ -25,6 +25,7 @@ struct SearchBar: View {
         .padding(.vertical, 10)
         .padding(.horizontal, 15)
         .frame(height: 45)
+        .foregroundStyle(.black)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(.textFieldBackground)
