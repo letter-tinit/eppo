@@ -18,7 +18,7 @@ enum Tab: String, CaseIterable {
 struct MainTabView: View {
     // MARK: - PROPERTY
     
-    @State private var selectedTab: Tab = .profile
+    @State private var selectedTab: Tab = .cart
     
     init () {
 //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -48,11 +48,11 @@ struct MainTabView: View {
                     }
                     .tag(Tab.explore)
                 
-                ProfileScreen()
+                CartScreen()
                     .tabItem {
                         Label("Giỏ hàng", systemImage: "cart")
                     }
-                    .tag(Tab.notification)
+                    .tag(Tab.cart)
                 
                 ProfileScreen()
                     .tabItem {

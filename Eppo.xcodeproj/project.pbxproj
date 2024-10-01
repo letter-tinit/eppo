@@ -47,6 +47,7 @@
 		2C7900582CA7A3E00015B320 /* TransactionTypeStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */; };
 		2C7EDB482C894A8B005CCAEB /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7EDB472C894A8B005CCAEB /* MainTabView.swift */; };
 		2C8BC30D2CA7D9A30082F075 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */; };
+		2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8BC30F2CA7DDFA0082F075 /* CartScreen.swift */; };
 		2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */; };
 		2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */; };
 		2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA48EF42C76F2DC00569212 /* BorderTextField.swift */; };
@@ -107,6 +108,7 @@
 		2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypeStack.swift; sourceTree = "<group>"; };
 		2C7EDB472C894A8B005CCAEB /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		2C8BC30F2CA7DDFA0082F075 /* CartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartScreen.swift; sourceTree = "<group>"; };
 		2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		2CA48EF42C76F2DC00569212 /* BorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTextField.swift; sourceTree = "<group>"; };
@@ -227,9 +229,18 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		2C8BC30E2CA7DDF00082F075 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				2C8BC30F2CA7DDFA0082F075 /* CartScreen.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
 		2CA48EF32C76F2BF00569212 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2C8BC30E2CA7DDF00082F075 /* Cart */,
 				2C5920EE2CA7980F004E996F /* Transaction */,
 				2C55405F2CA4030800F39C0E /* Order */,
 				2C6B245D2CA3E8F80021CA98 /* Notification */,
@@ -453,6 +464,7 @@
 				2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */,
 				2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */,
 				2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */,
+				2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */,
 				2C6B245F2CA3E9070021CA98 /* NotificationScreen.swift in Sources */,
 				2C439FD72C97D34400BE7DEE /* AuctionRoomItem.swift in Sources */,
 			);
