@@ -14,7 +14,7 @@ struct ChatScreen: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomHeaderView(title: "EPPO - Hệ Thống Cây Cảnh")
+            CustomHeaderView(title: "Quản Trị Viên")
             
             ScrollView(.vertical) {
                 ForEach(0 ..< 5) { index in

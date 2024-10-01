@@ -31,7 +31,7 @@ struct HomeHeader: View {
             }
             .padding(.horizontal)
             
-            HStack(spacing: 20) {
+            HStack(spacing: 30) {
                 NavigationLink {
                     ItemBuyScreen()
                 } label: {
@@ -92,6 +92,7 @@ struct HomeHeader: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity)
             .padding(.bottom)
         }
         .background(Color.white)
