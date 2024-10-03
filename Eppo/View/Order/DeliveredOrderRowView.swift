@@ -98,8 +98,8 @@ struct DeliveredOrderRowView: View {
                 
                 Spacer(minLength: 20)
                 
-                Button {
-                    
+                NavigationLink {
+                    RatingSubmitView(itemName: itemName, itemType: itemType)
                 } label: {
                     Text("Đánh giá")
                         .frame(width: 120, height: 40)

@@ -153,7 +153,7 @@ struct AuctionDetailScreen: View {
                     
                 } label: {
                     Image(systemName: "creditcard")
-                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
                         .overlay(alignment: .center) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -174,7 +174,7 @@ struct AuctionDetailScreen: View {
                 } label: {
                     
                     Text("Đăng Ký")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
                         .foregroundStyle(.blue)
                         .frame(width: UIScreen.main.bounds.size.width / 2, height: 80, alignment: .top)
                         .padding(.top, 16)

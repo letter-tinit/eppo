@@ -52,18 +52,14 @@ struct ToAuctionItem: View {
                         .foregroundStyle(.red)
                     }
                     
-                    NavigationLink {
-                        
-                    } label: {
-                        ZStack(alignment: .center) {
-                            Color.purple
-                            Text("Chi tiết")
-                                .font(.system(size: 10, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.white)
-                        }
-                        .clipShape(RoundedRectangle(cornerRadius: 3))
-                        .frame(width: 46, height: 24, alignment: .trailing)
+                    ZStack(alignment: .center) {
+                        Color.purple
+                        Text("Chi tiết")
+                            .font(.system(size: 10, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white)
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: 3))
+                    .frame(width: 46, height: 24, alignment: .trailing)
                 }
             }
             .padding(.horizontal, 10)

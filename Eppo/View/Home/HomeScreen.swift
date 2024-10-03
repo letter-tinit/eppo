@@ -22,9 +22,7 @@ struct HomeScreen: View {
                         FlashSale()
                             .frame(height: 220)
                             .background(.clear)
-                        
                         RecomendGrid()
-                        
                     }
                 }
                 .padding(.vertical, 10)
