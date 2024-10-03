@@ -31,17 +31,18 @@ struct CustomHeaderView: View {
             Spacer()
             
             Text(title)
-                .font(.system(size: 22, weight: .semibold))
+                .font(.system(size: 24, weight: .semibold))
                 .frame(width: 240)
                 .lineLimit(1)
                 .frame(alignment: .center)
                 .padding(.leading, -buttonWidth)
-            
+                .padding(.bottom, 6)
+
             Spacer()
         }
         .padding(.horizontal, 20)
         .foregroundStyle(.white)
-        .frame(width: UIScreen.main.bounds.size.width, height: 70, alignment: .bottom)
+        .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .bottom)
         .padding(.bottom, 10)
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
