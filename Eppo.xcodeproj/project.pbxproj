@@ -392,11 +392,11 @@
 			};
 			buildConfigurationList = 2CC5A21E2C5A019300D0035D /* Build configuration list for PBXProject "Eppo" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = vi;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				vi,
 			);
 			mainGroup = 2CC5A21A2C5A019300D0035D;
 			productRefGroup = 2CC5A2242C5A019300D0035D /* Products */;
@@ -623,6 +623,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eppo/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Ứng dụng cần quyền truy cập vào thư viện ảnh của bạn";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -659,6 +660,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eppo/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Ứng dụng cần quyền truy cập vào thư viện ảnh của bạn";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -9,13 +9,12 @@ import SwiftUI
 struct CartItemView: View {
     // MARK: - PROPERTIES
     @Binding var cartItem: Cart
-    var onRemove: () -> Void
+//    var on: () -> Void
     var onToggleCheck: () -> Void
-    
+
     // MARK: - BODY
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            // Toggle Check Button
             Button {
                 onToggleCheck()
             } label: {
@@ -40,15 +39,10 @@ struct CartItemView: View {
                     
                     Spacer()
                     
-                    Button {
-                        onRemove()
-                    } label: {
-                        Image(systemName: "trash")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 16)
-                            .foregroundStyle(.red)
-                    }
+                    Text("SL: \(cartItem.quantity)")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.mint)
+                        .font(.subheadline)
                 }
                 
                 HStack {
@@ -59,36 +53,43 @@ struct CartItemView: View {
                         .foregroundStyle(.mint)
                         .lineLimit(1)
                     
+                    Spacer()
+                    
                     Stepper(value: $cartItem.quantity, in: 1...cartItem.remainingQuantity) {}
                 }
                 
                 HStack {
-                    Text(cartItem.currentPrice, format: .currency(code: "VND"))
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.red)
-                        .font(.subheadline)
-                    
-                    Text(cartItem.originalPrice, format: .currency(code: "VND"))
-                        .font(.subheadline)
-                        .foregroundStyle(.black)
-                        .strikethrough()
-                    
-                    Spacer()
-                    
-                    Text("SL: \(cartItem.quantity)")
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.black)
-                        .font(.subheadline)
+                    HStack(spacing: 0) {
+                        Text(cartItem.currentPrice * Double(cartItem.quantity), format: .currency(code: "VND"))
+                        if cartItem.isHireable {
+                            Text("/ngày")
+                        }
+                    }
+                    .lineLimit(1)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.red)
+                    .font(.caption)
+
+                    HStack {
+                        Text(cartItem.originalPrice * Double(cartItem.quantity), format: .currency(code: "VND"))
+                        if cartItem.isHireable {
+                            Text("/ngày")
+                        }
+                    }
+                    .lineLimit(1)
+                    .font(.caption2)
+                    .fontWeight(.regular)
+                    .foregroundStyle(.black)
+                    .strikethrough()
                 }
             }
+            Spacer()
         }
         .padding(10)
-        .background(Color(uiColor: UIColor.systemGray6))
     }
 }
 
-
 // MARK: - PREVIEW
-//#Preview {
-//    CartItemView()
-//}
+#Preview {
+    CartScreen()
+}

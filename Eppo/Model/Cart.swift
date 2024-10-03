@@ -16,4 +16,5 @@ struct Cart: Codable, Identifiable, Hashable {
     let currentPrice: Double
     var quantity: Int
     let remainingQuantity: Int
+    let isHireable: Bool 
 }
