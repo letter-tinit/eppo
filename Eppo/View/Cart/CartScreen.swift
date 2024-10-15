@@ -42,7 +42,7 @@ struct CartScreen: View {
                                     print("Before toggle: \(cartItems.map { $0.isCheckedOut })") // Kiểm tra trạng thái trước
                                     toggleItemChecked(at: index)
                                     print("After toggle: \(cartItems.map { $0.isCheckedOut })") // Kiểm tra trạng thái sau
-
+                                    
                                 }
                             )
                             .listRowInsets(EdgeInsets())
@@ -79,7 +79,7 @@ struct CartScreen: View {
                                     .frame(height: 26)
                                     .fontWeight(.bold)
                                     .foregroundStyle(editMode == .active ? .green : .white)
-//                                    .padding(.bottom, 20)
+                                //                                    .padding(.bottom, 20)
                             }
                         }
                         .foregroundStyle(.white)
@@ -95,7 +95,6 @@ struct CartScreen: View {
                     }
                     .listRowInsets(EdgeInsets())
                 }
-                .defaultScrollAnchor(.center)
                 .environment(\.editMode, $editMode)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(8)
@@ -115,7 +114,7 @@ struct CartScreen: View {
                     }
                     .font(.headline)
                     .padding(10)
-
+                    
                     Button {
                         
                     } label: {
@@ -130,13 +129,13 @@ struct CartScreen: View {
                 }
                 .frame(width: UIScreen.main.bounds.size.width, height: 60, alignment: .top)
                 .background(.lightBlue)
-                
             } else {
                 Spacer()
                 
                 Text("Giỏ hàng trống")
                     .background(.red)
             }
+            
             Spacer()
         }
         .background(Color(uiColor: UIColor.systemGray6))

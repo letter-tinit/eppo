@@ -8,124 +8,153 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @AppStorage("isLogged") var isLogged: Bool = false
+    @State var viewModel = LoginViewModel()
     @State private var usernameTextField: String = ""
     @State private var passwordTextField: String = ""
+    @State private var showAlert: Bool = false
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .frame(height: 100)
-                        .foregroundStyle(
-                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                        )
+            ZStack {
+                VStack {
+                    ZStack {
+                        Rectangle()
+                            .frame(height: 100)
+                            .foregroundStyle(
+                                LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                            )
+                        
+                        VStack {
+                            Text("Đăng Nhập EPPO")
+                                .padding(.top)
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundStyle(.white)
+                        }
+                    }
                     
                     VStack {
-                        Text("Đăng Nhập EPPO")
-                            .padding(.top)
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-                
-                VStack {
-                    VStack(alignment: .leading) {
-                        Text("Tên Đăng Nhập")
-                            .foregroundStyle(.textDarkBlue)
-                            .font(.system(size: 16, weight: .semibold))
-                        BorderTextField {
-                            TextField("abc123@gmail.com".lowercased(), text: $usernameTextField)
-                        }
-                        .frame(height: 50)
-                        
-                        Text("Mật Khẩu")
-                            .foregroundStyle(.textDarkBlue)
-                            .font(.system(size: 16, weight: .semibold))
-                            .padding(.top, 30)
-                        BorderTextField {
-                            SecureField("Mật khẩu", text: $passwordTextField)
-                        }
-                        .frame(height: 50)
-                        
-                    } // TEXT FIELD STACK
-                    .padding(.top, 80)
-                    
-                    VStack(spacing: 30) {
-                        NavigationLink {
-                            ActiveScreen()
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .frame(height: 60)
-                                    .foregroundStyle(
-                                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
-                                    )
-                                
-                                Text("Đăng Nhập")
-                                    .foregroundStyle(.black)
-                                    .font(.system(size: 16, weight: .bold))
+                        VStack(alignment: .leading) {
+                            Text("Tên Đăng Nhập")
+                                .foregroundStyle(.textDarkBlue)
+                                .font(.system(size: 16, weight: .semibold))
+                            BorderTextField {
+                                TextField("abc123@gmail.com".lowercased(), text: $usernameTextField)
                             }
+                            .frame(height: 50)
                             
-                        } // LOGIN BUTTON
+                            Text("Mật Khẩu")
+                                .foregroundStyle(.textDarkBlue)
+                                .font(.system(size: 16, weight: .semibold))
+                                .padding(.top, 30)
+                            BorderTextField {
+                                SecureField("Mật khẩu", text: $passwordTextField)
+                            }
+                            .frame(height: 50)
+                            
+                        } // TEXT FIELD STACK
+                        .padding(.top, 80)
                         
-                        HStack {
-                            RoundedRectangle(cornerRadius: 0)
-                                .frame(width: 100, height: 1)
-                            
-                            Text("Hoặc tiếp tục với")
-                                .font(.system(size: 14))
-                            
-                            RoundedRectangle(cornerRadius: 0)
-                                .frame(width: 100, height: 1)
-                        } //DIVIDER STACK
-                        .foregroundStyle(Color(UIColor.darkGray))
-                        
-                        Button {
-                            
-                        } label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.black, lineWidth: 1)
-                                    .frame(height: 60)
-                                
-                                
-                                HStack {
-                                    Image("google-logo")
-                                    
-                                    Text("Google")
-                                        .font(.system(size: 16, weight: .bold))
-                                        .foregroundStyle(Color(UIColor.darkGray))
+                        VStack(spacing: 30) {
+                            Button {
+                                if usernameTextField.isEmpty || passwordTextField.isEmpty {
+                                    viewModel.errorMessage = "Tên đăng nhập và mật khẩu không được để trống."
+                                } else {
+                                    viewModel.login(userName: usernameTextField, password: passwordTextField)
                                 }
-                                .foregroundStyle(Color(UIColor.darkGray))
-                            }
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .frame(height: 60)
+                                        .foregroundStyle(
+                                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+                                        )
+                                    
+                                    Text("Đăng Nhập")
+                                        .foregroundStyle(.black)
+                                        .font(.system(size: 16, weight: .bold))
+                                }
+                                
+                            } // LOGIN BUTTON
                             
-                        } // LOGIN WITH GOOGLE BUTTON
-                        
-                    }// LOGIN BUTTON STACK
-                    .padding(.top, 40)
+                            HStack {
+                                RoundedRectangle(cornerRadius: 0)
+                                    .frame(width: 100, height: 1)
+                                
+                                Text("Hoặc tiếp tục với")
+                                    .font(.system(size: 14))
+                                
+                                RoundedRectangle(cornerRadius: 0)
+                                    .frame(width: 100, height: 1)
+                            } //DIVIDER STACK
+                            .foregroundStyle(Color(UIColor.darkGray))
+                            
+                            Button {
+                                
+                            } label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(.black, lineWidth: 1)
+                                        .frame(height: 60)
+                                    
+                                    
+                                    HStack(spacing: 10) {
+                                        Image("google-logo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 26, height: 26)
+                                        
+                                        Text("Google")
+                                            .font(.system(size: 16, weight: .bold))
+                                            .foregroundStyle(Color(UIColor.darkGray))
+                                    }
+                                    .foregroundStyle(Color(UIColor.darkGray))
+                                }
+                            } // LOGIN WITH GOOGLE BUTTON
+                            
+                        }// LOGIN BUTTON STACK
+                        .padding(.top, 40)
+                    }// CONTENT
+                    .padding(.horizontal, 20)
+                    Spacer()
                     
-                    //                HStack(spacing: 6) {
-                    //                    Text("Chưa có tài khoản?")
-                    //                        .foregroundStyle(.gray)
-                    //                        .font(.system(size: 16, weight: .semibold))
-                    //
-                    //                    Button {
-                    //
-                    //                    } label: {
-                    //                        Text("Đăng Ký")
-                    //                            .foregroundStyle(.textDarkBlue)
-                    //                            .font(.system(size: 16, weight: .semibold))
-                    //                    }
-                    //                }
-                    //                .padding(.top, 30)
-                    
-                }// CONTENT
-                .padding(.horizontal, 20)
-                Spacer()
+                }
+                .disabled(viewModel.isLoading)
                 
+                Rectangle()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.gray)
+                    .opacity(viewModel.isLoading ? 0.05 : 0)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 70, height: 70)
+                        .foregroundStyle(.white)
+                        .opacity(0.6)
+                    
+                    ProgressView()
+                        .controlSize(.large)
+                        .progressViewStyle(CircularProgressViewStyle())
+                }
+                .shadow(radius: 2, x: 1, y: 1)
+                .opacity(viewModel.isLoading ? 1 : 0)
             }
             .ignoresSafeArea(.all)
+            .alert(isPresented: $viewModel.isPopupMessage) {
+                Alert(
+                    title: Text("Lỗi"),
+                    message: Text(viewModel.errorMessage ?? "Lỗi không xác định"),
+                    dismissButton: .default(Text("Xác nhận"), action: {
+                        viewModel.errorMessage = nil
+                    })
+                )
+            }
+            .navigationDestination(isPresented: $viewModel.isLogged) {
+                MainTabView()
+            }
+        }
+        .onChange(of: viewModel.isLogged) {
+            isLogged = true
         }
     }
 }

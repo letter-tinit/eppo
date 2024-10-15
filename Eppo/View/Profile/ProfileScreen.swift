@@ -8,6 +8,8 @@ import SwiftUI
 
 struct ProfileScreen: View {
     // MARK: - PROPERTY
+    @AppStorage("isLogged") var isLogged: Bool = false
+    
     @State private var isActiveWaitingForConfirmed = false
     @State private var isActiveWaitingForPackage = false
     @State private var isActiveWaitingForDelivered = false
@@ -137,6 +139,7 @@ struct ProfileScreen: View {
                     Spacer(minLength: 80)
                     
                     Button {
+                        self.isLogged = false
                     } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
