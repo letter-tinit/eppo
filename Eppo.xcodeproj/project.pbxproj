@@ -52,8 +52,15 @@
 		2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */; };
 		2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */; };
 		2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA48EF42C76F2DC00569212 /* BorderTextField.swift */; };
+		2CAA6AAB2CB0223500003EC1 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AAA2CB0223500003EC1 /* APIManager.swift */; };
+		2CAA6AAE2CB0224100003EC1 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */; };
+		2CAA6AB12CB0226700003EC1 /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AAF2CB0226700003EC1 /* LoginAPI.swift */; };
+		2CAA6AB42CB022E300003EC1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2CAA6AB32CB022E200003EC1 /* Alamofire */; };
+		2CAA6AB82CB0321000003EC1 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AB72CB0321000003EC1 /* UserSession.swift */; };
+		2CAA6ABB2CB0334E00003EC1 /* NamingConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6ABA2CB0334E00003EC1 /* NamingConstant.swift */; };
 		2CAD5A652CABA9030038F795 /* RatingSubmitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAD5A642CABA9030038F795 /* RatingSubmitView.swift */; };
 		2CAD5A672CABAAA50038F795 /* RatingStarSubmitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAD5A662CABAAA50038F795 /* RatingStarSubmitionView.swift */; };
+		2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB106392CB10B9000D4C07B /* WebSocketManager.swift */; };
 		2CB4ED0D2C928AA10065BACC /* AuctionDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB4ED0C2C928AA10065BACC /* AuctionDetailItem.swift */; };
 		2CB7EC032C9F0924000E1407 /* FooterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EC022C9F0924000E1407 /* FooterToolBar.swift */; };
 		2CBFCE672C79D1FB00FB73CA /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */; };
@@ -66,6 +73,7 @@
 		2CDD314E2C87085900B731E0 /* MyAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD314D2C87085900B731E0 /* MyAccount.swift */; };
 		2CDD31552C871FB500B731E0 /* GenderRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD31542C871FB500B731E0 /* GenderRadioButton.swift */; };
 		2CDD31572C87297000B731E0 /* EditAvatarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD31562C87297000B731E0 /* EditAvatarButton.swift */; };
+		2CDE59F92CB0EA8A00CA7FFB /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */; };
 		2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED22DF2C7C34D70065025B /* ContentBox.swift */; };
 		2CED22E22C7C358E0065025B /* BalanceBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED22E12C7C358E0065025B /* BalanceBox.swift */; };
 		2CEDE5262CAE295700F98469 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDE5252CAE295700F98469 /* CartItemView.swift */; };
@@ -117,9 +125,15 @@
 		2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		2CA48EF42C76F2DC00569212 /* BorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTextField.swift; sourceTree = "<group>"; };
+		2CAA6AAA2CB0223500003EC1 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		2CAA6AAF2CB0226700003EC1 /* LoginAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
+		2CAA6AB72CB0321000003EC1 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		2CAA6ABA2CB0334E00003EC1 /* NamingConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamingConstant.swift; sourceTree = "<group>"; };
 		2CAD5A642CABA9030038F795 /* RatingSubmitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSubmitView.swift; sourceTree = "<group>"; };
 		2CAD5A662CABAAA50038F795 /* RatingStarSubmitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStarSubmitionView.swift; sourceTree = "<group>"; };
 		2CAD5A682CABC3900038F795 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2CB106392CB10B9000D4C07B /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2CB4ED0C2C928AA10065BACC /* AuctionDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionDetailItem.swift; sourceTree = "<group>"; };
 		2CB7EC022C9F0924000E1407 /* FooterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterToolBar.swift; sourceTree = "<group>"; };
 		2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
@@ -133,6 +147,7 @@
 		2CDD314D2C87085900B731E0 /* MyAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAccount.swift; sourceTree = "<group>"; };
 		2CDD31542C871FB500B731E0 /* GenderRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenderRadioButton.swift; sourceTree = "<group>"; };
 		2CDD31562C87297000B731E0 /* EditAvatarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAvatarButton.swift; sourceTree = "<group>"; };
+		2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		2CED22DF2C7C34D70065025B /* ContentBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBox.swift; sourceTree = "<group>"; };
 		2CED22E12C7C358E0065025B /* BalanceBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceBox.swift; sourceTree = "<group>"; };
 		2CEDE5252CAE295700F98469 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
@@ -143,6 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CAA6AB42CB022E300003EC1 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,9 +283,35 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		2CAA6AAD2CB0224100003EC1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */,
+				2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2CAA6AB02CB0226700003EC1 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				2CAA6AAF2CB0226700003EC1 /* LoginAPI.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		2CAA6AB92CB0332000003EC1 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				2CAA6ABA2CB0334E00003EC1 /* NamingConstant.swift */,
+			);
+			path = Constant;
+			sourceTree = "<group>";
+		};
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2CAA6AB02CB0226700003EC1 /* Auth */,
 				2C255F0C2CAD598000280EE9 /* Cart.swift */,
 			);
 			path = Model;
@@ -278,8 +320,11 @@
 		2CBFCE6A2C79D51A00FB73CA /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				2CAA6AAA2CB0223500003EC1 /* APIManager.swift */,
 				2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */,
 				2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */,
+				2CAA6AB72CB0321000003EC1 /* UserSession.swift */,
+				2CB106392CB10B9000D4C07B /* WebSocketManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -303,6 +348,8 @@
 		2CC5A2252C5A019300D0035D /* Eppo */ = {
 			isa = PBXGroup;
 			children = (
+				2CAA6AB92CB0332000003EC1 /* Constant */,
+				2CAA6AAD2CB0224100003EC1 /* ViewModel */,
 				2CAD5A682CABC3900038F795 /* Info.plist */,
 				2CBFCE6A2C79D51A00FB73CA /* Manager */,
 				2CBFCE682C79D50F00FB73CA /* Model */,
@@ -371,6 +418,9 @@
 			dependencies = (
 			);
 			name = Eppo;
+			packageProductDependencies = (
+				2CAA6AB32CB022E200003EC1 /* Alamofire */,
+			);
 			productName = eppo;
 			productReference = 2CC5A2232C5A019300D0035D /* Eppo.app */;
 			productType = "com.apple.product-type.application";
@@ -399,6 +449,9 @@
 				vi,
 			);
 			mainGroup = 2CC5A21A2C5A019300D0035D;
+			packageReferences = (
+				2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 2CC5A2242C5A019300D0035D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -435,12 +488,15 @@
 				2C605DEC2C9B0C1C0030895B /* TimelineBox.swift in Sources */,
 				2C78D6002C7D662000204BFE /* CustomButtonImage.swift in Sources */,
 				2C605DEA2C9B08FD0030895B /* PartnerChatBox.swift in Sources */,
+				2CAA6ABB2CB0334E00003EC1 /* NamingConstant.swift in Sources */,
 				2C7EDB482C894A8B005CCAEB /* MainTabView.swift in Sources */,
 				2C6C176D2C91E3F6004DB795 /* TimerView.swift in Sources */,
 				2C5920ED2CA794FA004E996F /* DeliveredOrderRowView.swift in Sources */,
 				2C7330E42C89646100A0F092 /* HomeHeader.swift in Sources */,
 				2CDD31572C87297000B731E0 /* EditAvatarButton.swift in Sources */,
+				2CAA6AAB2CB0223500003EC1 /* APIManager.swift in Sources */,
 				2C68E1F12C8C204900C8D0A0 /* AuctionScreen.swift in Sources */,
+				2CDE59F92CB0EA8A00CA7FFB /* ProfileViewModel.swift in Sources */,
 				2C37F6082C8EDB41003D7468 /* ItemDetailScreen.swift in Sources */,
 				2C7330E22C8962E600A0F092 /* SearchBar.swift in Sources */,
 				2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */,
@@ -472,6 +528,8 @@
 				2CAD5A652CABA9030038F795 /* RatingSubmitView.swift in Sources */,
 				2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */,
 				2C37F60E2C8EF94B003D7468 /* RateItem.swift in Sources */,
+				2CAA6AAE2CB0224100003EC1 /* LoginViewModel.swift in Sources */,
+				2CAA6AB82CB0321000003EC1 /* UserSession.swift in Sources */,
 				2C6E99002C8BB37A00241F9C /* RecomendGrid.swift in Sources */,
 				2CBFCE672C79D1FB00FB73CA /* ProfileScreen.swift in Sources */,
 				2C68E1F42C8C2FB900C8D0A0 /* ItemBuyScreen.swift in Sources */,
@@ -480,7 +538,9 @@
 				2C439FD52C97D2A600BE7DEE /* AuctionRoomScreen.swift in Sources */,
 				2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */,
 				2C255F0D2CAD598000280EE9 /* Cart.swift in Sources */,
+				2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */,
 				2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */,
+				2CAA6AB12CB0226700003EC1 /* LoginAPI.swift in Sources */,
 				2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */,
 				2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */,
 				2C6B245F2CA3E9070021CA98 /* NotificationScreen.swift in Sources */,
@@ -706,6 +766,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2CAA6AB32CB022E200003EC1 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2CC5A21B2C5A019300D0035D /* Project object */;
 }

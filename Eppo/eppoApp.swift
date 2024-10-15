@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct EppoApp: App {
+    @AppStorage("isLogged") var isLogged: Bool = false
+    
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            if isLogged {
+                MainTabView()
+            } else {
+                LoginScreen()
+            }
         }
     }
 }
