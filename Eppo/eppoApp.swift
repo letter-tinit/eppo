@@ -13,11 +13,15 @@ struct EppoApp: App {
     
     var body: some Scene {
         WindowGroup {
+<<<<<<< Updated upstream
             if isLogged {
                 MainTabView()
             } else {
                 LoginScreen()
             }
+=======
+            LoginScreen()
+>>>>>>> Stashed changes
         }
     }
 }

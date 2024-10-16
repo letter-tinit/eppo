@@ -47,10 +47,15 @@
 		2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */; };
 		2C7900582CA7A3E00015B320 /* TransactionTypeStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */; };
 		2C7EDB482C894A8B005CCAEB /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7EDB472C894A8B005CCAEB /* MainTabView.swift */; };
+		2C82C96B2CB01E8A009784D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2C82C96A2CB01E8A009784D8 /* Alamofire */; };
+		2C82C96F2CB01ED4009784D8 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C82C96E2CB01ED4009784D8 /* APIManager.swift */; };
+		2C82C9722CB01EE7009784D8 /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C82C9702CB01EE7009784D8 /* LoginAPI.swift */; };
+		2C82C9752CB01F20009784D8 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C82C9732CB01F20009784D8 /* LoginViewModel.swift */; };
 		2C8BC30D2CA7D9A30082F075 /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */; };
 		2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8BC30F2CA7DDFA0082F075 /* CartScreen.swift */; };
 		2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */; };
 		2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */; };
+		2C9A5A4A2CBFE1FC008C4485 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9A5A492CBFE1FC008C4485 /* User.swift */; };
 		2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA48EF42C76F2DC00569212 /* BorderTextField.swift */; };
 		2CAA6AAB2CB0223500003EC1 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AAA2CB0223500003EC1 /* APIManager.swift */; };
 		2CAA6AAE2CB0224100003EC1 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */; };
@@ -120,10 +125,14 @@
 		2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonImageLabel.swift; sourceTree = "<group>"; };
 		2C7900572CA7A3E00015B320 /* TransactionTypeStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypeStack.swift; sourceTree = "<group>"; };
 		2C7EDB472C894A8B005CCAEB /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		2C82C96E2CB01ED4009784D8 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIManager.swift; path = ../../../APIManager.swift; sourceTree = "<group>"; };
+		2C82C9702CB01EE7009784D8 /* LoginAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
+		2C82C9732CB01F20009784D8 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		2C8BC30C2CA7D9A30082F075 /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		2C8BC30F2CA7DDFA0082F075 /* CartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartScreen.swift; sourceTree = "<group>"; };
 		2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
+		2C9A5A492CBFE1FC008C4485 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2CA48EF42C76F2DC00569212 /* BorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTextField.swift; sourceTree = "<group>"; };
 		2CAA6AAA2CB0223500003EC1 /* APIManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -158,7 +167,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< Updated upstream
 				2CAA6AB42CB022E300003EC1 /* Alamofire in Frameworks */,
+=======
+				2C82C96B2CB01E8A009784D8 /* Alamofire in Frameworks */,
+>>>>>>> Stashed changes
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +269,24 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		2C82C9712CB01EE7009784D8 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				2C82C9702CB01EE7009784D8 /* LoginAPI.swift */,
+			);
+			name = Auth;
+			path = ../../../Auth;
+			sourceTree = "<group>";
+		};
+		2C82C9742CB01F20009784D8 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2C82C9732CB01F20009784D8 /* LoginViewModel.swift */,
+			);
+			name = ViewModel;
+			path = ../../ViewModel;
+			sourceTree = "<group>";
+		};
 		2C8BC30E2CA7DDF00082F075 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,8 +342,13 @@
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< Updated upstream
 				2CAA6AB02CB0226700003EC1 /* Auth */,
+=======
+				2C82C9712CB01EE7009784D8 /* Auth */,
+>>>>>>> Stashed changes
 				2C255F0C2CAD598000280EE9 /* Cart.swift */,
+				2C9A5A492CBFE1FC008C4485 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -320,7 +356,11 @@
 		2CBFCE6A2C79D51A00FB73CA /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< Updated upstream
 				2CAA6AAA2CB0223500003EC1 /* APIManager.swift */,
+=======
+				2C82C96E2CB01ED4009784D8 /* APIManager.swift */,
+>>>>>>> Stashed changes
 				2C8F5B7A2CA2DED100ACF578 /* KeyboardAdaptive.swift */,
 				2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */,
 				2CAA6AB72CB0321000003EC1 /* UserSession.swift */,
@@ -348,8 +388,12 @@
 		2CC5A2252C5A019300D0035D /* Eppo */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< Updated upstream
 				2CAA6AB92CB0332000003EC1 /* Constant */,
 				2CAA6AAD2CB0224100003EC1 /* ViewModel */,
+=======
+				2C82C9742CB01F20009784D8 /* ViewModel */,
+>>>>>>> Stashed changes
 				2CAD5A682CABC3900038F795 /* Info.plist */,
 				2CBFCE6A2C79D51A00FB73CA /* Manager */,
 				2CBFCE682C79D50F00FB73CA /* Model */,
@@ -419,7 +463,11 @@
 			);
 			name = Eppo;
 			packageProductDependencies = (
+<<<<<<< Updated upstream
 				2CAA6AB32CB022E200003EC1 /* Alamofire */,
+=======
+				2C82C96A2CB01E8A009784D8 /* Alamofire */,
+>>>>>>> Stashed changes
 			);
 			productName = eppo;
 			productReference = 2CC5A2232C5A019300D0035D /* Eppo.app */;
@@ -450,7 +498,11 @@
 			);
 			mainGroup = 2CC5A21A2C5A019300D0035D;
 			packageReferences = (
+<<<<<<< Updated upstream
 				2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */,
+=======
+				2C82C9692CB01E8A009784D8 /* XCRemoteSwiftPackageReference "Alamofire" */,
+>>>>>>> Stashed changes
 			);
 			productRefGroup = 2CC5A2242C5A019300D0035D /* Products */;
 			projectDirPath = "";
@@ -494,7 +546,11 @@
 				2C5920ED2CA794FA004E996F /* DeliveredOrderRowView.swift in Sources */,
 				2C7330E42C89646100A0F092 /* HomeHeader.swift in Sources */,
 				2CDD31572C87297000B731E0 /* EditAvatarButton.swift in Sources */,
+<<<<<<< Updated upstream
 				2CAA6AAB2CB0223500003EC1 /* APIManager.swift in Sources */,
+=======
+				2C82C96F2CB01ED4009784D8 /* APIManager.swift in Sources */,
+>>>>>>> Stashed changes
 				2C68E1F12C8C204900C8D0A0 /* AuctionScreen.swift in Sources */,
 				2CDE59F92CB0EA8A00CA7FFB /* ProfileViewModel.swift in Sources */,
 				2C37F6082C8EDB41003D7468 /* ItemDetailScreen.swift in Sources */,
@@ -502,6 +558,7 @@
 				2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */,
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
+				2C9A5A4A2CBFE1FC008C4485 /* User.swift in Sources */,
 				2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */,
 				2CB7EC032C9F0924000E1407 /* FooterToolBar.swift in Sources */,
 				2C37F60C2C8EEB85003D7468 /* RatingView.swift in Sources */,
@@ -536,6 +593,7 @@
 				2CED22E22C7C358E0065025B /* BalanceBox.swift in Sources */,
 				2CB4ED0D2C928AA10065BACC /* AuctionDetailItem.swift in Sources */,
 				2C439FD52C97D2A600BE7DEE /* AuctionRoomScreen.swift in Sources */,
+				2C82C9722CB01EE7009784D8 /* LoginAPI.swift in Sources */,
 				2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */,
 				2C255F0D2CAD598000280EE9 /* Cart.swift in Sources */,
 				2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */,
@@ -545,6 +603,7 @@
 				2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */,
 				2C6B245F2CA3E9070021CA98 /* NotificationScreen.swift in Sources */,
 				2C439FD72C97D34400BE7DEE /* AuctionRoomItem.swift in Sources */,
+				2C82C9752CB01F20009784D8 /* LoginViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,20 +827,34 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+<<<<<<< Updated upstream
 		2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+=======
+		2C82C9692CB01E8A009784D8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+>>>>>>> Stashed changes
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = upToNextMajorVersion;
+<<<<<<< Updated upstream
 				minimumVersion = 5.9.1;
+=======
+				minimumVersion = 5.8.1;
+>>>>>>> Stashed changes
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+<<<<<<< Updated upstream
 		2CAA6AB32CB022E200003EC1 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2CAA6AB22CB022E200003EC1 /* XCRemoteSwiftPackageReference "Alamofire" */;
+=======
+		2C82C96A2CB01E8A009784D8 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C82C9692CB01E8A009784D8 /* XCRemoteSwiftPackageReference "Alamofire" */;
+>>>>>>> Stashed changes
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
