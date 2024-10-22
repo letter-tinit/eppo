@@ -8,6 +8,11 @@
 struct LoginRequest: Codable {
     let userName: String
     let password: String
+    
+    enum CodingKeys: String, CodingKey {
+        case userName = "usernameOrEmail"
+        case password = "password"
+    }
 }
 
 struct LoginResponse: Codable {

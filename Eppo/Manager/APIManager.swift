@@ -15,10 +15,7 @@ enum APIError: Error {
 }
 
 struct APIErrorResponse: Codable, Error {
-    let type: String
-    let title: String
-    let status: Int
-    let traceId: String
+    let message: String
 }
 
 struct APIConstants {
@@ -54,7 +51,6 @@ class APIManager {
                                 let apiError = try JSONDecoder().decode(APIErrorResponse.self, from: data)
                                 promise(.failure(apiError))
                             } catch {
-                                // If parsing fails, return the original error
                                 promise(.failure(error))
                             }
                         } else {
