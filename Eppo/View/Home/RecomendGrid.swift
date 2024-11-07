@@ -10,59 +10,77 @@ import SwiftUI
 
 struct RecomendGrid: View {
     // MARK: - PROPERTY
+    @ObservedObject var viewModel: HomeViewModel
     
+    @State var recomendOption: RecomendOption = .forBuy
     
-    private var data  = Array(1...10)
-    private let adaptiveColumn = [
+     let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
     
     // MARK: - BODY
     
     var body: some View {
-        LazyVGrid(columns: adaptiveColumn, spacing: 20, pinnedViews: [.sectionHeaders]) {
-            Section {
-                ForEach(data, id: \.self) { item in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Image("sample-bonsai-01")
-                            .resizable()
-                            .frame(width: 160, height: 100, alignment: .top)
-                            .scaledToFit()
-                            .clipped()
-                        
-                        VStack(alignment: .leading, spacing: 4){
-                            Text("Sen Đá Kim Cương Haworthia Cooperi")
-                                .font(.system(size: 12, weight: .regular, design: .rounded))
-                                .multilineTextAlignment(.leading)
-                            
-                            Text("50.000₫")
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(.red)
-                            
-                            Text("Đã bán 301")
-                                .font(.system(size: 8, weight: .regular, design: .rounded))
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(.gray)
-                            
+        RecommendSectionHeader(selectedOption: $recomendOption)
+        
+        ScrollView {
+            LazyVGrid(columns: adaptiveColumn, spacing: 20) {
+                Section {
+                    ForEach(viewModel.plants, id: \.self) { plant in
+                        if recomendOption == .forBuy {
+                            NavigationLink {
+                                ItemDetailScreen(id: plant.id)
+                            } label: {
+                                ToBuyItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
+                                    .onAppear {
+                                        if plant == viewModel.plants.last {
+                                            loadMorePlant()
+                                        }
+                                    }
+                                    .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
+                            }
+                        } else {
+                            NavigationLink {
+                                HireItemDetailScreen(id: plant.id)
+                            } label: {
+                                ToHireItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
+                                    .onAppear {
+                                        if plant == viewModel.plants.last {
+                                            loadMorePlant()
+                                        }
+                                    }
+                                    .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
+                            }
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.bottom, 10)
                     }
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .shadow(color: .black.opacity(0.5), radius: 2, y: 4)
                 }
-            } header: {
-                RecommendSectionHeader()
             }
+            .padding()
+
+            Text("Hết")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .opacity(viewModel.isLastPage ? 1 : 0)
+                .padding(.bottom)
         }
-        .padding(.bottom, 100)
         .background(.white)
+        .padding(.bottom, 80)
+        .onAppear {
+            viewModel.resetPagination()
+            loadMorePlant()
+        }
+        .onChange(of: recomendOption, initial: true) { oldValue, newValue in
+            viewModel.resetPagination() // Reset for new recommendation type
+            viewModel.loadMorePlants(typeEcommerceId: newValue == .forBuy ? 1 : 2)
+        }
+    }
+    
+    private func loadMorePlant() {
+        viewModel.loadMorePlants(typeEcommerceId: recomendOption == .forBuy ? 1 : 2)
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    RecomendGrid()
+    RecomendGrid(viewModel: HomeViewModel())
 }

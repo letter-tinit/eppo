@@ -7,33 +7,35 @@
 
 import SwiftUI
 
-struct RecommendSectionHeader: View {
-    enum RecomendOption: String, CaseIterable {
-        case forYou = "Dành Cho Bạn"
-        case forHire = "Cho Thuê"
-        
-        var flag: String {
-            return self.rawValue
-        }
+
+enum RecomendOption: String, CaseIterable {
+    case forBuy = "Bán"
+    case forHire = "Cho Thuê"
+    
+    var flag: String {
+        return self.rawValue
     }
+}
+
+struct RecommendSectionHeader: View {
     
     @Namespace private var animation
     
-    @State private var selectedOption: RecomendOption = .forYou
+    @Binding var selectedOption: RecomendOption
     
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
             Button {
                 withAnimation {
-                    selectedOption = .forYou
+                    selectedOption = .forBuy
                 }
             } label: {
-                Text(RecomendOption.forYou.rawValue)
+                Text(RecomendOption.forBuy.rawValue)
                     .frame(maxWidth: .infinity)
                     .padding(6)
             }
-            .foregroundColor(selectedOption == .forYou ? .orange : .primary)
-            .background(selectedOption == .forYou ? Color.white : Color(uiColor: UIColor.systemGray5))
+            .foregroundColor(selectedOption == .forBuy ? .orange : .primary)
+            .background(selectedOption == .forBuy ? Color.white : Color(uiColor: UIColor.systemGray5))
             .clipShape(
                 .rect(
                     topLeadingRadius: 0,
@@ -42,7 +44,7 @@ struct RecommendSectionHeader: View {
                     topTrailingRadius: 20
                 )
             )
-            .matchedGeometryEffect(id: "forYou", in: animation)
+            .matchedGeometryEffect(id: "forBuy", in: animation)
             
             Button {
                 withAnimation {
@@ -73,5 +75,5 @@ struct RecommendSectionHeader: View {
 }
 
 #Preview {
-    RecommendSectionHeader()
+    RecommendSectionHeader(selectedOption: .constant(.forBuy))
 }

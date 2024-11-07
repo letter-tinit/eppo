@@ -79,9 +79,9 @@ struct ItemBuyScreen: View {
                         Section {
                             ForEach(data, id: \.self) { item in
                                 NavigationLink {
-                                    ItemDetailScreen()
+                                    ItemDetailScreen(id: 1)
                                 } label: {
-                                    ToBuyItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: "50.000₫", sold: 309)
+                                    ToBuyItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000)
                                 }
                             }
                         }
@@ -89,6 +89,7 @@ struct ItemBuyScreen: View {
                 }// ITEM SCROLL VIEW
                 .padding(.horizontal)
             }
+            .foregroundStyle(.black)
             .navigationBarBackButtonHidden()
         }
         .navigationBarBackButtonHidden()

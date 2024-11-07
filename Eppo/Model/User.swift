@@ -15,14 +15,14 @@ struct User: Codable {
     let email: String
     let phoneNumber: String
     let gender: String
-    let rankId: String
+//    let rankId: String
     let walletId: String
     let identificationCard: String
     let dateOfBirth: String
     let role: String
     
     enum CodingKeys: String, CodingKey {
-        case userId, roleId, roleName, fullName, email, phoneNumber, gender, rankId, walletId, identificationCard, dateOfBirth
+        case userId, roleId, roleName, fullName, email, phoneNumber, gender, walletId, identificationCard, dateOfBirth
         case role = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
     }
 }

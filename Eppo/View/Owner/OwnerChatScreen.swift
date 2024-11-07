@@ -1,24 +1,21 @@
 //
-// Created by Letter ♥
+//  OwnerChatScreen.swift
+//  Eppo
 //
-// https://github.com/tinit4ever
+//  Created by Letter on 23/10/2024.
 //
 
 import SwiftUI
 
-struct ChatScreen: View {
+struct OwnerChatScreen: View {
     // MARK: - PROPERTY
     @State var messageTextField: String = ""
-    
-    @State private var messageText: String = ""
-    
-    @State private var token: String? = nil
     
     // MARK: - BODY
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomHeaderView(title: "Quản Trị Viên")
+            OwnerCustomHeaderView(title: "Quản Trị Viên")
             
             ScrollView(.vertical) {
                 ForEach(0 ..< 5) { index in
@@ -42,28 +39,15 @@ struct ChatScreen: View {
             }
             
             // MARK: - FOOTER BUTTON
-//            FooterToolBar(messageTextField: $messageTextField)
-//                .modifier(KeyboardAdaptive())
+            //            FooterToolBar(messageTextField: $messageTextField)
+            //                .modifier(KeyboardAdaptive())
         }
         .background(Color(uiColor: .systemGray6))
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarBackButtonHidden()
-        .onAppear {
-            connectWebSocket()
-        }
-    }
-    
-    private func connectWebSocket() {
-        DispatchQueue.main.async {
-            if let token = UserSession.shared.token {
-                self.token = token
-                WebSocketManager.shared.connectWebSocket(token: token)
-            }
-        }
     }
 }
 
-// MARK: - PREVIEW
 #Preview {
-    ChatScreen()
+    OwnerChatScreen()
 }

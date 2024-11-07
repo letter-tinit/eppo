@@ -46,8 +46,6 @@ struct AuctionRoomScreen: View {
                             .scaledToFit()
                             .frame(width: 30, height: 30)
                             .foregroundStyle(.black)
-                        
-                        
                     }
                 }
                 .padding(.horizontal)
