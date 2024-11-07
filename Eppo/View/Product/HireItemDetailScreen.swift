@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-struct ItemDetailScreen: View {
+struct HireItemDetailScreen: View {
     // MARK: - PROPERTY
     
     let id: Int
@@ -102,10 +102,61 @@ struct ItemDetailScreen: View {
                     }
                     .padding(.horizontal)
                     
+                    Rectangle()
+                        .frame(height: 10)
+                        .foregroundStyle(Color(uiColor: UIColor.systemGray4))
+                    
+                    // MARK: - RATING
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Đánh Giá sản phẩm")
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(.black)
+                        
+                        HStack {
+                            RatingView(rating: 4.5, font: .title2)
+                            
+                            Text("4.5/5")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.red)
+                            
+                            Text("(2.1k đánh giá)")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.secondary)
+                            
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Text("Đánh giá")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal)
+                    
+                    VStack(spacing: 20) {
+                        RateItem()
+                        RateItem()
+                        RateItem()
+                    }
+                    .padding(.horizontal)
+                    
+                    
                     Spacer()
                 }
                 .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
                 .navigationBarBackButtonHidden()
+            }
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+            .onAppear {
+                DispatchQueue.main.async {
+                    UIScrollView.appearance().bounces = true
+                }
+                viewModel.getPlantById(id: self.id)
+            }
+            .onDisappear {
+                DispatchQueue.main.async {
+                    UIScrollView.appearance().bounces = false
+                }
             }
             .overlay(alignment: .topLeading) {
                 Button {
@@ -121,19 +172,6 @@ struct ItemDetailScreen: View {
                         .shadow(color: .black, radius: 10)
                 }
             }
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            .onAppear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = true
-                }
-                viewModel.getPlantById(id: self.id)
-            }
-            .onDisappear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = false
-                }
-            }
-
             
             
             Divider()
@@ -181,12 +219,12 @@ struct ItemDetailScreen: View {
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
-            }
+    }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 }
 
 
 // MARK: - PREVIEW
 #Preview {
-    ItemDetailScreen(id: 1)
+    HireItemDetailScreen(id: 1)
 }

@@ -41,6 +41,7 @@ struct FooterToolBar: View {
             )
             if isTyping {
                 Button {
+                    sendMessage()
                 } label: {
                     Image(systemName: "paperplane.fill")
                         .font(.title)
@@ -60,6 +61,11 @@ struct FooterToolBar: View {
         .frame(width: UIScreen.main.bounds.size.width, height: 70, alignment: .top)
         .background(.white)
         .shadow(radius: 1, x: 1, y: 1)
+    }
+    
+    private func sendMessage() {
+        WebSocketManager.shared.sendMessage(conversationId: 1, message: messageTextField)
+        messageTextField = ""
     }
 }
 

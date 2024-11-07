@@ -6,11 +6,8 @@
 
 import SwiftUI
 
-struct ItemDetailScreen: View {
+struct OwnerItemDetailScreen: View {
     // MARK: - PROPERTY
-    
-    let id: Int
-    @ObservedObject var viewModel = ItemDetailsViewModel()
     @State private var currentPage = 0
     let images = ["sample-bonsai", "sample-bonsai-01"]
     
@@ -31,28 +28,21 @@ struct ItemDetailScreen: View {
                             Text("Giá chỉ:")
                                 .font(.system(size: 18, weight: .medium))
                             
-                            if let price = viewModel.plant?.price {
-                                HStack(spacing: 0) {
-                                    Text(price, format: .currency(code: "VND"))
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.red)
-                                    
-                                    Text("Ngày")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.red)
-                                }
-                            } else {
-                                Text("unknow")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundStyle(.red)
-                            }
+                            Text("40.000đ/tháng")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundStyle(.red)
+                            
+                            Text("70.000 đ/tháng")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.secondary)
+                                .strikethrough()
                         }
                         
-                        Text(viewModel.plant?.name ?? "Unknow")
+                        Text("Thạch Xương Bồ")
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text("Thạch xương bồ là cây thân cỏ, sống dai, thân rễ mọc bò ngang, nhiều đốt và phân nhánh.")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }// CONTENT VSTACK
@@ -67,7 +57,7 @@ struct ItemDetailScreen: View {
                             .font(.title3)
                             .foregroundStyle(.green)
                         
-                        Text("Cam kết bảo hành")
+                        Text("Đổi ý miễn phí 10 ngày")
                             .font(.subheadline)
                     }
                     .padding(.horizontal)
@@ -83,7 +73,7 @@ struct ItemDetailScreen: View {
                                 LinearGradient(colors: [.red, .orange, .yellow], startPoint: .leading, endPoint: .trailing)
                             )
                         
-                        Text("Giao hàng nhanh tiện lợi")
+                        Text("Nhận hàng từ 30/7 - 31/7, phí giao 0đ")
                             .font(.subheadline)
                     }
                     .padding(.horizontal)
@@ -96,15 +86,53 @@ struct ItemDetailScreen: View {
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text("Cây sen đá vài năm trở lại đây như một phần không thể thiếu trong cuộc sống hàng ngày của mỗi người chúng ta. Mọi người sử dụng cây sen đá phần nhiều để trang trí làm đẹp cho không gian của riêng mình, với một số khác còn được sử dụng với mong muốn mang đến những may mắn và tài lộc trong phong thủy")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }
                     .padding(.horizontal)
                     
+                    Divider()
+                        .frame(height: 10)
+                        .background(Color(uiColor: UIColor.systemGray4))
+                    
+                    // MARK: - RATING
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Đánh Giá sản phẩm")
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(.black)
+                        
+                        HStack {
+                            RatingView(rating: 4.5, font: .title2)
+                            
+                            Text("4.5/5")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.red)
+                            
+                            Text("(2.1k đánh giá)")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(.secondary)
+                            
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Text("Đánh giá")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal)
+                    
+                    VStack(spacing: 20) {
+                        RateItem()
+                        RateItem()
+                        RateItem()
+                    }
+                    .padding(.horizontal)
+                    
+                    
                     Spacer()
                 }
-                .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
                 .navigationBarBackButtonHidden()
             }
             .overlay(alignment: .topLeading) {
@@ -121,19 +149,6 @@ struct ItemDetailScreen: View {
                         .shadow(color: .black, radius: 10)
                 }
             }
-            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
-            .onAppear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = true
-                }
-                viewModel.getPlantById(id: self.id)
-            }
-            .onDisappear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = false
-                }
-            }
-
             
             
             Divider()
@@ -142,51 +157,46 @@ struct ItemDetailScreen: View {
                 Button {
                     
                 } label: {
-                    Image(systemName: "message")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
-                }
-                
-                Divider()
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "cart")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
+                    VStack {
+                        Text("Hủy Cho Thuê")
+                            .font(.headline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white)
+                            .frame(width: UIScreen.main.bounds.size.width / 2)
+                            .padding(.top, 8)
+                        
+                        Spacer()
+                    }
+                    .background(.purple)
                 }
                 
                 Button {
                     
                 } label: {
                     VStack {
-                        Text("Mua hàng")
-                            .font(.system(size: 18, weight: .medium, design: .rounded))
+                        Text("Xem Hợp Đồng")
+                            .font(.headline)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white)
+                            .frame(width: UIScreen.main.bounds.size.width / 2)
+                            .padding(.top, 8)
                         
-                        Text("428.321 VND")
-                            .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        Spacer()
                     }
-                    .foregroundStyle(.white)
-                    .frame(width: UIScreen.main.bounds.size.width / 2)
-                    .padding(.top, 10)
-                    .padding(.bottom, 20)
-                    .background(.red)
+                    .background(.green)
                 }
             }
-            .frame(width: UIScreen.main.bounds.size.width, height: 80)
+            .frame(width: UIScreen.main.bounds.size.width, height: 60)
             .shadow(radius: 2, y: 2)
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
-            }
+    }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 }
 
 
 // MARK: - PREVIEW
 #Preview {
-    ItemDetailScreen(id: 1)
+    OwnerItemDetailScreen()
 }

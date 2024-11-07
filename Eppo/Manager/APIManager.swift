@@ -19,10 +19,20 @@ struct APIErrorResponse: Codable, Error {
 }
 
 struct APIConstants {
-    static let baseURL = "https://quangtrandeptrai-001-site1.atempurl.com/"
+
+    static let baseURL = "https://sep490ne-001-site1.atempurl.com/"
     
     struct Auth {
         static let login = baseURL + "api/v1/Users/Login"
+    }
+    
+    struct Plant {
+        static let getByType = baseURL + "api/v1/GetList/Plants/Filter/ByTypeEcommerceId"
+        static let getById = baseURL + "https://sep490ne-001-site1.atempurl.com/api/v1/Plant"
+    }
+    
+    struct Room {
+        static let getListRoom = baseURL + "https://sep490ne-001-site1.atempurl.com/api/v1/GetList/Rooms"
     }
 }
 
@@ -61,5 +71,88 @@ class APIManager {
                 }
         }
         .eraseToAnyPublisher()
+    }
+    
+//    func getPlantByType(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<[Plant], Error> {
+//        guard let url = URL(string: APIConstants.Plant.getByType) else {
+//            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+//        }
+//        
+//        let parameters: [String: Any] = [
+//            "pageIndex": pageIndex,
+//            "pageSize": pageSize,
+//            "typeEcommerceId": typeEcommerceId
+//        ]
+//        
+//        return AF.request(url, method: .get, parameters: parameters, encoding: JSONEncoding.default)
+//            .publishDecodable(type: [Plant].self)
+//            .value()
+//            .mapError { error in
+//                return error as Error
+//            }
+//            .eraseToAnyPublisher()
+//    }
+    
+    // MARK: - FIX Get do not contains request body
+    func getPlantByType(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<[Plant], Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getByType) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+
+        return AF.request(url, method: .get)
+            .publishDecodable(type: [Plant].self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getPlantById(id: Int) -> AnyPublisher<Plant, Error> {
+        guard let url = URL(string: "https://sep490ne-001-site1.atempurl.com/api/v1/Plant/\(id)") else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+
+        return AF.request(url, method: .get)
+            .publishDecodable(type: Plant.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getListAuctionRoom(id: Int) -> AnyPublisher<AuctionResponse, Error> {
+        guard let url = URL(string: "https://sep490ne-001-site1.atempurl.com/api/v1/Plant/1") else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+
+        // Set query parameters
+//        urlComponents.queryItems = [
+//            URLQueryItem(name: "id", value: String(id)),
+//        ]
+//
+//        guard let url = urlComponents.url else {
+//            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+//        }
+
+        return AF.request(url, method: .get)
+            .publishDecodable(type: AuctionResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
     }
 }

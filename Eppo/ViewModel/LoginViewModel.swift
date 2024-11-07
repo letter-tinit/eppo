@@ -12,7 +12,7 @@ import Combine
     var errorMessage: String?
     var isPopupMessage: Bool {
         get {
-            if let errorMessage = self.errorMessage {
+            if self.errorMessage == nil {
                 return true
             } else {
                 return false

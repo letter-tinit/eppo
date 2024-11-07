@@ -1,12 +1,12 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
 import SwiftUI
 
-struct ToBuyItem: View {
+struct ToHireItem: View {
     // MARK: - PROPERTY
     var imageUrl: String
     var itemName: String
@@ -51,10 +51,16 @@ struct ToBuyItem: View {
                     .multilineTextAlignment(.leading)
                     .foregroundStyle(.black)
                 
-                Text(price, format: .currency(code: "VND"))
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .multilineTextAlignment(.leading)
-                    .foregroundStyle(.red)
+                HStack(spacing: 0) {
+                    Text(price, format: .currency(code: "VND"))
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .multilineTextAlignment(.leading)
+                        .foregroundStyle(.red)
+                    Text("/ngày")
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .multilineTextAlignment(.leading)
+                        .foregroundStyle(.red)
+                }
             }
             .padding(.horizontal, 10)
             .padding(.bottom, 10)
@@ -68,5 +74,5 @@ struct ToBuyItem: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ToBuyItem(imageUrl: "https://hws.https://hws.dev/paul2.jpgdev/paul2.jpg", itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000)
+    ToHireItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000)
 }
