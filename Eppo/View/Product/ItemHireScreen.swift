@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-struct ItemBuyScreen: View {
+struct ItemHireScreen: View {
     // MARK: - PROPERTY
     @StateObject var viewModel = ItemBuyViewModel()
     
@@ -41,7 +41,7 @@ struct ItemBuyScreen: View {
 //                            .scaledToFit()
 //                            .frame(width: 30, alignment: .leading)
 //                    }
-//                    
+//
 //                    Button {
 //                    } label: {
 //                        Image(systemName: "message")
@@ -58,7 +58,7 @@ struct ItemBuyScreen: View {
                         Button {
                             viewModel.selectedCategory = category
                             viewModel.resetPagination()
-                            viewModel.loadMorePlantsForCate(typeEcommerceId: 1)
+                            viewModel.loadMorePlantsForCate(typeEcommerceId: 2)
                         } label: {
                             Text(category.title)
                         }
@@ -100,10 +100,10 @@ struct ItemBuyScreen: View {
                                     NavigationLink {
                                         ItemDetailScreen(id: plant.id)
                                     } label: {
-                                        ToBuyItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
+                                        ToHireItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
                                             .onAppear(perform: {
                                                 if plant == viewModel.plants.last {
-                                                    viewModel.loadMorePlantsForCate(typeEcommerceId: 1)
+                                                    viewModel.loadMorePlantsForCate(typeEcommerceId: 2)
                                                 }
                                             })
                                         
@@ -136,7 +136,7 @@ struct ItemBuyScreen: View {
             .onAppear {
                 viewModel.getListCategory()
                 viewModel.resetPagination()
-                viewModel.loadMorePlants(typeEcommerceId: 1)
+                viewModel.loadMorePlants(typeEcommerceId: 2)
             }
         }
         .navigationBarBackButtonHidden()
@@ -145,5 +145,5 @@ struct ItemBuyScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ItemBuyScreen()
+    ItemHireScreen()
 }
