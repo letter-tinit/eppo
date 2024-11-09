@@ -48,11 +48,11 @@ struct HireItemDetailScreen: View {
                             }
                         }
                         
-                        Text(viewModel.plant?.name ?? "Unknow")
+                        Text(viewModel.plant?.name ?? "Đang tải")
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text(viewModel.plant?.description ?? "Đang tải")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }// CONTENT VSTACK
@@ -96,7 +96,7 @@ struct HireItemDetailScreen: View {
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text(viewModel.plant?.description ?? "Đang tải")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }
@@ -201,12 +201,17 @@ struct HireItemDetailScreen: View {
                     
                 } label: {
                     VStack {
-                        Text("Mua hàng")
-                            .font(.system(size: 18, weight: .medium, design: .rounded))
-                        
-                        Text("428.321 VND")
-                            .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        Text("Thuê")
+                        if let price = viewModel.plant?.price {
+                            HStack(spacing: 0) {
+                                Text(price, format: .currency(code: "VND"))
+                                Text("/ngày")
+                            }
+                        } else {
+                            Text("Đang tải")
+                        }
                     }
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .frame(width: UIScreen.main.bounds.size.width / 2)
                     .padding(.top, 10)

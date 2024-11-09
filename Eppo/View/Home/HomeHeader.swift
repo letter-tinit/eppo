@@ -36,27 +36,29 @@ struct HomeHeader: View {
                     ItemBuyScreen()
                 } label: {
                     VStack {
-                        Image("bonsai")
+                        Image(systemName: "cart.badge.plus")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 40)
+                            .frame(width: 40, height: 40)
+                            .foregroundStyle(.blue)
                         
-                        Text("Cây cảnh")
+                        Text("Mua cây")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.black)
                     }
                 }
-
+                
                 NavigationLink {
-                    
+                    ItemHireScreen()
                 } label: {
                     VStack {
-                        Image("tool")
+                        Image(systemName: "doc.plaintext")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 40)
+                            .frame(width: 40, height: 40)
+                            .foregroundStyle(.purple)
                         
-                        Text("Phụ kiện")
+                        Text("Thuê cây")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.black)
                     }
@@ -66,10 +68,11 @@ struct HomeHeader: View {
                     AuctionRoomScreen()
                 } label: {
                     VStack {
-                        Image("auction-room")
+                        Image(systemName: "person.3.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 40)
+                            .frame(width: 40, height: 40)
+                            .foregroundStyle(.green)
                         
                         Text("Phòng đấu giá")
                             .font(.system(size: 14, weight: .medium))
@@ -81,10 +84,11 @@ struct HomeHeader: View {
                     
                 } label: {
                     VStack {
-                        Image("service")
+                        Image(systemName: "questionmark.app")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 40)
+                            .frame(width: 40, height: 40)
+                            .foregroundStyle(.yellow)
                         
                         Text("Dịch vụ")
                             .font(.system(size: 14, weight: .medium))

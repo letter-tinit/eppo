@@ -10,7 +10,7 @@ struct ItemDetailScreen: View {
     // MARK: - PROPERTY
     
     let id: Int
-    @ObservedObject var viewModel = ItemDetailsViewModel()
+    @StateObject var viewModel = ItemDetailsViewModel()
     @State private var currentPage = 0
     let images = ["sample-bonsai", "sample-bonsai-01"]
     
@@ -32,15 +32,10 @@ struct ItemDetailScreen: View {
                                 .font(.system(size: 18, weight: .medium))
                             
                             if let price = viewModel.plant?.price {
-                                HStack(spacing: 0) {
-                                    Text(price, format: .currency(code: "VND"))
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.red)
-                                    
-                                    Text("Ngày")
-                                        .font(.system(size: 18, weight: .medium))
-                                        .foregroundStyle(.red)
-                                }
+                                Text(price, format: .currency(code: "VND"))
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundStyle(.red)
+                                
                             } else {
                                 Text("unknow")
                                     .font(.system(size: 18, weight: .medium))
@@ -48,11 +43,11 @@ struct ItemDetailScreen: View {
                             }
                         }
                         
-                        Text(viewModel.plant?.name ?? "Unknow")
+                        Text(viewModel.plant?.name ?? "Đang tải")
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text(viewModel.plant?.description ?? "Đang tải")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }// CONTENT VSTACK
@@ -96,7 +91,7 @@ struct ItemDetailScreen: View {
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Unknow")
+                        Text(viewModel.plant?.description ?? "Đang tải")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }
@@ -163,12 +158,14 @@ struct ItemDetailScreen: View {
                     
                 } label: {
                     VStack {
-                        Text("Mua hàng")
-                            .font(.system(size: 18, weight: .medium, design: .rounded))
-                        
-                        Text("428.321 VND")
-                            .font(.system(size: 20, weight: .semibold, design: .rounded))
+                        Text("Mua")
+                        if let price = viewModel.plant?.price {
+                            Text(price, format: .currency(code: "VND"))
+                        } else {
+                            Text("Đang tải")
+                        }
                     }
+                    .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .frame(width: UIScreen.main.bounds.size.width / 2)
                     .padding(.top, 10)

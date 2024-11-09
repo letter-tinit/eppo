@@ -13,13 +13,13 @@ struct EppoApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            if isLogged {
-//                MainTabView()
-//            } else {
-//                LoginScreen()
-//            }
+            if isLogged {
+                MainTabView()
+            } else {
+                LoginScreen()
+            }
             
-            MainTabView()
+//            MainTabView()
         }
     }
 }

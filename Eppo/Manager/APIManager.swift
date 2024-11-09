@@ -19,7 +19,7 @@ struct APIErrorResponse: Codable, Error {
 }
 
 struct APIConstants {
-
+    
     static let baseURL = "https://sep490ne-001-site1.atempurl.com/"
     
     struct Auth {
@@ -28,11 +28,16 @@ struct APIConstants {
     
     struct Plant {
         static let getByType = baseURL + "api/v1/GetList/Plants/Filter/ByTypeEcommerceId"
-        static let getById = baseURL + "https://sep490ne-001-site1.atempurl.com/api/v1/Plant"
+        static let getByTypeAndCate = baseURL + "api/v1/GetList/Plants/Filter/TypeEcommerceIdAndCategoryId"
+        static let getById = baseURL + "api/v1/Plant/"
     }
     
     struct Room {
-        static let getListRoom = baseURL + "https://sep490ne-001-site1.atempurl.com/api/v1/GetList/Rooms"
+        static let getList = baseURL + "api/v1/GetList/Rooms"
+    }
+    
+    struct Category {
+        static let getList = baseURL + "api/v1/GetList/Categories?page=1&size=10"
     }
 }
 
@@ -40,7 +45,7 @@ class APIManager {
     static let shared = APIManager()
     
     private init() {}
-
+    
     func login(username: String, password: String) -> AnyPublisher<LoginResponse, Error>  {
         let apiUrl = APIConstants.Auth.login
         
@@ -73,32 +78,12 @@ class APIManager {
         .eraseToAnyPublisher()
     }
     
-//    func getPlantByType(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<[Plant], Error> {
-//        guard let url = URL(string: APIConstants.Plant.getByType) else {
-//            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
-//        }
-//        
-//        let parameters: [String: Any] = [
-//            "pageIndex": pageIndex,
-//            "pageSize": pageSize,
-//            "typeEcommerceId": typeEcommerceId
-//        ]
-//        
-//        return AF.request(url, method: .get, parameters: parameters, encoding: JSONEncoding.default)
-//            .publishDecodable(type: [Plant].self)
-//            .value()
-//            .mapError { error in
-//                return error as Error
-//            }
-//            .eraseToAnyPublisher()
-//    }
-    
     // MARK: - FIX Get do not contains request body
     func getPlantByType(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<[Plant], Error> {
         guard var urlComponents = URLComponents(string: APIConstants.Plant.getByType) else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
-
+        
         // Set query parameters
         urlComponents.queryItems = [
             URLQueryItem(name: "pageIndex", value: String(pageIndex)),
@@ -109,7 +94,7 @@ class APIManager {
         guard let url = urlComponents.url else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
-
+        
         return AF.request(url, method: .get)
             .publishDecodable(type: [Plant].self)
             .value()
@@ -120,11 +105,15 @@ class APIManager {
     }
     
     func getPlantById(id: Int) -> AnyPublisher<Plant, Error> {
-        guard let url = URL(string: "https://sep490ne-001-site1.atempurl.com/api/v1/Plant/\(id)") else {
+        guard let url = URL(string: APIConstants.Plant.getById + String(describing: id)) else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
-
+        
         return AF.request(url, method: .get)
+            .validate()
+            .response { response in
+                print(response.result as Any)
+            }
             .publishDecodable(type: Plant.self)
             .value()
             .mapError { error in
@@ -133,22 +122,78 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func getListAuctionRoom(id: Int) -> AnyPublisher<AuctionResponse, Error> {
-        guard let url = URL(string: "https://sep490ne-001-site1.atempurl.com/api/v1/Plant/1") else {
+    func getListAuctionRoom(pageIndex: Int, pageSize: Int) -> AnyPublisher<AuctionResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Room.getList) else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
-
+        
         // Set query parameters
-//        urlComponents.queryItems = [
-//            URLQueryItem(name: "id", value: String(id)),
-//        ]
-//
-//        guard let url = urlComponents.url else {
-//            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
-//        }
-
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
         return AF.request(url, method: .get)
             .publishDecodable(type: AuctionResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getListCategory(token: String) -> AnyPublisher<CategoryResponse, Error> {
+        let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetList/Categories"
+        let parameters: [String: Any] = [
+            "page": 1,
+            "size": 10
+        ]
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)"
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate() // Validates the response
+            .response { response in
+                switch response.result {
+                case .success(let value):
+                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                }
+            }
+            .publishDecodable(type: CategoryResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getPlantByTypeAndCate(pageIndex: Int, pageSize: Int, typeEcommerceId: Int, categoryId: Int) -> AnyPublisher<[Plant], Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getByTypeAndCate) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId)),
+            URLQueryItem(name: "categoryId", value: String(categoryId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: [Plant].self)
             .value()
             .mapError { error in
                 return error as Error
