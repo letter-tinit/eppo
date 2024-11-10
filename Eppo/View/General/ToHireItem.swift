@@ -10,7 +10,7 @@ struct ToHireItem: View {
     // MARK: - PROPERTY
     var imageUrl: String
     var itemName: String
-    var price: Int
+    var price: Double
     
     // MARK: - BODY
     

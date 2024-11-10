@@ -10,6 +10,7 @@ import Alamofire
 import Combine
 
 enum APIError: Error {
+    case dataNotFound
     case failedToGetData
     case badUrl
 }
@@ -34,6 +35,8 @@ struct APIConstants {
     
     struct Room {
         static let getList = baseURL + "api/v1/GetList/Rooms"
+        static let getByDate = baseURL + "api/v1/GetList/Rooms/SearchRoomByDate"
+        static let getById = baseURL + "api/v1/GetList/Rooms/Id"
     }
     
     struct Category {
@@ -129,8 +132,8 @@ class APIManager {
         
         // Set query parameters
         urlComponents.queryItems = [
-            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
-            URLQueryItem(name: "pageSize", value: String(pageSize))
+            URLQueryItem(name: "page", value: String(pageIndex)),
+            URLQueryItem(name: "size", value: String(pageSize))
         ]
         
         guard let url = urlComponents.url else {
@@ -138,7 +141,62 @@ class APIManager {
         }
         
         return AF.request(url, method: .get)
+            .validate()
             .publishDecodable(type: AuctionResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getListAuctionRoomByDate(pageIndex: Int, pageSize: Int, date: String) -> AnyPublisher<AuctionResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Room.getByDate) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "page", value: String(pageIndex)),
+            URLQueryItem(name: "size", value: String(pageSize)),
+            URLQueryItem(name: "date", value: String(date))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .validate()
+            .publishDecodable(type: AuctionResponse.self)
+            .value()
+            .mapError { error -> APIError in
+                if let afError = error.asAFError, afError.responseCode == 404 {
+                    return .dataNotFound
+                } else {
+                    return .failedToGetData
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getRoomById(id: Int) -> AnyPublisher<AuctionDetailResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Room.getById) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "id", value: String(id))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .validate()
+            .publishDecodable(type: AuctionDetailResponse.self)
             .value()
             .mapError { error in
                 return error as Error

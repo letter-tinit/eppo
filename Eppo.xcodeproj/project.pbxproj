@@ -83,6 +83,7 @@
 		2CAD5A672CABAAA50038F795 /* RatingStarSubmitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CAD5A662CABAAA50038F795 /* RatingStarSubmitionView.swift */; };
 		2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB106392CB10B9000D4C07B /* WebSocketManager.swift */; };
 		2CB4ED0D2C928AA10065BACC /* AuctionDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB4ED0C2C928AA10065BACC /* AuctionDetailItem.swift */; };
+		2CB7DD2E2CE04C750015CFE5 /* AuctionDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7DD2D2CE04C750015CFE5 /* AuctionDetailsViewModel.swift */; };
 		2CB7EC032C9F0924000E1407 /* FooterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB7EC022C9F0924000E1407 /* FooterToolBar.swift */; };
 		2CBFCE672C79D1FB00FB73CA /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */; };
 		2CC5A2272C5A019300D0035D /* EppoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5A2262C5A019300D0035D /* EppoApp.swift */; };
@@ -178,6 +179,7 @@
 		2CAD5A682CABC3900038F795 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2CB106392CB10B9000D4C07B /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		2CB4ED0C2C928AA10065BACC /* AuctionDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionDetailItem.swift; sourceTree = "<group>"; };
+		2CB7DD2D2CE04C750015CFE5 /* AuctionDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionDetailsViewModel.swift; sourceTree = "<group>"; };
 		2CB7EC022C9F0924000E1407 /* FooterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterToolBar.swift; sourceTree = "<group>"; };
 		2CBFCE662C79D1FB00FB73CA /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		2CC5A2232C5A019300D0035D /* Eppo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eppo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -372,6 +374,7 @@
 				2CAA6AAC2CB0224100003EC1 /* LoginViewModel.swift */,
 				2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */,
 				2C7D7A112CDF462600DA9CCC /* AuctionViewModel.swift */,
+				2CB7DD2D2CE04C750015CFE5 /* AuctionDetailsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -650,6 +653,7 @@
 				2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */,
 				2C8F5B7C2CA2DED100ACF578 /* KeyboardAdaptive.swift in Sources */,
 				2C45B5F02CDC95C0008670F1 /* OwnerMainTabView.swift in Sources */,
+				2CB7DD2E2CE04C750015CFE5 /* AuctionDetailsViewModel.swift in Sources */,
 				2C45B5EC2CDC95C0008670F1 /* OwnerCustomHeaderView.swift in Sources */,
 				2CAA6AB12CB0226700003EC1 /* LoginAPI.swift in Sources */,
 				2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */,
