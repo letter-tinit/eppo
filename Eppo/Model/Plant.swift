@@ -13,6 +13,9 @@ struct Plant: Codable, Identifiable, Hashable {
     let price: Double
     let description: String
     
+    // computed value
+    var isSelected: Bool = false
+    
     enum CodingKeys: String, CodingKey {
         case id = "plantId"
         case name = "plantName"

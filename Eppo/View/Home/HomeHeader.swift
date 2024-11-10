@@ -16,20 +16,9 @@ struct HomeHeader: View {
         VStack(spacing: 30) {
             CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
             
-            HStack(spacing: 15) {
-                SearchBar(searchText: $searchText)
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "cart")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .foregroundStyle(.black)
-                }
-            }
-            .padding(.horizontal)
+            SearchBar(searchText: $searchText)
+                .padding(.horizontal)
+            
             
             HStack(spacing: 30) {
                 NavigationLink {
