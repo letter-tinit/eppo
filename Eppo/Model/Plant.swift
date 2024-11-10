@@ -10,7 +10,7 @@ import Foundation
 struct Plant: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
-    let price: Int
+    let price: Double
     let description: String
     
     enum CodingKeys: String, CodingKey {

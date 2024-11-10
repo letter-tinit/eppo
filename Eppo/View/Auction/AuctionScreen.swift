@@ -9,8 +9,11 @@ import SwiftUI
 struct AuctionScreen: View {
     // MARK: - PROPERTY
     @State var searchText: String = ""
+    var viewModel: AuctionViewModel = AuctionViewModel()
+    @State var isCalendarToggle: Bool = false
     
-    private var data  = Array(1...10)
+    @State private var date = Date()
+    
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
@@ -19,41 +22,62 @@ struct AuctionScreen: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 30) {
+            VStack(spacing: 0) {
                 CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: false)
                 
                 HStack(spacing: 15) {
                     SearchBar(searchText: $searchText)
+
+                    Image(systemName: "calendar")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .foregroundStyle(.black)
+                        .overlay {
+                            DatePicker(selection: $date, displayedComponents: .date) {}
+                                .labelsHidden()
+                                .contentShape(Rectangle())
+                                .opacity(0.011)
+                        }
+                        .onChange(of: date) { oldValue, newValue in
+                            viewModel.selectedDate = newValue
+                            if oldValue != newValue {
+                                self.viewModel.loadMoreAuctiuonRoomsByDate()
+                            }
+                        }
                     
+                }
+                .padding()
+                
+                if viewModel.selectedDate != nil {
                     Button {
-                        
+                        viewModel.selectedDate = nil
+                        viewModel.resetAllPage()
+                        viewModel.loadMoreAutionRooms()
                     } label: {
-                        Image(systemName: "slider.horizontal.3")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundStyle(.black)
-                    }
-                    
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "message")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundStyle(.black)
+                        HStack {
+                            Text("Xoá bộ lọc")
+                            
+                            Spacer()
+                        }
+                        .padding(.bottom)
+                        .padding(.horizontal)
                     }
                 }
-                .padding(.horizontal)
+                
+                if viewModel.isEmptyResult {
+                    Text("Không tìm thấy kết quả")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVGrid(columns: adaptiveColumn, spacing: 20) {
-                        ForEach(data, id: \.self) { item in
+                        ForEach(viewModel.rooms, id: \.self) { room in
                             NavigationLink {
-                                AuctionDetailScreen()
+                                AuctionDetailScreen(roomId: room.roomId)
                             } label: {
-                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 500000, time: "1/08 - 10:20")
+                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: room.plant.name, price: room.plant.price, time: reformatDateString(room.activeDate) ?? "đang tải")
                             }
                         }
                     }
@@ -65,7 +89,29 @@ struct AuctionScreen: View {
             }
             //            .background(Color.init(uiColor: UIColor.systemGray5))
             .ignoresSafeArea(.all)
+            .onAppear {
+                viewModel.resetAllPage()
+                viewModel.loadMoreAutionRooms()
+            }
         }
+    }
+    
+    
+    func reformatDateString(_ dateString: String) -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        // Convert the string to a Date object
+        guard let date = inputFormatter.date(from: dateString) else {
+            return nil // Return nil if the date string is invalid
+        }
+        
+        // Create a DateFormatter for the desired output format
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "HH:mm dd/MM"
+        
+        // Convert the Date object back to a string in the new format
+        return outputFormatter.string(from: date)
     }
 }
 

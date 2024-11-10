@@ -12,3 +12,9 @@ struct AuctionResponse: Codable {
     let message: String
     let data: [Room]
 }
+
+struct AuctionDetailResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let data: Room
+}

@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Room: Codable {
+struct Room: Codable, Hashable {
     let roomId: Int
+    let activeDate: String
     let plantId: Int
     let plant: Plant
 }

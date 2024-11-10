@@ -8,6 +8,8 @@ import SwiftUI
 
 struct AuctionDetailScreen: View {
     // MARK: - PROPERTY
+    var roomId: Int
+    var viewModel = AuctionDetailsViewModel()
     @State var timeRemaining = 3600
     
     // MARK: - BODY
@@ -185,10 +187,13 @@ struct AuctionDetailScreen: View {
         }
         .ignoresSafeArea(.all, edges: .vertical)
         .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.getRoomById(roomId: self.roomId)
+        }
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    AuctionDetailScreen()
+    AuctionDetailScreen(roomId: 1)
 }
