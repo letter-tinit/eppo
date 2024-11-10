@@ -18,7 +18,7 @@ enum Tab: String, CaseIterable {
 struct MainTabView: View {
     // MARK: - PROPERTY
     
-    @State private var selectedTab: Tab = .auction
+    @State private var selectedTab: Tab = .cart
     
     init () {
         //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -29,12 +29,13 @@ struct MainTabView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                AuctionScreen()
+                HomeScreen()
                     .tabItem {
-                        Image(selectedTab == .auction ? "selected-auction" : "auction")
-                        Text("Đấu giá")
+                        Label("Khám phá", systemImage: "house")
                     }
-                    .tag(Tab.auction)
+                    .tag(Tab.explore)
+                
+                
                 
                 NotificationScreen()
                     .tabItem {
@@ -42,11 +43,12 @@ struct MainTabView: View {
                     }
                     .tag(Tab.notification)
                 
-                HomeScreen()
+                AuctionScreen()
                     .tabItem {
-                        Label("Khám phá", systemImage: "house")
+                        Image(selectedTab == .auction ? "selected-auction" : "auction")
+                        Text("Đấu giá")
                     }
-                    .tag(Tab.explore)
+                    .tag(Tab.auction)
                 
                 CartScreen()
                     .tabItem {

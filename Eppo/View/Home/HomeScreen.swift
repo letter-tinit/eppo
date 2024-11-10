@@ -17,16 +17,6 @@ struct HomeScreen: View {
         NavigationView {
             VStack(spacing: 2) {
                 HomeHeader()
-                
-//                ScrollView(.vertical, showsIndicators: false) {
-//                    VStack(spacing: 10) {
-//                        FlashSale()
-//                            .frame(height: 220)
-//                            .background(.clear)
-//                        RecomendGrid()
-//                    }
-//                }
-//                .padding(.vertical, 10)
 
                 RecomendGrid(viewModel: viewModel)
                 

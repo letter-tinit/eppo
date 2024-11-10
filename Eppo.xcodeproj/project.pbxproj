@@ -211,6 +211,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C0807C82CE05FE100598AD0 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				2C255F0C2CAD598000280EE9 /* Cart.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
 		2C45B5D42CDC94C0008670F1 /* Auction */ = {
 			isa = PBXGroup;
 			children = (
@@ -398,13 +406,13 @@
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2C45B5F82CDCB0F4008670F1 /* BuyItem */,
-				2C45B5D72CDC94C8008670F1 /* Plant.swift */,
-				2C45B5D42CDC94C0008670F1 /* Auction */,
-				2CFC7CAC2CC77F6200D277EA /* User.swift */,
-				2CAA6AB02CB0226700003EC1 /* Auth */,
-				2C255F0C2CAD598000280EE9 /* Cart.swift */,
+				2C0807C82CE05FE100598AD0 /* Cart */,
 				2C45B5F62CDCAFAE008670F1 /* Category.swift */,
+				2CFC7CAC2CC77F6200D277EA /* User.swift */,
+				2C45B5D72CDC94C8008670F1 /* Plant.swift */,
+				2C45B5F82CDCB0F4008670F1 /* BuyItem */,
+				2C45B5D42CDC94C0008670F1 /* Auction */,
+				2CAA6AB02CB0226700003EC1 /* Auth */,
 			);
 			path = Model;
 			sourceTree = "<group>";
