@@ -7,23 +7,11 @@
 import SwiftUI
 
 struct CartScreen: View {
-    // MARK: - PROPERTY
-    @State var orderDetails: [Plant] = [
-        Plant(id: 1, name: "Aloe Vera", price: 10.99, description: "A succulent plant with healing properties."),
-        Plant(id: 2, name: "Snake Plant", price: 15.49, description: "A hardy plant that purifies air."),
-        Plant(id: 3, name: "Spider Plant", price: 8.99, description: "A popular houseplant that's easy to care for."),
-        Plant(id: 4, name: "Peace Lily", price: 12.99, description: "An elegant plant with beautiful white flowers."),
-        Plant(id: 5, name: "Fiddle Leaf Fig", price: 20.0, description: "A trendy plant with large, lush leaves."),
-        Plant(id: 6, name: "Fiddle Leaf Fig", price: 20.0, description: "A trendy plant with large, lush leaves.")
-    ]
+    //    @State private var viewModel.orderDetails: [Plant] = []
     
     @State private var editMode: EditMode = .inactive
     
-    // Computed property to check if all items are selected
-    private var allItemsSelected: Bool {
-        orderDetails.allSatisfy { $0.isSelected }
-    }
-    
+    @State var viewModel = CartViewModel()
     
     // MARK: - BODY
     
@@ -31,20 +19,20 @@ struct CartScreen: View {
         VStack(alignment: .center, spacing: 0) {
             SingleHeaderView(title: "Giỏ hàng")
             
-            if !orderDetails.isEmpty {
+            if !viewModel.orderDetails.isEmpty {
                 HStack {
                     Button {
-                        toggleAllSelections()
+                        viewModel.toggleAllSelections()
                     } label: {
                         HStack(spacing: 8) {
-                            Image(systemName: allItemsSelected ? "checkmark.square.fill" : "square")
+                            Image(systemName: viewModel.allItemsSelected ? "checkmark.square.fill" : "square")
                                 .fontWeight(.semibold)
                                 .frame(width: 20, height: 20)
                             
-                            Text(allItemsSelected ? "Bỏ chọn tất cả" : "Chọn tất cả")
+                            Text(viewModel.allItemsSelected ? "Bỏ chọn tất cả" : "Chọn tất cả")
                                 .font(.headline)
                         }
-                        .foregroundStyle(allItemsSelected ? .green : .white)
+                        .foregroundStyle(viewModel.allItemsSelected ? .green : .white)
                     }
                     
                     Spacer()
@@ -70,13 +58,13 @@ struct CartScreen: View {
                 List {
                     // MARK: - SECTION
                     Section {
-                        ForEach($orderDetails, id: \.self) { plant in
+                        ForEach($viewModel.orderDetails, id: \.self) { plant in
                             CartItemView(plant: plant)
                                 .listRowInsets(EdgeInsets())
                                 .background(Color.clear)
                         }
-                        .onDelete(perform: deleteItem)
-//                        .listRowSeparator(.hidden)
+                        .onDelete(perform: viewModel.deleteItem)
+                        //                        .listRowSeparator(.hidden)
                     }
                 }
                 .environment(\.editMode, $editMode)
@@ -91,14 +79,14 @@ struct CartScreen: View {
                         Text("Tổng giá tiền")
                             .foregroundStyle(.blue)
                         
-                        Text(totalPrice(), format: .currency(code: "VND"))
+                        Text(viewModel.totalPrice(), format: .currency(code: "VND"))
                             .foregroundStyle(.red)
                     }
                     .font(.headline)
                     .padding(10)
                     
-                    Button {
-                        
+                    NavigationLink {
+                        OrderDetailsScreen(viewModel: viewModel)
                     } label: {
                         Text("Thanh Toán")
                             .font(.title2)
@@ -122,6 +110,9 @@ struct CartScreen: View {
         }
         .background(Color(uiColor: UIColor.systemGray6))
         .ignoresSafeArea(.container, edges: .top)
+        .onAppear {
+            self.viewModel.orderDetails = UserSession.shared.cart
+        }
     }
     
     // MARK: - HEADER VIEW
@@ -134,29 +125,6 @@ struct CartScreen: View {
             Spacer()
         }
         .background(Color.blue) // Màu nền cho header
-    }
-    
-    // MARK: - FUNCTIONS
-    
-    func deleteItem(at offsets: IndexSet) {
-        orderDetails.remove(atOffsets: offsets)
-        print(orderDetails)
-    }
-    
-    func toggleAllSelections() {
-        let shouldSelectAll = !allItemsSelected
-        orderDetails = orderDetails.map { plant in
-            var updatedPlant = plant
-            updatedPlant.isSelected = shouldSelectAll
-            return updatedPlant
-        }
-    }
-    
-    func totalPrice() -> Double {
-        return orderDetails
-            .filter { $0.isSelected }
-            .map { $0.price }
-            .reduce(0, +)
     }
 }
 

@@ -65,6 +65,10 @@ struct RecomendGrid: View {
         }
         .background(.white)
         .padding(.bottom, 80)
+        .refreshable {
+            viewModel.resetPagination()
+            loadMorePlant()
+        }
         .onAppear {
             viewModel.resetPagination()
             loadMorePlant()

@@ -5,8 +5,9 @@
 //  Created by Letter on 04/10/2024.
 //
 import Foundation
+import Observation
 
-class UserSession {
+@Observable class UserSession {
     static let shared = UserSession() // Singleton instance
     
     private init() {
@@ -24,6 +25,8 @@ class UserSession {
             }
         }
     }
+    
+    var cart: [Plant] = []
     
     // Save token to UserDefaults
     func saveToken(_ token: String) {

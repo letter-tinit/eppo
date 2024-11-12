@@ -88,11 +88,11 @@ class ItemBuyViewModel: ObservableObject {
                 case .finished:
                     break
                 }
-            }, receiveValue: { plants in
-                if plants.isEmpty {
+            }, receiveValue: { categoryPlantResponse in
+                if categoryPlantResponse.data.isEmpty {
                     self.isLastPage = true
                 } else {
-                    self.plants.append(contentsOf: plants)
+                    self.plants.append(contentsOf: categoryPlantResponse.data)
                     self.currentPage += 1
                 }
                 

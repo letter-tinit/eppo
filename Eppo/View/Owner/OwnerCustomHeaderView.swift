@@ -42,7 +42,7 @@ struct OwnerCustomHeaderView: View {
         }
         .padding(.horizontal, 20)
         .foregroundStyle(.white)
-        .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .bottom)
+        .frame(width: UIScreen.main.bounds.size.width, height: 90, alignment: .bottom)
         .padding(.bottom, 10)
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
