@@ -5,13 +5,13 @@
 //
 
 import SwiftUI
+import Observation
 
 struct ItemDetailScreen: View {
     // MARK: - PROPERTY
     
     let id: Int
-    @StateObject var viewModel = ItemDetailsViewModel()
-    @State private var currentPage = 0
+    @State var viewModel = ItemDetailsViewModel()
     let images = ["sample-bonsai", "sample-bonsai-01"]
     
     @Environment(\.dismiss) var dismiss
@@ -118,24 +118,13 @@ struct ItemDetailScreen: View {
             }
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = true
-                }
-                viewModel.getPlantById(id: self.id)
+                viewModel.getPlantById(id: id)
             }
-            .onDisappear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = false
-                }
-            }
-
-            
-            
+                        
             Divider()
             
             HStack(alignment: .top, spacing: 0) {
                 Button {
-                    
                 } label: {
                     Image(systemName: "message")
                         .font(.title)
@@ -144,14 +133,25 @@ struct ItemDetailScreen: View {
                 }
                 
                 Divider()
-                
-                Button {
+                VStack {
+                    Button {
+                        viewModel.isAlertShowing = true
+                        addToCart()
+                    } label: {
+                        Image(systemName: "cart")
+                            .font(.title)
+                            .frame(width: UIScreen.main.bounds.size.width / 4)
+                            .padding(.top, 10)
+                    }
+                    .alert(isPresented: $viewModel.isAlertShowing) {
+                        Alert(title: Text(viewModel.message))
+                    }
                     
-                } label: {
-                    Image(systemName: "cart")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
+                    Button {
+                        
+                    } label: {
+//                        EmptyView()
+                    }
                 }
                 
                 Button {
@@ -178,8 +178,27 @@ struct ItemDetailScreen: View {
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
-            }
+    }
+    
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
+    func addToCart() {
+        guard let plant = viewModel.plant else {
+            return
+        }
+        
+        if plantExists(withId: plant.id, in: UserSession.shared.cart) {
+            viewModel.message = "Đơn hàng đã có trong giỏ hàng của bạn rồi"
+        } else {
+            UserSession.shared.cart.append(plant)
+            viewModel.message = "Đã thêm đơn hàng vào giỏ"
+        }
+        
+    }
+    
+    func plantExists(withId id: Int, in plants: [Plant]) -> Bool {
+        return plants.contains { $0.id == id }
+    }
 }
 
 

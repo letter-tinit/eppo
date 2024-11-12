@@ -1,27 +1,18 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
 import SwiftUI
 
-struct CartItemView: View {
+struct OrderItemView: View {
     // MARK: - PROPERTIES
-    @Binding var plant: Plant
+    var plant: Plant
 
     // MARK: - BODY
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            Button {
-                plant.isSelected.toggle()
-            } label: {
-                Image(systemName: plant.isSelected ? "checkmark.square.fill" : "square")
-                    .fontWeight(.semibold)
-                    .frame(width: 20, height: 20)
-                    .foregroundStyle(plant.isSelected ? .green : .gray)
-            }
-            
             // Item Image
             Image("sample-bonsai")
                 .resizable()
@@ -50,5 +41,11 @@ struct CartItemView: View {
         }
         .padding(8)
         .background(.gray.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
+}
+
+// MARK: - PREVIEW
+#Preview {
+    CartScreen()
 }

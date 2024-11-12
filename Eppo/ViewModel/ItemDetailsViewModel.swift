@@ -7,14 +7,21 @@
 
 import Foundation
 import Combine
+import Observation
 
-class ItemDetailsViewModel: ObservableObject {
-    @Published var plant: Plant?
-    
-    @Published var isLoading: Bool = false
+enum ActiveAlert {
+    case first, second
+}
+
+@Observable class ItemDetailsViewModel {
+    var plant: Plant?
+    var isAlertShowing: Bool = false
+
+    var message: String = ""
+
+    var isLoading: Bool = false
     
     private var cancellables = Set<AnyCancellable>()
-    
     
     func getPlantById(id: Int) {
         self.isLoading = true

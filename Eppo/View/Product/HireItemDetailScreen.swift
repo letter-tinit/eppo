@@ -10,8 +10,7 @@ struct HireItemDetailScreen: View {
     // MARK: - PROPERTY
     
     let id: Int
-    @ObservedObject var viewModel = ItemDetailsViewModel()
-    @State private var currentPage = 0
+    @State var viewModel = ItemDetailsViewModel()
     let images = ["sample-bonsai", "sample-bonsai-01"]
     
     @Environment(\.dismiss) var dismiss
@@ -148,15 +147,7 @@ struct HireItemDetailScreen: View {
             }
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = true
-                }
-                viewModel.getPlantById(id: self.id)
-            }
-            .onDisappear {
-                DispatchQueue.main.async {
-                    UIScrollView.appearance().bounces = false
-                }
+                viewModel.getPlantById(id: id)
             }
             .overlay(alignment: .topLeading) {
                 Button {

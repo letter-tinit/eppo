@@ -13,6 +13,8 @@ enum APIError: Error {
     case dataNotFound
     case failedToGetData
     case badUrl
+    case transportError
+    case invalidResponse
 }
 
 struct APIErrorResponse: Codable, Error {
@@ -40,7 +42,15 @@ struct APIConstants {
     }
     
     struct Category {
-        static let getList = baseURL + "api/v1/GetList/Categories?page=1&size=10"
+        static let getList = baseURL + "api/v1/GetList/Categories"
+    }
+    
+    struct Notification {
+        static let getList = baseURL + "api/v1/GetList/Notification"
+    }
+    
+    struct Order {
+        static let createOrder = baseURL + "api/v1/Order"
     }
 }
 
@@ -205,10 +215,10 @@ class APIManager {
     }
     
     func getListCategory(token: String) -> AnyPublisher<CategoryResponse, Error> {
-        let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetList/Categories"
+        let url = APIConstants.Category.getList
         let parameters: [String: Any] = [
             "page": 1,
-            "size": 10
+            "size": 100
         ]
         
         let headers: HTTPHeaders = [
@@ -233,7 +243,7 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func getPlantByTypeAndCate(pageIndex: Int, pageSize: Int, typeEcommerceId: Int, categoryId: Int) -> AnyPublisher<[Plant], Error> {
+    func getPlantByTypeAndCate(pageIndex: Int, pageSize: Int, typeEcommerceId: Int, categoryId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
         guard var urlComponents = URLComponents(string: APIConstants.Plant.getByTypeAndCate) else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
@@ -251,11 +261,83 @@ class APIManager {
         }
         
         return AF.request(url, method: .get)
-            .publishDecodable(type: [Plant].self)
+            .publishDecodable(type: CategoryPlantResponse.self)
             .value()
             .mapError { error in
                 return error as Error
             }
             .eraseToAnyPublisher()
+    }
+    
+    func getListNotifications(token: String, pageIndex: Int, pageSize: Int) -> AnyPublisher<NotificationResponse, Error> {
+        let url = APIConstants.Notification.getList
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)"
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate() // Validates the response
+            .response { response in
+                switch response.result {
+                case .success(let value):
+                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                }
+            }
+            .publishDecodable(type: NotificationResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createOrder(createOrderRequest: CreateOrderRequest) -> AnyPublisher<(Int, String), Error> {
+        let apiUrl = APIConstants.Order.createOrder
+        
+        // Ensure there's a token available
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        
+        return AF.request(apiUrl, method: .post, parameters: createOrderRequest, encoder: JSONParameterEncoder.default, headers: headers)
+            .validate(statusCode: 200..<300) // Validate status code is between 200 and 299
+            .publishData() // Use Alamofire's Combine publisher to get the response
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw NSError(domain: "API Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response received"])
+                }
+                
+                // Check if status code is 200 (Success)
+                if statusCode == 200 {
+                    return (200, "Đơn hàng đã đặt thành công")
+                }
+                
+                // Check for 500 (Server Error) and get the response message
+                if statusCode == 500 {
+                    return (500, "Số dư ví hiện không khả dụng")
+                }
+                
+                // For other status codes, throw an error
+                throw NSError(domain: "API Error", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "Unexpected error occurred"])
+            }
+            .mapError { error in
+                error // Handle and map error to the Combine error
+            }
+            .eraseToAnyPublisher() // Return the publisher as AnyPublisher
     }
 }
