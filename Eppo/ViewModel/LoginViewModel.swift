@@ -13,9 +13,9 @@ import Combine
     var isPopupMessage: Bool {
         get {
             if self.errorMessage == nil {
-                return true
-            } else {
                 return false
+            } else {
+                return true
             }
         }
         
@@ -23,6 +23,7 @@ import Combine
     }
     var isLogged: Bool = false
     var isLoading: Bool = false
+    var isCustomer: Bool = true
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -31,27 +32,21 @@ import Combine
         
         APIManager.shared.login(username: userName, password: password)
             .sink(receiveCompletion: { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
-                    self.isLoading = false
-                    self.isLogged = true
+                    // API request thành công
                     break
                 case .failure(let error):
-                    self.isLoading = false
+                    // Xử lý lỗi
+                    self.handleAPIError(error)
                     self.isPopupMessage = true
-                    if let apiError = error as? APIErrorResponse {
-                        // Handle API-specific error (e.g., unauthorized)
-                        print(apiError.localizedDescription)
-                        self.errorMessage = "Tài khoản hoặc mật khẩu không chính xác"
-                    } else {
-                        // Handle other errors (e.g., networking issues)
-                        self.errorMessage = "Không kết nối được với server. Kiểm tra lại kết nối mạng"
-                    }
                 }
             }, receiveValue: { loginResponse in
-                print(loginResponse.token)
-                if self.checkIsCustomer(token: loginResponse.token) {
+                // Cập nhật dữ liệu vào ViewModel
+                if self.checkIsCustomer(roleName: loginResponse.roleName) {
                     UserSession.shared.saveToken(loginResponse.token)
+                    self.isCustomer = true
                     self.errorMessage = nil
                     self.isLoading = false
                     self.isLogged = true
@@ -61,56 +56,46 @@ import Combine
                     self.errorMessage = "Tài khoản hoặc mật khẩu không chính xác"
                 }
             })
-            .store(in: &cancellables) // Store the cancellable
+            .store(in: &cancellables)
     }
     
-    func checkIsCustomer(token: String) -> Bool {
-        if let user = decodeJWT(token: token) {
-            if user.roleId == "5" {
-                return true
-            } else {
-                return false
+    private func handleAPIError(_ error: Error) {
+        if let apiError = error as? APIError {
+            switch apiError {
+            case .networkError:
+                self.errorMessage = "Không thể kết nối tới mạng."
+            case .serverError(let statusCode):
+                self.errorMessage = "Lỗi từ server: \(statusCode)"
+            case .decodingError:
+                self.errorMessage = "Dữ liệu trả về không hợp lệ."
+            case .custom(let message):
+                self.errorMessage = message
+            case .dataNotFound:
+                self.errorMessage = "Không tìm thấy dữ liệu"
+            case .failedToGetData:
+                self.errorMessage = "Không lấy được dữ liệu"
+            case .badUrl:
+                self.errorMessage = "Lỗi kết nối đến server"
+            case .transportError:
+                self.errorMessage = "Lỗi đường truyền"
+            case .invalidResponse:
+                self.errorMessage = "Dữ liệu trả về bị lỗi"
+            case .noData:
+                self.errorMessage = "Không có dữ liệu trả về"
+            case .unexpectedError:
+                self.errorMessage = "Lỗi không xác định, vui lòng thử lại sau."
             }
         } else {
-            return false
+            self.errorMessage = "Lỗi không xác định, vui lòng thử lại sau."
         }
     }
     
-    func decodeJWT(token: String) -> User? {
-        // Split the JWT token into its parts (header, payload, signature)
-        let segments = token.split(separator: ".")
-        guard segments.count == 3 else {
-            print("Invalid token")
-            return nil
-        }
-        
-        // Extract the payload part (second segment) and decode it
-        let payloadSegment = segments[1]
-        
-        // Decode Base64URL encoded string
-        var base64 = payloadSegment.replacingOccurrences(of: "-", with: "+")
-                                       .replacingOccurrences(of: "_", with: "/")
-        
-        // Add padding if necessary
-        switch base64.count % 4 {
-        case 2: base64.append("==")
-        case 3: base64.append("=")
-        default: break
-        }
-        
-        guard let payloadData = Data(base64Encoded: base64) else {
-            print("Failed to decode base64")
-            return nil
-        }
-        
-        // Decode JSON data into a User object
-        let decoder = JSONDecoder()
-        do {
-            let user = try decoder.decode(User.self, from: payloadData)
-            return user
-        } catch {
-            print("Failed to decode User: \(error)")
-            return nil
+    
+    func checkIsCustomer(roleName: String) -> Bool {
+        if roleName == "customer" {
+            return true
+        } else {
+            return false
         }
     }
     

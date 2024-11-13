@@ -59,6 +59,7 @@ struct LoginScreen: View {
                             Button {
                                 if usernameTextField.isEmpty || passwordTextField.isEmpty {
                                     viewModel.errorMessage = "Tên đăng nhập và mật khẩu không được để trống."
+                                    viewModel.isPopupMessage = true
                                 } else {
                                     viewModel.login(userName: usernameTextField, password: passwordTextField)
                                 }
@@ -153,9 +154,9 @@ struct LoginScreen: View {
                 MainTabView()
             }
         }
-        .onChange(of: viewModel.isLogged) {
-            isLogged = true
-        }
+//        .onChange(of: viewModel.isLogged) {
+//            isLogged = viewModel.isLogged
+//        }
     }
 }
 
