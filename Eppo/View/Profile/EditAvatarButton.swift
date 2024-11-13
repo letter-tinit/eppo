@@ -16,22 +16,14 @@ struct EditAvatarButton: View {
         Button {
             action()
         } label: {
-            ZStack(alignment: .center) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(lineWidth: 2)
-                        .frame(width: 36, height: 30)
-                        .foregroundStyle(.gray)
-                    
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 36, height: 30)
-                        .foregroundStyle(.white)
-                }
-                
-                Image(systemName: "pencil")
-                    .foregroundStyle(.black)
-                    .scaleEffect(1.2)
-            }
+            Image(systemName: "camera")
+                .font(.subheadline)
+                .fontWeight(.bold)
+                .padding(4)
+                .background(.gray.opacity(0.6))
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .padding([.bottom, .trailing], 2)
         }
     }
 }

@@ -8,7 +8,7 @@ import SwiftUI
 
 struct BalanceBox: View {
     // MARK: - PROPERTY
-    var balance: String
+    var balance: Double
     
     @State var isShowing: Bool = false
     
@@ -21,33 +21,33 @@ struct BalanceBox: View {
                     Text("Số dư ví")
                         .font(.system(size: 20, weight: .medium))
                     
+                    Spacer()
+                    
                     Button {
                         isShowing.toggle()
                     } label: {
                         Image(systemName: isShowing ? "eye" : "eye.slash")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
                             .foregroundStyle(.black)
                     }
                 }
                 
                 if isShowing {
-                    HStack {
-                        Text(balance)
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundStyle(.white)
-                        
-                        Text("VND")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundStyle(.white)
-                    }
+                    Text(balance, format: .currency(code: "VND"))
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(.white)
                     
                 } else {
-                    Text("●●●  ●●●  ●●●")
+                    Text("● ● ●   ● ● ●   ● ● ●   ● ● ●")
                         .font(.system(size: 12))
                         .foregroundStyle(.white)
                 }
             }
             .padding()
-            .frame(width: 200, height: 100, alignment: .topLeading)
+            .frame(maxWidth: .infinity)
+            .frame(height: 100, alignment: .topLeading)
         }
         .background(
             RoundedRectangle(cornerRadius: 10)
@@ -58,5 +58,5 @@ struct BalanceBox: View {
 
 // MARK: - PREVIEW
 #Preview(traits: .sizeThatFitsLayout) {
-    BalanceBox(balance: "10.000.000")
+    BalanceBox(balance: 100000000000)
 }

@@ -18,7 +18,7 @@ enum Tab: String, CaseIterable {
 struct MainTabView: View {
     // MARK: - PROPERTY
     
-    @State private var selectedTab: Tab = .explore
+    @State private var selectedTab: Tab = .profile
     
     init () {
         //        UITabBar.appearance().backgroundColor = UIColor.white

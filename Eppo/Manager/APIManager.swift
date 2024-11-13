@@ -15,6 +15,14 @@ enum APIError: Error {
     case badUrl
     case transportError
     case invalidResponse
+    
+    // MARK: - NEW CASE
+    case networkError
+    case serverError(statusCode: Int)
+    case decodingError
+    case noData
+    case custom(message: String)
+    case unexpectedError
 }
 
 struct APIErrorResponse: Codable, Error {
@@ -52,6 +60,15 @@ struct APIConstants {
     struct Order {
         static let createOrder = baseURL + "api/v1/Order"
     }
+    
+    struct User {
+        static let getMyInfor = baseURL + "api/v1/GetUser/Users/Information/UserID"
+    }
+    
+    
+    struct Address {
+        static let create = baseURL + "api/v1/GetList/Address/CreateAddress"
+    }
 }
 
 class APIManager {
@@ -64,31 +81,47 @@ class APIManager {
         
         let parameters = LoginRequest(userName: username, password: password)
         
-        return Future<LoginResponse, Error> { promise in
-            // Use Alamofire to make the request
-            AF.request(apiUrl, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
-                .validate()
-                .responseDecodable(of: LoginResponse.self) { response in
-                    switch response.result {
-                    case .success(let loginResponse):
-                        promise(.success(loginResponse))
-                    case .failure(let error):
+        return AF.request(apiUrl, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default)
+            .publishData()
+            .tryMap { response in
+                // Kiểm tra mã trạng thái HTTP
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 200...299:
+                        // Nếu mã thành công, trả về dữ liệu thô
                         if let data = response.data {
-                            do {
-                                // Parse error response if data is available
-                                let apiError = try JSONDecoder().decode(APIErrorResponse.self, from: data)
-                                promise(.failure(apiError))
-                            } catch {
-                                promise(.failure(error))
-                            }
+                            return data
                         } else {
-                            // Handle other network or validation errors
-                            promise(.failure(error))
+                            throw APIError.noData // Nếu không có dữ liệu, ném lỗi thích hợp
                         }
+                    case 400...499:
+                        throw APIError.serverError(statusCode: statusCode)
+                    case 401:
+                        throw APIError.custom(message: "Chưa được xác thực.")
+                    case 403:
+                        throw APIError.custom(message: "Không có quyền truy cập.")
+                    case 404:
+                        throw APIError.custom(message: "Không tìm thấy dữ liệu.")
+                    case 500...599:
+                        throw APIError.serverError(statusCode: statusCode)
+                    default:
+                        // Lỗi khác
+                        throw APIError.unexpectedError
                     }
+                } else {
+                    throw APIError.networkError
                 }
-        }
-        .eraseToAnyPublisher()
+            }
+            .decode(type: LoginResponse.self, decoder: JSONDecoder()) // Giải mã dữ liệu
+            .mapError { error in
+                // Chuyển đổi lỗi thành APIError
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.decodingError
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     // MARK: - FIX Get do not contains request body
@@ -337,6 +370,66 @@ class APIManager {
             }
             .mapError { error in
                 error // Handle and map error to the Combine error
+            }
+            .eraseToAnyPublisher() // Return the publisher as AnyPublisher
+    }
+    
+    func getMyInformation() -> AnyPublisher<UserResponse, Error> {
+        let apiUrl = APIConstants.User.getMyInfor
+        
+        // Ensure there's a token available
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        //        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzIiwicm9sZUlkIjoiNSIsInJvbGVOYW1lIjoiY3VzdG9tZXIiLCJmdWxsTmFtZSI6IlVzZXIgVGhyZWUiLCJlbWFpbCI6ImN1c3RvbWVyQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwMTEyMjMzNDQ1IiwiZ2VuZGVyIjoiTWFsZSIsIndhbGxldElkIjoiMiIsImlkZW50aWZpY2F0aW9uQ2FyZCI6IjEyMzQ1NiIsImRhdGVPZkJpcnRoIjoiMy8zLzE5OTQgMTI6MDA6MDAgQU0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjdXN0b21lciIsImV4cCI6MTczMTQwMDY0MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDAifQ.TFZ_kqsJ27dltRVfud-IJXbhy94SnQIbwMxeDvSKJFE"
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        
+        return AF.request(apiUrl, method: .get, headers: headers)
+            .validate()
+            .response { response in
+                switch response.result {
+                case .success(let value):
+                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                }
+            }
+            .publishDecodable(type: UserResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createAddress(createAddressResponse: CreateAddessRequest) -> AnyPublisher<CreateAddressResponse, Error> {
+        let apiUrl = APIConstants.Address.create
+        
+        // Ensure there's a token available
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "Content-Type": "application/json"
+        ]
+        
+        return AF.request(apiUrl, method: .post, parameters: createAddressResponse, encoder: JSONParameterEncoder.default, headers: headers)
+            .validate()
+            .publishDecodable(type: CreateAddressResponse.self)
+            .value()
+            .mapError { error in
+                error
             }
             .eraseToAnyPublisher() // Return the publisher as AnyPublisher
     }

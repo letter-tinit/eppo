@@ -96,7 +96,7 @@ struct OwnerProfileScreen: View {
                             .foregroundStyle(.settingBoxBackground)
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount())
+                            CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount(viewModel: ProfileViewModel()))
                             
                             Divider()
                             
