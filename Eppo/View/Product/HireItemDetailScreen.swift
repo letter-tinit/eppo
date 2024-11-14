@@ -194,8 +194,8 @@ struct HireItemDetailScreen: View {
                 }
                 .padding(20)
                 
-                Button {
-                    
+                NavigationLink {
+                   HireOrderScreen(viewModel: viewModel)
                 } label: {
                     VStack(alignment: .leading) {
                         Text("Thuê cây")

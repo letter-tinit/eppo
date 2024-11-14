@@ -59,6 +59,7 @@ struct APIConstants {
     
     struct Order {
         static let createOrder = baseURL + "api/v1/Order"
+        static let createOrderRental = baseURL + "api/v1/Order/CreateOrderRental"
     }
     
     struct User {
@@ -70,6 +71,11 @@ struct APIConstants {
         static let getList = baseURL + "api/v1/GetList/Address/OfByUserID/ByToken"
         static let create = baseURL + "api/v1/GetList/Address/CreateAddress"
         static let delete = baseURL + "api/v1/GetList/Address/Delete/AddressByToken/Id"
+    }
+    
+    struct Contract {
+        static let getById = baseURL + "api/v1/GetList/Contracts/Id"
+        static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
     }
 }
 
@@ -513,6 +519,49 @@ class APIManager {
                 // Map error to a general `Error`
                 return error
             }
+            .eraseToAnyPublisher()
+    }
+    
+    func createContract(createContractRequest: ContractRequest) -> AnyPublisher<ContractResponse, Error> {
+        let url = APIConstants.Contract.create
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: createContractRequest, encoder: JSONParameterEncoder.iso8601, headers: headers)
+            .validate()
+            .publishDecodable(type: ContractResponse.self)
+            .value()
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
+    }
+    
+    func getContractById(contractId: Int) -> AnyPublisher<GetContractByIdResponse, Error> {
+        let url = APIConstants.Contract.getById
+        
+        let param: [String : Any] = [
+            "id": contractId
+        ]
+        
+        return AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default)
+            .validate()
+            .publishDecodable(type: GetContractByIdResponse.self)
+            .value()
+            .mapError { error in
+                return error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createOrderRental(order: Order) -> AnyPublisher<OrderResponse, Error> {
+        let url = APIConstants.Order.createOrderRental
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: order, encoder: JSONParameterEncoder.iso8601, headers: headers)
+            .validate()
+            .publishDecodable(type: OrderResponse.self)
+            .value()
+            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
     
