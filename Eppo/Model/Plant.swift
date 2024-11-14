@@ -23,3 +23,9 @@ struct Plant: Codable, Identifiable, Hashable {
         case description = "description"
     }
 }
+
+struct PlantResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let data: Plant
+}

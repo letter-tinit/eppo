@@ -21,6 +21,12 @@ enum ActiveAlert {
 
     var isLoading: Bool = false
     
+    // MARK: - HireItemDetailScreen
+    var selectedDate = Date()
+    var numberOfMonth = 1
+    let step = 1
+    let range = 1...99
+    
     private var cancellables = Set<AnyCancellable>()
     
     func getPlantById(id: Int) {
@@ -35,8 +41,8 @@ enum ActiveAlert {
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
-            } receiveValue: { plant in
-                self.plant = plant
+            } receiveValue: { plantResponse in
+                self.plant = plantResponse.data
             }
             .store(in: &cancellables)
     }

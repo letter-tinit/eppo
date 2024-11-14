@@ -13,29 +13,29 @@ struct AddressScreen: View {
         VStack(spacing: 0) {
             CustomHeaderView(title: "Địa chỉ của Tôi")
             
-            List {
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
-                Text("Thông Tin Địa Chỉ")
+            if viewModel.addresses.isEmpty {
+                Spacer()
+                
+                Text("Bạn chưa có địa chỉ nào")
+                
+                Spacer()
+            } else {
+                List {
+                    ForEach(viewModel.addresses) { address in
+                        Text(address.description)
+                    }
+                    .onDelete { indices in
+                        // Pass the ID of the address to delete
+                        indices.forEach { index in
+                            let addressId = viewModel.addresses[index].id
+                            viewModel.deleteAddress(by: addressId)
+                        }
+                    }
+                }
+                .font(.headline)
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
             }
-            .font(.headline)
-            .fontWeight(.medium)
-            .fontDesign(.rounded)
             
             Button {
                 viewModel.isPopup = true
@@ -44,7 +44,7 @@ struct AddressScreen: View {
                     .font(.title3)
                     .fontWeight(.medium)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 50)
+                    .frame(height: 80)
                     .background(.green)
                     .foregroundStyle(.white)
             }
@@ -85,6 +85,9 @@ struct AddressScreen: View {
         })
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .top)
+        .onAppear {
+            viewModel.getAddress()
+        }
     }
 }
 

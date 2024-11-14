@@ -90,7 +90,6 @@ import Combine
         }
     }
     
-    
     func checkIsCustomer(roleName: String) -> Bool {
         if roleName == "customer" {
             return true

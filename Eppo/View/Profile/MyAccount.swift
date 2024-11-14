@@ -19,7 +19,6 @@ struct MyAccount: View {
     // MARK: - PROPERTY
     @Bindable var viewModel: ProfileViewModel
     
-    
     // MARK: - BODY
     
     var body: some View {
@@ -41,7 +40,7 @@ struct MyAccount: View {
                             .foregroundStyle(.textDarkBlue)
                             .font(.system(size: 16, weight: .semibold))
                         BorderTextField {
-                            TextField(viewModel.userResponse?.data.userName ?? "Đang tải", text: $viewModel.usernameTextField)
+                            TextField(viewModel.userResponse?.data.fullName ?? "Đang tải", text: $viewModel.usernameTextField)
                         }
                         .frame(height: 50)
                         
@@ -113,7 +112,7 @@ struct MyAccount: View {
                         BorderTextField {
                             TextField(text: $viewModel.idCodeTextField) {
                                 Text(viewModel.userResponse?.data.identificationCard ?? 0, format: .number.grouping(.never))
-                                    
+                                
                             }
                             .keyboardType(.numberPad)
                         }

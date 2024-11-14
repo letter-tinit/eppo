@@ -18,3 +18,9 @@ struct CreateAddressResponse: Codable {
 struct DataCreateAddressResponse: Codable {
     let description: String
 }
+
+struct AddressResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let data: [Address]
+}

@@ -102,8 +102,13 @@ struct CartScreen: View {
             } else {
                 Spacer()
                 
-                Text("Giỏ hàng trống")
-                    .background(.red)
+                VStack {
+                    Text("Giỏ hàng trống")
+                        .font(.headline)
+                    Image(systemName: "cart.fill.badge.questionmark")
+                        .font(.title)
+                }
+                .foregroundStyle(.gray)
             }
             
             Spacer()

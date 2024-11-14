@@ -59,10 +59,10 @@ struct OrderHistoryScreen: View {
                     }
                 }
             }
-            
+                        
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach (0 ..< 4) { _ in
-                    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", originalPrice: 190000, currentPrice: 150000, quantity: 1, totalPrice: 200000)
+                    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", price: 150000, quantity: 1, totalPrice: 200000)
                 }
                 .padding(.top, 10)
                 .background(Color(uiColor: UIColor.systemGray5))

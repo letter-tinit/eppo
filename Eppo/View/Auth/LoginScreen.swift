@@ -154,9 +154,12 @@ struct LoginScreen: View {
                 MainTabView()
             }
         }
-//        .onChange(of: viewModel.isLogged) {
-//            isLogged = viewModel.isLogged
-//        }
+        .onAppear {
+            viewModel.login(userName: "customer", password: "123")
+        }
+        .onChange(of: viewModel.isLogged) { oldValue, newValue in
+            self.isLogged = newValue
+        }
     }
 }
 

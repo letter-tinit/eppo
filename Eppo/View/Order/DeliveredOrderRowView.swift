@@ -11,8 +11,7 @@ struct DeliveredOrderRowView: View {
     var image: Image
     var itemName: String
     var itemType: String
-    var originalPrice: Double
-    var currentPrice: Double
+    var price: Double
     var quantity: Int
     var totalPrice: Double
 
@@ -24,7 +23,7 @@ struct DeliveredOrderRowView: View {
                 // Item Image
                 Image("sample-bonsai")
                     .resizable()
-                    .frame(width: 80, height: 80)
+                    .frame(width: 70, height: 70)
                     .clipped()
                     .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
                 
@@ -37,27 +36,11 @@ struct DeliveredOrderRowView: View {
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                         .lineLimit(1)
-
-                    HStack {
-                        Text("Đổi ý 15 ngày")
-                            .font(.caption)
-                            .padding(3)
-                            .border(.mint)
-                            .foregroundStyle(.mint)
-                            .lineLimit(1)
-                        
-                        Spacer()
-                        
-                        Text(originalPrice, format: .currency(code: "VND"))
-                            .font(.subheadline)
-                            .foregroundStyle(.black)
-                            .strikethrough()
-                        
-                        Text(currentPrice, format: .currency(code: "VND"))
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.red)
-                            .font(.subheadline)
-                    }
+                    
+                    Text(price, format: .currency(code: "VND"))
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.red)
+                        .font(.subheadline)
                 }
                 
                 Spacer()
@@ -124,5 +107,5 @@ struct DeliveredOrderRowView: View {
 
 // MARK: - PREVIEW
 #Preview {
-    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", originalPrice: 190000, currentPrice: 150000, quantity: 1, totalPrice: 200000)
+    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", price: 150000, quantity: 1, totalPrice: 200000)
 }

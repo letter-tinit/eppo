@@ -36,7 +36,11 @@ struct ProfileScreen: View {
                     
                 } //: HEADER STACK
                 
-                BalanceBox(balance: viewModel.userResponse?.data.wallet.numberBalance ?? 0.0)
+                if let wallet = viewModel.userResponse?.data.wallet {
+                    BalanceBox(balance: wallet.numberBalance)
+                } else {
+                    BalanceBox(balance: 0)
+                }
                 
                 
                 // MARK: - DELIVER TOOLS BAR
@@ -112,6 +116,7 @@ struct ProfileScreen: View {
                 Spacer(minLength: 80)
                 
                 Button {
+                    viewModel.logout()
                     self.isLogged = false
                 } label: {
                     ZStack {
