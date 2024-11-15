@@ -10,19 +10,16 @@ struct BuyOrderRowView: View {
     // MARK: - PROPERTY
     var totalPrice: Double
     var deliveriteFree: Double
+    
+    let orderDetails: [BuyHistoryOrderDetail]
+    
     var isCancellable: Bool = false
     
-    let plants: [Plant] = [
-        Plant(id: 1, name: "Rose", price: 15.99, description: "A beautiful red rose."),
-        Plant(id: 2, name: "Tulip", price: 10.50, description: "A vibrant spring tulip."),
-//        Plant(id: 3, name: "Orchid", price: 25.75, description: "An elegant and exotic orchid.")
-    ]
-    
     // MARK: - BODY
-
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            ForEach(plants) { plant in
+        LazyVStack(alignment: .leading) {
+            ForEach(orderDetails) { orderDetail in
                 HStack(alignment: .center) {
                     // Item Image
                     Image("sample-bonsai")
@@ -32,11 +29,11 @@ struct BuyOrderRowView: View {
                         .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
                     
                     VStack(alignment: .leading) {
-                        Text(plant.name)
+                        Text(orderDetail.plant.name)
                             .font(.headline)
                             .lineLimit(1)
                         
-                        Text(plant.price, format: .currency(code: "VND"))
+                        Text(orderDetail.plant.price, format: .currency(code: "VND"))
                             .fontWeight(.semibold)
                             .foregroundStyle(.red)
                             .font(.subheadline)
@@ -52,7 +49,7 @@ struct BuyOrderRowView: View {
             HStack(alignment: .bottom) {
                 // Quantity
                 VStack(alignment: .leading) {
-                    Text("Số sản phẩm: \(plants.count)")
+                    Text("Số sản phẩm: \(orderDetails.count)")
                     Text("Phí ship: \(deliveriteFree.formatted(.currency(code: "VND")))")
                 }
                 .font(.subheadline)
@@ -93,11 +90,10 @@ struct BuyOrderRowView: View {
         .padding(.vertical)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.horizontal, 10)
     }
 }
 
 // MARK: - PREVIEW
-#Preview {
-    BuyOrderRowView(totalPrice: 2001, deliveriteFree: 0)
-}
+//#Preview {
+//    BuyOrderRowView(totalPrice: 2001, deliveriteFree: 0)
+//}

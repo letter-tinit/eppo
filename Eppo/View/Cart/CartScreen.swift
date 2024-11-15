@@ -118,6 +118,9 @@ struct CartScreen: View {
         .onAppear {
             self.viewModel.orderDetails = UserSession.shared.cart
         }
+        .onChange(of: viewModel.orderDetails) {
+            viewModel.selectedOrder = viewModel.orderDetails.filter { $0.isSelected }
+        }
     }
     
     // MARK: - HEADER VIEW

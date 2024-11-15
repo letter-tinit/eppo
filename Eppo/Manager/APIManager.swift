@@ -61,6 +61,8 @@ struct APIConstants {
         static let createOrder = baseURL + "api/v1/Order"
         static let createOrderRental = baseURL + "api/v1/Order/CreateOrderRental"
         static let updatePaymentOrderRental = baseURL + "api/v1/Order/UpdatePaymentOrderRental"
+        static let getHireOrderHistory = baseURL + "api/v1/Order/GetOrdersRentalByUser"
+        static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
     }
     
     struct User {
@@ -577,7 +579,7 @@ class APIManager {
     }
     
     func updatePaymentOrderRental(orderId: Int, contractId: Int, paymentId: Int) -> AnyPublisher<Void, Error> {
-        let url = APIConstants.Order.createOrderRental
+        let url = APIConstants.Order.updatePaymentOrderRental
         
         let parameters: [String: Any] = [
             "orderId": orderId,
@@ -603,7 +605,50 @@ class APIManager {
             }
             .eraseToAnyPublisher()
     }
+    
+    func getHireOrderHistory(pageIndex: Int, pageSize: Int, status: Int) -> AnyPublisher<HireHistoryResponse, Error> {
+        let url = APIConstants.Order.getHireOrderHistory
+        
+        let parameters: [String: Any] = [
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
+            "status": status
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: HireHistoryResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
 
+    func getBuyOrderHistory(pageIndex: Int, pageSize: Int, status: Int) -> AnyPublisher<BuyHistoryResponse, Error> {
+        let url = APIConstants.Order.getBuyOrderHistory
+        
+        let parameters: [String: Any] = [
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
+            "status": status
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: BuyHistoryResponse.self)
+            .value()
+            .mapError { error in
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
     
     func setupHeaderToken() -> HTTPHeaders? {
         guard let token = UserSession.shared.token else {

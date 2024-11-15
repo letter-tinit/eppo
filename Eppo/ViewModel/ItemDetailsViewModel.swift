@@ -30,6 +30,10 @@ enum ActiveAlert {
     var contractUrl: String?
     var isSigned: Bool = false
     var isLinkActive = false
+    
+    // MARK: - BuyItemDetailScreen
+    var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+
     private var cancellables = Set<AnyCancellable>()
     
     func getPlantById(id: Int) {
@@ -167,12 +171,44 @@ enum ActiveAlert {
 
     }
     
+    // MARK: - BuyItemDetailScreen
+    func createOrder() {
+        guard let plant = self.plant,
+        let deliveriteFree = self.deliveriteFree else {
+            return
+        }
+        
+        let orderDetails: [Plant] = [plant]
+        
+        let createOrderRequest = CreateOrderRequest(totalPrice: plant.price, deliveryFee: deliveriteFree, deliveryAddress: "Địa chỉ FIXXXXXX", paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
+        
+        isLoading = true
+        
+        APIManager.shared.createOrder(createOrderRequest: createOrderRequest)
+            .sink(receiveCompletion: { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    print("Thực thi thành công")
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }, receiveValue: { statusCode, message in
+                print(message)
+            })
+            .store(in: &cancellables)
+    }
+    
     func rentTotalAmount() -> Double {
         return ((self.plant?.price ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
     }
     
     func rentTotalPrice() -> Double {
         return ((self.plant?.price ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
+    }
+    
+    func totalPrice() -> Double {
+        return (self.plant?.price ?? 0) + (self.deliveriteFree ?? 0)
     }
     
     private func handleAPIError(_ error: Error) {

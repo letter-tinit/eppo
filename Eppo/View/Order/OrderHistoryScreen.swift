@@ -1,6 +1,6 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
@@ -23,10 +23,9 @@ enum OrderState: String, CaseIterable {
 
 struct OrderHistoryScreen: View {
     // MARK: - PROPERTY
+    @State var viewModel = BuyOrderViewModel()
     @Namespace private var animation
     
-    @State var selectedOrderState: OrderState = .waitingForConfirm
-
     // MARK: - BODY
     
     var body: some View {
@@ -37,7 +36,7 @@ struct OrderHistoryScreen: View {
                     ForEach(OrderState.allCases, id: \.self) { orderState in
                         Button {
                             withAnimation {
-                                selectedOrderState = orderState
+                                viewModel.selectedOrderState = orderState
                             }
                         } label: {
                             Text(orderState.flag)
@@ -46,33 +45,49 @@ struct OrderHistoryScreen: View {
                         .clipShape(
                             RoundedRectangle(cornerRadius: 10)
                         )
-                        .foregroundColor(selectedOrderState == orderState ? .white : .primary)
+                        .foregroundColor(viewModel.selectedOrderState == orderState ? .white : .primary)
                         .frame(width: 140)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
+                                .fill(viewModel.selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
                         )
                         .padding(.vertical, 10)
                         .padding(orderState == .waitingForConfirm ? .leading : [])
                         .padding(orderState == .canceled ? .trailing : [])
-                        .matchedGeometryEffect(id: orderState, in: animation, isSource: selectedOrderState == orderState)
+                        .matchedGeometryEffect(id: orderState, in: animation, isSource: viewModel.selectedOrderState == orderState)
                     }
                 }
             }
-                        
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach (0 ..< 4) { _ in
-//                    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", price: 150000, quantity: 1, totalPrice: 200000)
-                }
-                .padding(.top, 10)
-                .background(Color(uiColor: UIColor.systemGray5))
-            }
-            .padding(.bottom, 30)
             
+            if viewModel.orders.isEmpty {
+                Spacer()
+                
+                Text("Không tìm thấy đơn hàng")
+                    .font(.headline)
+                    .foregroundStyle(.gray)
+                
+                Spacer()
+                
+            } else {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach (viewModel.orders) { order in
+                        BuyOrderRowView(totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: true)
+                            .padding(10)
+                    }
+                    .background(Color(uiColor: UIColor.systemGray5))
+                }
+                .padding(.bottom, 30)
+            }
         }
         .background(.white)
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .vertical)
+        .onAppear {
+            viewModel.getBuyOrderHistory()
+        }
+        .onChange(of: viewModel.selectedOrderState) {
+            viewModel.getBuyOrderHistory()
+        }
     }
 }
 

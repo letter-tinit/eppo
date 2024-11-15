@@ -18,7 +18,7 @@ struct HireOrderRowView: View {
 //        Plant(id: 2, name: "Tulip", price: 10.50, description: "A vibrant spring tulip."),
 //        Plant(id: 3, name: "Orchid", price: 25.75, description: "An elegant and exotic orchid.")
 //    ]
-    let plant = Plant(id: 1, name: "Rose", price: 15.99, description: "A beautiful red rose.")
+    let orderDetail: HireHistoryOrderDetail
     
     // MARK: - BODY
 
@@ -28,23 +28,28 @@ struct HireOrderRowView: View {
                 // Item Image
                 Image("sample-bonsai")
                     .resizable()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 80, height: 80)
                     .clipped()
                     .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
                 
                 VStack(alignment: .leading) {
-                    Text(plant.name)
+                    Text(orderDetail.plant.name)
                         .font(.headline)
                         .lineLimit(1)
                     
-                    Text(plant.price, format: .currency(code: "VND"))
+                    Text(orderDetail.plant.price, format: .currency(code: "VND"))
                         .fontWeight(.semibold)
                         .foregroundStyle(.red)
                         .font(.subheadline)
                     
-                    Text("Thuê: \(Date.now.formatted(date: .long, time: .omitted))")
+                    Text("Ngày thuê: \(orderDetail.rentalStartDate.formatted(date: .numeric, time: .omitted))")
                         .fontWeight(.semibold)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.green)
+                        .font(.subheadline)
+                    
+                    Text("Ngày trả: \(orderDetail.rentalEndDate.formatted(date: .numeric, time: .omitted))")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.red)
                         .font(.subheadline)
                 }
                 
@@ -103,6 +108,6 @@ struct HireOrderRowView: View {
 }
 
 // MARK: - PREVIEW
-#Preview {
-    HireOrderRowView(totalPrice: 2001, deliveriteFree: 0, numberOfMonth: 3)
-}
+//#Preview {
+//    HireOrderRowView(totalPrice: 2001, deliveriteFree: 0, numberOfMonth: 3, plant: Plant(id: 1, name: "Rose", price: 15.99, description: "A beautiful red rose."))
+//}
