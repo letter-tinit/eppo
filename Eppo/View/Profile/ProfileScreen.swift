@@ -11,13 +11,6 @@ struct ProfileScreen: View {
     @AppStorage("isLogged") var isLogged: Bool = false
     
     @State var viewModel = ProfileViewModel()
-    
-    @State private var isActiveWaitingForConfirmed = false
-    @State private var isActiveWaitingForPackage = false
-    @State private var isActiveWaitingForDelivered = false
-    @State private var isActiveRating = false
-        
-    @State var selectedOrderState: OrderState = .delivered
     // MARK: - BODY
     
     var body: some View {
@@ -49,31 +42,24 @@ struct ProfileScreen: View {
                         .foregroundStyle(.settingBoxBackground)
                     
                     HStack(spacing: 14) {
-                        Button {
-                            isActiveWaitingForConfirmed = true
-                            selectedOrderState = .waitingForConfirm
+                        NavigationLink {
+                            OrderHistoryScreen()
                         } label: {
-                            CustomButtonImageLabel(imageName: "list.clipboard.fill", title: "Chờ xác nhận")
+                            CustomButtonImageLabel(imageName: "cart.badge.plus", title: "Đơn mua")
+                        }
+                        
+                        NavigationLink {
+                            HireOrderHistoryScreen()
+                        } label: {
+                            CustomButtonImageLabel(imageName: "doc.plaintext", title: " Đơn thuê")
                         }
                         
                         Button {
-                            isActiveWaitingForPackage = true
-                            selectedOrderState = .waitingForPackage
-                        } label: {
-                            CustomButtonImageLabel(imageName: "clock.arrow.circlepath", title: "Chờ đóng gói")
-                        }
-                        
-                        Button {
-                            isActiveWaitingForDelivered = true
-                            selectedOrderState = .waitingForDeliver
                         } label: {
                             CustomButtonImageLabel(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng")
                         }
                         
-                        
                         Button {
-                            isActiveRating = true
-                            selectedOrderState = .waitingForDeliver
                         } label: {
                             CustomButtonImageLabel(imageName: "star.bubble.fill", title: "Đánh giá")
                         }
@@ -146,18 +132,6 @@ struct ProfileScreen: View {
         .scrollIndicators(.hidden)
         .onAppear {
             viewModel.getMyInformation()
-        }
-        .navigationDestination(isPresented: $isActiveWaitingForConfirmed) {
-            OrderHistoryScreen(selectedOrderState: $selectedOrderState)
-        }
-        .navigationDestination(isPresented: $isActiveWaitingForPackage) {
-            OrderHistoryScreen(selectedOrderState: $selectedOrderState)
-        }
-        .navigationDestination(isPresented: $isActiveWaitingForDelivered) {
-            OrderHistoryScreen(selectedOrderState: $selectedOrderState)
-        }
-        .navigationDestination(isPresented: $isActiveRating) {
-            OrderHistoryScreen(selectedOrderState: $selectedOrderState)
         }
     }
 }

@@ -64,7 +64,6 @@ enum ActiveAlert {
             totalPrice: rentTotalPrice(),
             deliveryFee: deliveriteFree,
             deliveryAddress: "Thành Phố Hồ Chí Minh",
-            paymentId: paymentId,
             orderDetails: [
                 OrderDetail(plantId: plant.id,
                             rentalStartDate: Date(),

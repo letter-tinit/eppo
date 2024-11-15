@@ -1,27 +1,13 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
 import SwiftUI
 
 
-// MARK: - ENUM
-
-enum OrderState: String, CaseIterable {
-    case waitingForConfirm = "Chờ xác nhận"
-    case waitingForPackage = "Chờ đóng gói"
-    case waitingForDeliver = "Chờ giao hàng"
-    case delivered = "Đã giao"
-    case canceled = "Đã hủy"
-    
-    var flag: String {
-        return self.rawValue
-    }
-}
-
-struct OrderHistoryScreen: View {
+struct HireOrderHistoryScreen: View {
     // MARK: - PROPERTY
     @Namespace private var animation
     
@@ -31,7 +17,7 @@ struct OrderHistoryScreen: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(title: "Đơn hàng của bạn")
+            CustomHeaderView(title: "Đơn hàng Thuê")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(OrderState.allCases, id: \.self) { orderState in
@@ -62,9 +48,9 @@ struct OrderHistoryScreen: View {
                         
             ScrollView(.vertical, showsIndicators: false) {
                 ForEach (0 ..< 4) { _ in
-//                    DeliveredOrderRowView(image: Image("sample-bonsai"), itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu", price: 150000, quantity: 1, totalPrice: 200000)
+                    HireOrderRowView(totalPrice: 2001, deliveriteFree: 0, numberOfMonth: 3)
                 }
-                .padding(.top, 10)
+                .padding(.vertical, 10)
                 .background(Color(uiColor: UIColor.systemGray5))
             }
             .padding(.bottom, 30)
@@ -78,5 +64,5 @@ struct OrderHistoryScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    OrderHistoryScreen()
+    HireOrderHistoryScreen()
 }

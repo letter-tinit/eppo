@@ -18,7 +18,6 @@ struct Order: Codable {
     var totalPrice: Double
     var deliveryFee: Double
     var deliveryAddress: String
-    var paymentId: Int
     var orderDetails: [OrderDetail]
 }
 
