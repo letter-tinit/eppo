@@ -95,6 +95,7 @@ struct HireOrderScreen: View {
                                 .underline()
                                 .foregroundStyle(.blue)
                         }
+                        .disabled(viewModel.contractUrl == nil)
                         
                         Divider()
                         
@@ -164,7 +165,6 @@ struct HireOrderScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            viewModel.createOrderRental(paymentId: selectedPaymentMethod == .cashOnDelivery ? 1 : 2)
             //            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
         }
     }

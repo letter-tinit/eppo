@@ -194,8 +194,8 @@ struct HireItemDetailScreen: View {
                 }
                 .padding(20)
                 
-                NavigationLink {
-                   HireOrderScreen(viewModel: viewModel)
+                Button {
+                    viewModel.createOrderRental()
                 } label: {
                     VStack(alignment: .leading) {
                         Text("Thuê cây")
@@ -215,12 +215,18 @@ struct HireItemDetailScreen: View {
                     .padding(.bottom, 20)
                     .background(.red)
                 }
+                .navigationDestination(isPresented: $viewModel.isLinkActive) {
+                    HireOrderScreen(viewModel: viewModel)
+                }
             }
             .frame(width: UIScreen.main.bounds.size.width, height: 100)
             .shadow(radius: 2, y: 2)
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
+        }
     }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 }

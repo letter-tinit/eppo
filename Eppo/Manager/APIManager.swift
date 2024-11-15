@@ -60,6 +60,7 @@ struct APIConstants {
     struct Order {
         static let createOrder = baseURL + "api/v1/Order"
         static let createOrderRental = baseURL + "api/v1/Order/CreateOrderRental"
+        static let updatePaymentOrderRental = baseURL + "api/v1/Order/UpdatePaymentOrderRental"
     }
     
     struct User {
@@ -558,12 +559,51 @@ class APIManager {
         let headers = setupHeaderToken()
         
         return AF.request(url, method: .post, parameters: order, encoder: JSONParameterEncoder.iso8601, headers: headers)
-            .validate()
-            .publishDecodable(type: OrderResponse.self)
-            .value()
-            .mapError { $0 as Error }
+            .validate(statusCode: 200..<300)
+            .publishData() // Use `publishData` to inspect the response data
+            .tryMap { response in
+                if let statusCode = response.response?.statusCode, statusCode == 400 {
+                    // Return a custom error message for status code 400
+                    throw APIError.custom(message: "Đơn hàng của bạn đã tạo rồi")
+                }
+                return response.data ?? Data()
+            }
+            .decode(type: OrderResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                // Handle or map other errors here if needed
+                return error as Error
+            }
             .eraseToAnyPublisher()
     }
+    
+    func updatePaymentOrderRental(orderId: Int, contractId: Int, paymentId: Int) -> AnyPublisher<Void, Error> {
+        let url = APIConstants.Order.createOrderRental
+        
+        let parameters: [String: Any] = [
+            "orderId": orderId,
+            "contractId": contractId,
+            "paymentId": paymentId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate(statusCode: 200..<300) // Chỉ thành công với status code 200-299
+            .publishData() // Dùng publishData để kiểm tra dữ liệu trả về
+            .tryMap { response in
+                // Kiểm tra xem response có dữ liệu không, nếu không thì trả về lỗi
+                guard response.data != nil else {
+                    throw APIError.unexpectedError // Lỗi nếu không có dữ liệu
+                }
+                return () // Thành công thì trả về Void
+            }
+            .mapError { error in
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+
     
     func setupHeaderToken() -> HTTPHeaders? {
         guard let token = UserSession.shared.token else {
