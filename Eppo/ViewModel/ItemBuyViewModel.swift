@@ -36,7 +36,8 @@ class ItemBuyViewModel: ObservableObject {
                 case .finished:
                     break
                 }
-            }, receiveValue: { plants in
+            }, receiveValue: { responseData in
+                let plants = responseData.data
                 if plants.isEmpty {
                     self.isLastPage = true // No more data to load
                 } else {

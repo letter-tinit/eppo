@@ -18,8 +18,6 @@ struct EppoApp: App {
             } else {
                 LoginScreen()
             }
-            
-//            MainTabView()
         }
     }
 }

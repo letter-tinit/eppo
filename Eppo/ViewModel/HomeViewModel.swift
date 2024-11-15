@@ -27,7 +27,8 @@ class HomeViewModel: ObservableObject {
                 case .finished:
                     break
                 }
-            }, receiveValue: { plants in
+            }, receiveValue: { responseData in
+                let plants = responseData.data
                 self.plants = plants
             })
             .store(in: &cancellables)
@@ -47,7 +48,9 @@ class HomeViewModel: ObservableObject {
                 case .finished:
                     break
                 }
-            }, receiveValue: { plants in
+            }, receiveValue: { responseData in
+                let plants = responseData.data
+                
                 print(plants.map { $0.name }.joined(separator: ", "))
 
                 if plants.isEmpty {

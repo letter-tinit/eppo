@@ -14,11 +14,10 @@ struct HomeHeader: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
+            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: false)
             
             SearchBar(searchText: $searchText)
                 .padding(.horizontal)
-            
             
             HStack(spacing: 30) {
                 NavigationLink {
@@ -69,8 +68,8 @@ struct HomeHeader: View {
                     }
                 }
                 
-                Button {
-                    
+                NavigationLink {
+                    SupportScreen()
                 } label: {
                     VStack {
                         Image(systemName: "questionmark.app")
@@ -79,7 +78,7 @@ struct HomeHeader: View {
                             .frame(width: 40, height: 40)
                             .foregroundStyle(.yellow)
                         
-                        Text("Dịch vụ")
+                        Text("Hỗ trợ")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.black)
                     }

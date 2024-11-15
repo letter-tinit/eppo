@@ -9,21 +9,15 @@ import SwiftUI
 enum Gender {
     case male
     case female
+    
+    var isFemale: Bool {
+        self == .female
+    }
 }
-
-
 
 struct MyAccount: View {
     // MARK: - PROPERTY
-    @State private var usernameTextField: String = ""
-    @State private var phoneNumberTextField: String = ""
-    @State private var emailTextField: String = ""
-    @State private var addressTextField: String = ""
-    @State private var idCodeTextField: String = ""
-    
-    @State private var date = Date()
-    
-    @State private var selectedGender: Gender = .male
+    @Bindable var viewModel: ProfileViewModel
     
     // MARK: - BODY
     
@@ -42,11 +36,11 @@ struct MyAccount: View {
                         }
                     
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Tên Đăng Nhập")
+                        Text("Tên Đầy Đủ")
                             .foregroundStyle(.textDarkBlue)
                             .font(.system(size: 16, weight: .semibold))
                         BorderTextField {
-                            TextField("Nguyễn Văn An", text: $usernameTextField)
+                            TextField(viewModel.userResponse?.data.fullName ?? "Đang tải", text: $viewModel.usernameTextField)
                         }
                         .frame(height: 50)
                         
@@ -55,14 +49,14 @@ struct MyAccount: View {
                             .font(.system(size: 16, weight: .semibold))
                         
                         HStack(spacing: 80) {
-                            GenderRadioButton(title: "Nam", isSelected: .constant(selectedGender == .male))
+                            GenderRadioButton(title: "Nam", isSelected: $viewModel.isMale)
                                 .onTapGesture {
-                                    selectedGender = .male
+                                    viewModel.setIsMale(true)
                                 }
                             
-                            GenderRadioButton(title: "Nữ", isSelected: .constant(selectedGender == .female))
+                            GenderRadioButton(title: "Nữ", isSelected: $viewModel.isFemale)
                                 .onTapGesture {
-                                    selectedGender = .female
+                                    viewModel.setIsMale(false)
                                 }
                         }
                         
@@ -70,8 +64,17 @@ struct MyAccount: View {
                             .foregroundStyle(.textDarkBlue)
                             .font(.system(size: 16, weight: .semibold))
                         BorderTextField {
-                            TextField("0912345678", text: $phoneNumberTextField)
+                            TextField(viewModel.userResponse?.data.phoneNumber ?? "Đang tải", text: $viewModel.phoneNumberTextField)
                                 .keyboardType(.numberPad)
+                                .toolbar {
+                                    ToolbarItemGroup(placement: .keyboard) {
+                                        Spacer()
+                                        Button("Hoàn tất") {
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                        }
+                                        .fontWeight(.medium)
+                                    }
+                                }
                         }
                         .frame(height: 50)
                         
@@ -81,13 +84,16 @@ struct MyAccount: View {
                         
                         
                         BorderTextField {
-                            Text("01/01/2000")
+                            Text(viewModel.isSelectedDate ? viewModel.selectedDate() : viewModel.dayOfBirth() ?? "Đang Tải")
                                 .foregroundStyle(.gray)
                                 .overlay {
-                                    DatePicker(selection: $date, displayedComponents: .date) {}
+                                    DatePicker(selection: $viewModel.date, displayedComponents: .date) {}
                                         .labelsHidden()
                                         .contentShape(Rectangle())
                                         .opacity(0.011)
+                                        .onChange(of: viewModel.date) {
+                                            viewModel.isSelectedDate = true
+                                        }
                                 }
                         }
                         .frame(height: 50)
@@ -96,15 +102,7 @@ struct MyAccount: View {
                             .foregroundStyle(.textDarkBlue)
                             .font(.system(size: 16, weight: .semibold))
                         BorderTextField {
-                            TextField("abc123@gmail.com".lowercased(), text: $emailTextField)
-                        }
-                        .frame(height: 50)
-                        
-                        Text("Địa Chỉ")
-                            .foregroundStyle(.textDarkBlue)
-                            .font(.system(size: 16, weight: .semibold))
-                        BorderTextField {
-                            TextField("abc123, quận 9, TP. Hồ Chí Minh", text: $addressTextField)
+                            TextField(viewModel.userResponse?.data.email ?? "Đang tải", text: $viewModel.emailTextField)
                         }
                         .frame(height: 50)
                         
@@ -112,9 +110,27 @@ struct MyAccount: View {
                             .foregroundStyle(.textDarkBlue)
                             .font(.system(size: 16, weight: .semibold))
                         BorderTextField {
-                            TextField("0000000000", text: $idCodeTextField)
+                            TextField(text: $viewModel.idCodeTextField) {
+                                Text(viewModel.userResponse?.data.identificationCard ?? 0, format: .number.grouping(.never))
+                                
+                            }
+                            .keyboardType(.numberPad)
                         }
                         .frame(height: 50)
+                        
+                        NavigationLink {
+                            AddressScreen(viewModel: viewModel)
+                        } label: {
+                            Text("Địa chỉ")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(.green)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .foregroundStyle(.white)
+                                .padding(.top)
+                        }
                         
                         Spacer(minLength: 40)
                         
@@ -148,5 +164,5 @@ struct MyAccount: View {
 
 // MARK: - PREVIEW
 #Preview {
-    MyAccount()
+    MyAccount(viewModel: ProfileViewModel())
 }

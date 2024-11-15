@@ -43,19 +43,8 @@ struct RatingSubmitView: View {
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                         .lineLimit(1)
-
-                    HStack {
-                        Text("Đổi ý 15 ngày")
-                            .font(.caption)
-                            .padding(3)
-                            .border(.mint)
-                            .foregroundStyle(.mint)
-                            .lineLimit(1)
-                        
-                        Spacer()
-                        
-                        RatingStarSubmitionView(rating: $rating)
-                    }
+                    
+                    RatingStarSubmitionView(rating: $rating)
                 }
                 
                 Spacer()
@@ -133,8 +122,9 @@ struct RatingSubmitView: View {
                         )
                     
                     Text("Gửi đánh giá")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(.white)
+                        .font(.system(size: 20, weight: .semibold))
+                        .fontDesign(.rounded)
                 }
                 .padding()
                 

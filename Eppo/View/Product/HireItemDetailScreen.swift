@@ -8,7 +8,6 @@ import SwiftUI
 
 struct HireItemDetailScreen: View {
     // MARK: - PROPERTY
-    
     let id: Int
     @State var viewModel = ItemDetailsViewModel()
     let images = ["sample-bonsai", "sample-bonsai-01"]
@@ -164,39 +163,46 @@ struct HireItemDetailScreen: View {
                 }
             }
             
-            
             Divider()
             
             HStack(alignment: .top, spacing: 0) {
-                Button {
-                    
-                } label: {
-                    Image(systemName: "message")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
-                }
+                Image(systemName: "calendar")
+                    .font(.title)
+                    .frame(width: UIScreen.main.bounds.size.width / 6)
+                    .padding(.top, 20)
+                    .overlay {
+                        DatePicker(selection: $viewModel.selectedDate, displayedComponents: .date) {}
+                            .labelsHidden()
+                            .contentShape(Rectangle())
+                            .opacity(0.011)
+                    }
                 
                 Divider()
                 
-                Button {
+                VStack(spacing: 10) {
+                    Stepper(
+                        value: $viewModel.numberOfMonth,
+                        in: viewModel.range,
+                        step: viewModel.step
+                    ) {
+                        Text("\(viewModel.numberOfMonth)")
+                    }
+                    .background(.clear)
                     
-                } label: {
-                    Image(systemName: "cart")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
+                    Text("\(viewModel.numberOfMonth) Tháng")
+                    
                 }
+                .padding(20)
                 
                 Button {
-                    
+                    viewModel.createOrderRental()
                 } label: {
-                    VStack {
-                        Text("Thuê")
+                    VStack(alignment: .leading) {
+                        Text("Thuê cây")
                         if let price = viewModel.plant?.price {
                             HStack(spacing: 0) {
                                 Text(price, format: .currency(code: "VND"))
-                                Text("/ngày")
+                                Text("/tháng")
                             }
                         } else {
                             Text("Đang tải")
@@ -205,16 +211,22 @@ struct HireItemDetailScreen: View {
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .frame(width: UIScreen.main.bounds.size.width / 2)
-                    .padding(.top, 10)
+                    .padding(.top, 20)
                     .padding(.bottom, 20)
                     .background(.red)
                 }
+                .navigationDestination(isPresented: $viewModel.isLinkActive) {
+                    HireOrderScreen(viewModel: viewModel)
+                }
             }
-            .frame(width: UIScreen.main.bounds.size.width, height: 80)
+            .frame(width: UIScreen.main.bounds.size.width, height: 100)
             .shadow(radius: 2, y: 2)
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
+        }
     }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 }

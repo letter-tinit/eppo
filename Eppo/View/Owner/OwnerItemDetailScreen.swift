@@ -28,14 +28,13 @@ struct OwnerItemDetailScreen: View {
                             Text("Giá chỉ:")
                                 .font(.system(size: 18, weight: .medium))
                             
-                            Text("40.000đ/tháng")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundStyle(.red)
-                            
-                            Text("70.000 đ/tháng")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.secondary)
-                                .strikethrough()
+                            HStack(spacing: 0) {
+                                Text(40000, format: .currency(code: "VND"))
+                                Text("/tháng")
+                            }
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundStyle(.red)
+
                         }
                         
                         Text("Thạch Xương Bồ")
@@ -57,7 +56,7 @@ struct OwnerItemDetailScreen: View {
                             .font(.title3)
                             .foregroundStyle(.green)
                         
-                        Text("Đổi ý miễn phí 10 ngày")
+                        Text("Cam kết bảo hành")
                             .font(.subheadline)
                     }
                     .padding(.horizontal)
@@ -73,7 +72,7 @@ struct OwnerItemDetailScreen: View {
                                 LinearGradient(colors: [.red, .orange, .yellow], startPoint: .leading, endPoint: .trailing)
                             )
                         
-                        Text("Nhận hàng từ 30/7 - 31/7, phí giao 0đ")
+                        Text("Giao hàng nhanh tiện lợi")
                             .font(.subheadline)
                     }
                     .padding(.horizontal)

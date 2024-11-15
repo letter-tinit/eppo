@@ -7,30 +7,16 @@
 import SwiftUI
 
 
-// MARK: - ENUM
-
-enum OrderState: String, CaseIterable {
-    case waitingForConfirm = "Chờ xác nhận"
-    case waitingForPackage = "Chờ đóng gói"
-    case waitingForDeliver = "Chờ giao hàng"
-    case delivered = "Đã giao"
-    case canceled = "Đã hủy"
-    
-    var flag: String {
-        return self.rawValue
-    }
-}
-
-struct OrderHistoryScreen: View {
+struct HireOrderHistoryScreen: View {
     // MARK: - PROPERTY
-    @State var viewModel = BuyOrderViewModel()
-    @Namespace private var animation
+    @State var viewModel = HireOrderViewModel()
     
+    @Namespace private var animation
     // MARK: - BODY
     
     var body: some View {
         VStack {
-            CustomHeaderView(title: "Đơn hàng của bạn")
+            CustomHeaderView(title: "Đơn hàng Thuê")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(OrderState.allCases, id: \.self) { orderState in
@@ -58,7 +44,7 @@ struct OrderHistoryScreen: View {
                     }
                 }
             }
-            
+                
             if viewModel.orders.isEmpty {
                 Spacer()
                 
@@ -70,10 +56,13 @@ struct OrderHistoryScreen: View {
                 
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
-                    ForEach (viewModel.orders) { order in
-                        BuyOrderRowView(totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: true)
-                            .padding(10)
+                    ForEach (viewModel.orders) { ordersHireHistoryOrder in
+                        if let orderDetail = ordersHireHistoryOrder.orderDetails.first
+                        {
+                            HireOrderRowView(totalPrice: ordersHireHistoryOrder.finalPrice, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail)
+                        }
                     }
+                    .padding(.vertical, 10)
                     .background(Color(uiColor: UIColor.systemGray5))
                 }
                 .padding(.bottom, 30)
@@ -83,15 +72,15 @@ struct OrderHistoryScreen: View {
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .vertical)
         .onAppear {
-            viewModel.getBuyOrderHistory()
+            viewModel.getHireOrderHistory()
         }
         .onChange(of: viewModel.selectedOrderState) {
-            viewModel.getBuyOrderHistory()
+            viewModel.getHireOrderHistory()
         }
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    OrderHistoryScreen()
+    HireOrderHistoryScreen()
 }

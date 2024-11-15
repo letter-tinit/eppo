@@ -102,8 +102,13 @@ struct CartScreen: View {
             } else {
                 Spacer()
                 
-                Text("Giỏ hàng trống")
-                    .background(.red)
+                VStack {
+                    Text("Giỏ hàng trống")
+                        .font(.headline)
+                    Image(systemName: "cart.fill.badge.questionmark")
+                        .font(.title)
+                }
+                .foregroundStyle(.gray)
             }
             
             Spacer()
@@ -112,6 +117,9 @@ struct CartScreen: View {
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
             self.viewModel.orderDetails = UserSession.shared.cart
+        }
+        .onChange(of: viewModel.orderDetails) {
+            viewModel.selectedOrder = viewModel.orderDetails.filter { $0.isSelected }
         }
     }
     

@@ -1,21 +1,13 @@
 //
-//  OrderDetailsScreen.swift
-//  Eppo
+// Created by Letter ♥
 //
-//  Created by Letter on 11/11/2024.
+// https://github.com/tinit4ever
 //
 
 import SwiftUI
 
-enum PaymentMethod: String, CaseIterable, Identifiable {
-    case cashOnDelivery = "Thanh toán khi nhận hàng"
-    case myWallet = "Ví điện tử"
-    var id: Self { self }
-}
-
-struct OrderDetailsScreen: View {
-    @Bindable var viewModel: CartViewModel
-    @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+struct BuyOrderDetailsScreen: View {
+    @Bindable var viewModel: ItemDetailsViewModel
     
     var body: some View {
         VStack {
@@ -26,7 +18,7 @@ struct OrderDetailsScreen: View {
                         .padding(.horizontal)
                     
                     VStack {
-                        ForEach(viewModel.selectedOrder) { plant in
+                        if let plant = viewModel.plant {
                             OrderItemView(plant: plant)
                                 .background(Color.clear)
                         }
@@ -51,7 +43,7 @@ struct OrderDetailsScreen: View {
                     .padding(.horizontal)
                     
                     List {
-                        Picker(selection: $selectedPaymentMethod) {
+                        Picker(selection: $viewModel.selectedPaymentMethod) {
                             ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
                                 Text(paymentMethod.rawValue)
                                     .font(.subheadline)
@@ -63,12 +55,12 @@ struct OrderDetailsScreen: View {
                         }
                         
                         HStack {
-                            Text(selectedPaymentMethod.rawValue)
+                            Text(viewModel.selectedPaymentMethod.rawValue)
                             
                             Spacer()
                             
-                            Image(systemName: selectedPaymentMethod == .cashOnDelivery ? "coloncurrencysign.circle" : "creditcard.fill")
-                                .foregroundStyle(selectedPaymentMethod == .cashOnDelivery ? .green : .red)
+                            Image(systemName: viewModel.selectedPaymentMethod == .cashOnDelivery ? "coloncurrencysign.circle" : "creditcard.fill")
+                                .foregroundStyle(viewModel.selectedPaymentMethod == .cashOnDelivery ? .green : .red)
                         }
                         .listRowSeparator(.hidden, edges: .bottom)
                     }
@@ -100,15 +92,15 @@ struct OrderDetailsScreen: View {
                 }
                 
                 Button {
-                    guard var createOrderRequest = viewModel.createOrderRequest else {
-                        return
-                    }
-                    
-                    createOrderRequest.paymentId = selectedPaymentMethod == .cashOnDelivery ? 1 : 2
-                    
-                    viewModel.createOrderRequest = createOrderRequest
-                    
-                    viewModel.createOrder()
+//                    guard var createOrderRequest = viewModel.createOrderRequest else {
+//                        return
+//                    }
+//                    
+//                    createOrderRequest.paymentId = viewModel.selectedPaymentMethod == .cashOnDelivery ? 1 : 2
+//                    
+//                    viewModel.createOrderRequest = createOrderRequest
+//                    
+//                    viewModel.createOrder()
                 } label: {
                     Text("Đặt hàng")
                         .fontWeight(.medium)
@@ -126,11 +118,12 @@ struct OrderDetailsScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+//            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
         }
     }
 }
 
+// MARK: - PREVIEW
 #Preview {
-    OrderDetailsScreen(viewModel: CartViewModel())
+    BuyOrderDetailsScreen(viewModel: ItemDetailsViewModel())
 }

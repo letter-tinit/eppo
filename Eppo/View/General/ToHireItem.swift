@@ -56,7 +56,7 @@ struct ToHireItem: View {
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.leading)
                         .foregroundStyle(.red)
-                    Text("/ngày")
+                    Text("/tháng")
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
                         .multilineTextAlignment(.leading)
                         .foregroundStyle(.red)

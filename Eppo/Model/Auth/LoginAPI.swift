@@ -17,4 +17,5 @@ struct LoginRequest: Codable {
 
 struct LoginResponse: Codable {
     let token: String
+    let roleName: String
 }

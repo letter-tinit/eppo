@@ -52,9 +52,9 @@ struct OwnerProfileScreen: View {
                             } label: {
                                 OwnerCustomButtomImageLabel(imageName: "doc.append.fill", title: "Hợp đồng")
                             }
-                            .navigationDestination(isPresented: $isActiveWaitingForConfirmed) {
-                                OrderHistoryScreen(selectedOrderState: $selectedOrderState)
-                            }
+//                            .navigationDestination(isPresented: $isActiveWaitingForConfirmed) {
+//                                OrderHistoryScreen(selectedOrderState: $selectedOrderState)
+//                            }
                             
                             Button {
                                 isActiveWaitingForPackage = true
@@ -62,9 +62,9 @@ struct OwnerProfileScreen: View {
                             } label: {
                                 OwnerCustomButtomImageLabel(imageName: "creditcard.fill", title: "Nạp tiền")
                             }
-                            .navigationDestination(isPresented: $isActiveWaitingForPackage) {
-                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
-                            }
+//                            .navigationDestination(isPresented: $isActiveWaitingForPackage) {
+//                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+//                            }
                             
                             Button {
                                 isActiveWaitingForDelivered = true
@@ -72,9 +72,9 @@ struct OwnerProfileScreen: View {
                             } label: {
                                 OwnerCustomButtomImageLabel(imageName: "dollarsign.square.fill", title: "Rút tiền")
                             }
-                            .navigationDestination(isPresented: $isActiveWaitingForDelivered) {
-                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
-                            }
+//                            .navigationDestination(isPresented: $isActiveWaitingForDelivered) {
+//                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+//                            }
                             
                             Button {
                                 isActiveRating = true
@@ -82,9 +82,9 @@ struct OwnerProfileScreen: View {
                             } label: {
                                 OwnerCustomButtomImageLabel(imageName: "star.bubble.fill", title: "Đánh giá")
                             }
-                            .navigationDestination(isPresented: $isActiveRating) {
-                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
-                            }
+//                            .navigationDestination(isPresented: $isActiveRating) {
+//                                OrderHistoryScreen(selectedOrderState:$selectedOrderState)
+//                            }
                         }
                     }
                     .frame(height: 90)
@@ -96,7 +96,7 @@ struct OwnerProfileScreen: View {
                             .foregroundStyle(.settingBoxBackground)
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount())
+                            CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount(viewModel: ProfileViewModel()))
                             
                             Divider()
                             
