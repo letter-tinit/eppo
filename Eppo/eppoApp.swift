@@ -9,12 +9,14 @@ import SwiftUI
 
 @main
 struct EppoApp: App {
+    @State private var networkMonitor = NetworkMonitor()
     @AppStorage("isLogged") var isLogged: Bool = false
     
     var body: some Scene {
         WindowGroup {
             if isLogged {
                 MainTabView()
+                    .environment(networkMonitor)
             } else {
                 LoginScreen()
             }

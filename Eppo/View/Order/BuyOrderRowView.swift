@@ -8,6 +8,8 @@ import SwiftUI
 
 struct BuyOrderRowView: View {
     // MARK: - PROPERTY
+    @Bindable var viewModel: BuyOrderViewModel
+    var orderId: Int
     var totalPrice: Double
     var deliveriteFree: Double
     
@@ -72,6 +74,7 @@ struct BuyOrderRowView: View {
 
             if isCancellable {
                 Button {
+                    viewModel.cancelOrder(id: orderId)
                 } label: {
                     Text("Huỷ đơn hàng")
                         .frame(width: 140, height: 40)

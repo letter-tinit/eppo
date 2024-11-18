@@ -93,7 +93,7 @@ struct HireOrderScreen: View {
                             Text("Xem hợp đồng")
                                 .font(.headline)
                                 .underline()
-                                .foregroundStyle(.blue)
+                                .foregroundStyle(viewModel.contractUrl == nil ? .gray : .blue)
                         }
                         .disabled(viewModel.contractUrl == nil)
                         
@@ -146,6 +146,7 @@ struct HireOrderScreen: View {
                     //                    viewModel.createOrderRequest = createOrderRequest
                     //
                     //                    viewModel.createOrder()
+                    viewModel.updatePaymentStatus(paymentId: selectedPaymentMethod == .cashOnDelivery ? 1 : 2)
                     
                 } label: {
                     Text("Thanh toán")
