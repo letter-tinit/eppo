@@ -173,6 +173,7 @@ enum ActiveAlert {
     
     // MARK: - BuyItemDetailScreen
     func createOrder() {
+        self.deliveriteFree = 0
         guard let plant = self.plant,
         let deliveriteFree = self.deliveriteFree else {
             return
@@ -190,8 +191,13 @@ enum ActiveAlert {
                 switch completion {
                 case .finished:
                     print("Thực thi thành công")
+                    self.message = "Tạo đơn hàng thành công"
+                    self.isAlertShowing = true
+                    
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")
+                    self.message = error.localizedDescription
+                    self.isAlertShowing = true
                 }
             }, receiveValue: { statusCode, message in
                 print(message)

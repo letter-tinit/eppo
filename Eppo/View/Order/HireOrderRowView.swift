@@ -8,6 +8,10 @@ import SwiftUI
 
 struct HireOrderRowView: View {
     // MARK: - PROPERTY
+    @Bindable var viewModel: HireOrderViewModel
+    
+    var id: Int
+
     var totalPrice: Double
     var deliveriteFree: Double
     var isCancellable: Bool = false
@@ -84,7 +88,7 @@ struct HireOrderRowView: View {
             .padding(.horizontal, 10)
 
             Button {
-                //                    RatingSubmitView(itemName: itemName, itemType: itemType)
+                viewModel.cancelOrder(id: id)
             } label: {
                 Text("Huỷ")
                     .font(.subheadline)

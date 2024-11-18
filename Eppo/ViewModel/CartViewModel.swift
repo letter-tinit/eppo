@@ -15,6 +15,8 @@ import Observation
     var cancellables: Set<AnyCancellable> = []
     var isCreateSucces: Bool = false
     var isLoading: Bool = false
+    var message: String = ""
+    var isAlertShowing: Bool = false
     
     var orderDetails: [Plant]
     var selectedOrder: [Plant] = []
@@ -39,8 +41,18 @@ import Observation
                 switch completion {
                 case .finished:
                     print("Thực thi thành công")
+                    self.message = "Tạo đơn hàng thành công"
+                    self.isAlertShowing = true
+                    UserSession.shared.cart.removeAll { parent in
+                        self.selectedOrder.contains { child in
+                            child.id == parent.id
+                        }
+                    }
+
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")
+                    self.message = error.localizedDescription
+                    self.isAlertShowing = true
                 }
             }, receiveValue: { statusCode, message in
                 print(message)

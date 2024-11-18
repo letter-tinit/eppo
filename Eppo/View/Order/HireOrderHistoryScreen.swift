@@ -59,7 +59,7 @@ struct HireOrderHistoryScreen: View {
                     ForEach (viewModel.orders) { ordersHireHistoryOrder in
                         if let orderDetail = ordersHireHistoryOrder.orderDetails.first
                         {
-                            HireOrderRowView(totalPrice: ordersHireHistoryOrder.finalPrice, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail)
+                            HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail)
                         }
                     }
                     .padding(.vertical, 10)

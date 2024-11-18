@@ -9,7 +9,6 @@ import Observation
 
 struct ItemDetailScreen: View {
     // MARK: - PROPERTY
-    
     let id: Int
     @State var viewModel = ItemDetailsViewModel()
     let images = ["sample-bonsai", "sample-bonsai-01"]
@@ -142,6 +141,17 @@ struct ItemDetailScreen: View {
                             .font(.title)
                             .frame(width: UIScreen.main.bounds.size.width / 4)
                             .padding(.top, 10)
+                            .foregroundStyle(.black)
+                            .overlay(alignment: .topTrailing) {
+                                Text(UserSession.shared.cart.count, format: .number.grouping(.never))
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                                    .fontWeight(.semibold)
+                                    .padding(5)
+                                    .background(Circle().foregroundStyle(.red))
+                                    .padding(.trailing)
+                                    .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
+                            }
                     }
                     .alert(isPresented: $viewModel.isAlertShowing) {
                         Alert(title: Text(viewModel.message))
@@ -154,8 +164,8 @@ struct ItemDetailScreen: View {
                     }
                 }
                 
-                Button {
-                    
+                NavigationLink {
+                    BuyOrderDetailsScreen(viewModel: viewModel)
                 } label: {
                     VStack {
                         Text("Mua")

@@ -49,6 +49,20 @@ class BuyOrderViewModel {
             .store(in: &cancellables)
     }
     
+    func cancelOrder(id: Int) {
+        APIManager.shared.cancelOrder(id: id)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    self.getBuyOrderHistory()
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: {}
+            .store(in: &cancellables)
+    }
+    
     deinit {
         cancellables.removeAll()
     }

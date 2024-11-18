@@ -87,6 +87,8 @@
 		2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */; };
 		2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */; };
 		2C907EF22CE25B0B005CDBD5 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EF12CE25B0B005CDBD5 /* CartViewModel.swift */; };
+		2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */; };
+		2CA147302CEB006B00E26D4E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */; };
 		2CA3568C2CE3269000FEB033 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3568B2CE3269000FEB033 /* ProfileAPI.swift */; };
 		2CA3568E2CE3708B00FEB033 /* AddressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3568D2CE3708A00FEB033 /* AddressScreen.swift */; };
 		2CA356902CE37A2400FEB033 /* AddressAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3568F2CE37A2400FEB033 /* AddressAPI.swift */; };
@@ -210,6 +212,8 @@
 		2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemView.swift; sourceTree = "<group>"; };
 		2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOrderRequest.swift; sourceTree = "<group>"; };
 		2C907EF12CE25B0B005CDBD5 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		2CA3568B2CE3269000FEB033 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
 		2CA3568D2CE3708A00FEB033 /* AddressScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressScreen.swift; sourceTree = "<group>"; };
 		2CA3568F2CE37A2400FEB033 /* AddressAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAPI.swift; sourceTree = "<group>"; };
@@ -558,6 +562,7 @@
 				2C8F5B7B2CA2DED100ACF578 /* KeyboardResponder.swift */,
 				2CAA6AB72CB0321000003EC1 /* UserSession.swift */,
 				2CB106392CB10B9000D4C07B /* WebSocketManager.swift */,
+				2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -592,6 +597,7 @@
 				2CC5A2262C5A019300D0035D /* EppoApp.swift */,
 				2CC5A22A2C5A019500D0035D /* Assets.xcassets */,
 				2CC5A22C2C5A019500D0035D /* Preview Content */,
+				2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */,
 			);
 			path = Eppo;
 			sourceTree = "<group>";
@@ -769,6 +775,7 @@
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
+				2CA147302CEB006B00E26D4E /* SwiftUIView.swift in Sources */,
 				2C45B5ED2CDC95C0008670F1 /* OwnerHome.swift in Sources */,
 				2CFC7CAD2CC77F6200D277EA /* User.swift in Sources */,
 				2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */,
@@ -798,6 +805,7 @@
 				2CF1BAC92CE70A710021D051 /* HireHistoryAPI.swift in Sources */,
 				2CDC7E032C77F31100028AC8 /* ActiveScreen.swift in Sources */,
 				2CC5A2272C5A019300D0035D /* EppoApp.swift in Sources */,
+				2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */,
 				2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */,
 				2C6B24612CA3F09D0021CA98 /* NotificationRow.swift in Sources */,
 				2C45B5D62CDC94C0008670F1 /* Room.swift in Sources */,

@@ -63,6 +63,7 @@ struct APIConstants {
         static let updatePaymentOrderRental = baseURL + "api/v1/Order/UpdatePaymentOrderRental"
         static let getHireOrderHistory = baseURL + "api/v1/Order/GetOrdersRentalByUser"
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
+        static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
     }
     
     struct User {
@@ -367,9 +368,10 @@ class APIManager {
                 }
                 
                 // Check if status code is 200 (Success)
-                if statusCode == 200 {
-                    return (200, "Đơn hàng đã đặt thành công")
+                if (200...299).contains(statusCode) {
+                    return (statusCode, "Đơn hàng đã đặt thành công")
                 }
+
                 
                 // Check for 500 (Server Error) and get the response message
                 if statusCode == 500 {
@@ -541,11 +543,13 @@ class APIManager {
     func getContractById(contractId: Int) -> AnyPublisher<GetContractByIdResponse, Error> {
         let url = APIConstants.Contract.getById
         
+        let headers = setupHeaderToken()
+        
         let param: [String : Any] = [
-            "id": contractId
+            "contractId": contractId
         ]
         
-        return AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default)
+        return AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: headers)
             .validate()
             .publishDecodable(type: GetContractByIdResponse.self)
             .value()
@@ -589,7 +593,7 @@ class APIManager {
         
         let headers = setupHeaderToken()
         
-        return AF.request(url, method: .post, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+        return AF.request(url, method: .put, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .validate(statusCode: 200..<300) // Chỉ thành công với status code 200-299
             .publishData() // Dùng publishData để kiểm tra dữ liệu trả về
             .tryMap { response in
@@ -648,6 +652,29 @@ class APIManager {
                 return error as Error
             }
             .eraseToAnyPublisher()
+    }
+    
+    func cancelOrder(id: Int) -> AnyPublisher<Void, Error> {
+        let url = APIConstants.Order.cancelOrder + String(id)
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData() // Dùng publishData để kiểm tra dữ liệu trả về
+            .tryMap { response in
+                // Kiểm tra xem response có dữ liệu không, nếu không thì trả về lỗi
+                guard response.data != nil else {
+                    throw APIError.unexpectedError // Lỗi nếu không có dữ liệu
+                }
+                return () // Thành công thì trả về Void
+            }
+            .mapError { error in
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+        
     }
     
     func setupHeaderToken() -> HTTPHeaders? {

@@ -100,7 +100,7 @@ struct BuyOrderDetailsScreen: View {
 //                    
 //                    viewModel.createOrderRequest = createOrderRequest
 //                    
-//                    viewModel.createOrder()
+                    viewModel.createOrder()
                 } label: {
                     Text("Đặt hàng")
                         .fontWeight(.medium)
@@ -119,6 +119,9 @@ struct BuyOrderDetailsScreen: View {
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
 //            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+        }
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
         }
     }
 }

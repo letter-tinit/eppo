@@ -71,7 +71,7 @@ struct OrderHistoryScreen: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach (viewModel.orders) { order in
-                        BuyOrderRowView(totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: true)
+                        BuyOrderRowView(viewModel: viewModel, orderId: order.id, totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: true)
                             .padding(10)
                     }
                     .background(Color(uiColor: UIColor.systemGray5))
