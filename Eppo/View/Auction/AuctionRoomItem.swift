@@ -12,7 +12,7 @@ struct AuctionRoomItem: View {
     var image: Image
     var itemName: String
     var roomNumber: String
-    var time: String
+    var time: Date
     
     // MARK: - BODY
     
@@ -31,7 +31,7 @@ struct AuctionRoomItem: View {
                         .font(.system(size: 10, weight: .regular, design: .rounded))
                         .foregroundStyle(.gray)
                     
-                    Text(time)
+                    Text(time, format: .dateTime)
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
                         .foregroundStyle(.red)
                 }
@@ -77,5 +77,5 @@ struct AuctionRoomItem: View {
 
 // MARK: - PREVIEW
 #Preview {
-    AuctionRoomItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", roomNumber: "P100", time: "1/08 - 10:30")
+    AuctionRoomItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", roomNumber: "P100", time: Date())
 }

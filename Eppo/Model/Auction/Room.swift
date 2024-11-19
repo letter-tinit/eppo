@@ -9,7 +9,13 @@ import Foundation
 
 struct Room: Codable, Hashable {
     let roomId: Int
-    let activeDate: String
     let plantId: Int
     let plant: Plant
+    let registrationOpenDate: Date
+    let registrationEndDate: Date
+    let registrationFee: Double
+    let priceStep: Double
+    let activeDate: Date
+    let endDate: Date
 }
+

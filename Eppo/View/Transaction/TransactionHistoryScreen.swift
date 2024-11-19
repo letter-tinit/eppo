@@ -8,6 +8,7 @@ import SwiftUI
 
 struct TransactionHistoryScreen: View {
     // MARK: - PROPERTY
+    @Bindable var viewModel: ProfileViewModel
     @State var selectedTransactionType: TransactionHistoryType = .all
     
     @State var typeState: String = "all"
@@ -58,10 +59,13 @@ struct TransactionHistoryScreen: View {
         }
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .top)
+        .onAppear {
+            viewModel.getTransactionHistory()
+        }
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    TransactionHistoryScreen()
+    TransactionHistoryScreen(viewModel: ProfileViewModel())
 }

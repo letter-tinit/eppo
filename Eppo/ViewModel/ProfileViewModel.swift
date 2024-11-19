@@ -164,6 +164,27 @@ class ProfileViewModel {
             .store(in: &cancellables)
     }
     
+    func getTransactionHistory() {
+        guard let userResponse = self.userResponse,
+              let walletId = userResponse.data.walletId else {
+            return
+        }
+        
+        APIManager.shared.getTransactionHistory(pageIndex: 1, pageSize: 999, walletId: walletId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.handleAPIError(error)
+                }
+            } receiveValue: { transactions in
+                print(transactions)
+            }
+            .store(in: &cancellables)
+
+    }
+    
     private func handleAPIError(_ error: Error) {
         if let apiError = error as? APIError {
             switch apiError {

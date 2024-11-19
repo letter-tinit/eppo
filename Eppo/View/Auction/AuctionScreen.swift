@@ -9,7 +9,7 @@ import SwiftUI
 struct AuctionScreen: View {
     // MARK: - PROPERTY
     @State var searchText: String = ""
-    var viewModel: AuctionViewModel = AuctionViewModel()
+    @State var viewModel: AuctionViewModel = AuctionViewModel()
     @State var isCalendarToggle: Bool = false
     
     @State private var date = Date()
@@ -77,7 +77,7 @@ struct AuctionScreen: View {
                             NavigationLink {
                                 AuctionDetailScreen(roomId: room.roomId)
                             } label: {
-                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: room.plant.name, price: room.plant.price, time: reformatDateString(room.activeDate) ?? "đang tải")
+                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: room.plant.name, price: room.plant.price, time: room.activeDate)
                             }
                         }
                     }
