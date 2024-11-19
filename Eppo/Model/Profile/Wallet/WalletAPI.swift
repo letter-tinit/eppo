@@ -20,20 +20,21 @@ struct Wallet: Codable {
     let creationDate: String
     let modificationDate: String
     let status: Int
-    let transactions: [Transaction]
+    let transactions: [TransactionAPI]
 }
 
 // MARK: - Transaction
-struct Transaction: Codable {
+struct TransactionAPI: Codable {
     let transactionId: Int
     let walletId: Int
     let description: String
     let withdrawNumber: Double?
     let rechargeNumber: Double?
-    let paymentId: Int
-    let isActive: Bool
+    let paymentId: Int?
+    let isActive: Bool?
     let rechargeDate: String?
     let withdrawDate: String?
-    let creationDate: String
-    let status: Int
+    let creationDate: String?
+    let status: Int?
 }
+

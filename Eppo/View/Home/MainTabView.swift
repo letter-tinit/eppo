@@ -17,7 +17,8 @@ enum Tab: String, CaseIterable {
 
 struct MainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: Tab = .profile
+    @State private var selectedTab: Tab = .auction
+    @State var viewModel = LoginViewModel()
     
     init () {
         //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -62,6 +63,9 @@ struct MainTabView: View {
             .tint(.black)
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.getMyInformation()
+        }
     }
 }
 

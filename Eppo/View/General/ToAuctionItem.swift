@@ -11,7 +11,7 @@ struct ToAuctionItem: View {
     var image: Image
     var itemName: String
     var price: Double
-    var time: String
+    var time: Date
 
     // MARK: - BODY
 
@@ -30,7 +30,7 @@ struct ToAuctionItem: View {
                         .font(.system(size: 10, weight: .regular, design: .rounded))
                         .foregroundStyle(.secondary)
                     
-                    Text(time)
+                    Text(time, format: .dateTime)
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
                         .foregroundStyle(.red)
                 }
@@ -73,5 +73,5 @@ struct ToAuctionItem: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ToAuctionItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000, time: "1/08 - 10:30")
+    ToAuctionItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000, time: Date())
 }

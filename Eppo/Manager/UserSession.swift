@@ -9,11 +9,7 @@ import Observation
 
 @Observable class UserSession {
     static let shared = UserSession() // Singleton instance
-    
-    private init() {
-        loadToken() // Load the token when the session is initialized
-    }
-    
+
     var token: String? {
         didSet {
             if let token = token {
@@ -26,8 +22,12 @@ import Observation
         }
     }
     
-    var cart: [Plant] = []
+    private init() {
+        loadToken() // Load the token when the session is initialized
+    }
     
+    var cart: [Plant] = []
+    var myInformation: User?
     // Save token to UserDefaults
     func saveToken(_ token: String) {
         self.token = token
@@ -41,5 +41,7 @@ import Observation
     // Clear token from UserDefaults
     func clearSession() {
         token = nil
+        self.myInformation = nil
+        self.cart = []
     }
 }

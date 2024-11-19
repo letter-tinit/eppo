@@ -47,6 +47,10 @@ struct APIConstants {
         static let getList = baseURL + "api/v1/GetList/Rooms"
         static let getByDate = baseURL + "api/v1/GetList/Rooms/SearchRoomByDate"
         static let getById = baseURL + "api/v1/GetList/Rooms/Id"
+        static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
+        static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
+        static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/Id"
+
     }
     
     struct Category {
@@ -80,6 +84,10 @@ struct APIConstants {
     struct Contract {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
+    }
+    
+    struct Transaction {
+        static let getHistory = baseURL + "api/v1/Transaction/GetAllTransactionsInWallet"
     }
 }
 
@@ -197,7 +205,7 @@ class APIManager {
         
         return AF.request(url, method: .get)
             .validate()
-            .publishDecodable(type: AuctionResponse.self)
+            .publishDecodable(type: AuctionResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error
@@ -251,8 +259,33 @@ class APIManager {
         
         return AF.request(url, method: .get)
             .validate()
-            .publishDecodable(type: AuctionDetailResponse.self)
+            .publishDecodable(type: AuctionDetailResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func auctionRegistration(roomId: Int) -> AnyPublisher<Void, Error> {
+        let url = APIConstants.Room.auctionRegistration
+        
+        let parameters: [String: Any] = [
+            "roomId": roomId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                guard let error = response.error else {
+                    return ()
+                }
+                
+                throw error
+            }
             .mapError { error in
                 return error as Error
             }
@@ -626,6 +659,7 @@ class APIManager {
             .publishDecodable(type: HireHistoryResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
+                debugPrint(error)
                 // Xử lý lỗi hoặc trả về lỗi mặc định
                 return error as Error
             }
@@ -675,6 +709,66 @@ class APIManager {
             }
             .eraseToAnyPublisher()
         
+    }
+    
+    func getTransactionHistory(pageIndex: Int, pageSize: Int, walletId: Int) -> AnyPublisher<[TransactionAPI], Error>{
+        let url = APIConstants.Transaction.getHistory
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize,
+            "walletId": walletId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: [TransactionAPI].self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getListRegisteredAuction(pageIndex: Int, pageSize: Int) -> AnyPublisher<RegisteredRoomsResponse, Error> {
+        let url = APIConstants.Room.getListRegisterdAuctionRoom
+        
+        let parameters: [String : Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: RegisteredRoomsResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getRegistedAuctonById(userRoomId: Int) -> AnyPublisher<RegistedRoomResponse, Error> {
+        let url = APIConstants.Room.getRegistedAuctionRoomById
+        
+        let param: [String: Any] = [
+            "userRoomId": userRoomId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: param, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: RegistedRoomResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
     }
     
     func setupHeaderToken() -> HTTPHeaders? {

@@ -11,6 +11,7 @@ struct Plant: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
     let price: Double
+    let finalPrice: Double
     let description: String
     
     // computed value
@@ -20,6 +21,7 @@ struct Plant: Codable, Identifiable, Hashable {
         case id = "plantId"
         case name = "plantName"
         case price = "price"
+        case finalPrice = "finalPrice"
         case description = "description"
     }
 }

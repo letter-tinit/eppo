@@ -100,7 +100,7 @@ struct OwnerProfileScreen: View {
                             
                             Divider()
                             
-                            CustomSettingNavigationLink(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: TransactionHistoryScreen())
+                            CustomSettingNavigationLink(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: TransactionHistoryScreen(viewModel: ProfileViewModel()))
                             
                             Divider()
                             

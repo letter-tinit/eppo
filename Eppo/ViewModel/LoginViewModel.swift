@@ -59,6 +59,21 @@ import Combine
             .store(in: &cancellables)
     }
     
+    func getMyInformation() {
+        APIManager.shared.getMyInformation()
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { userResponse in
+                UserSession.shared.myInformation = userResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
     private func handleAPIError(_ error: Error) {
         if let apiError = error as? APIError {
             switch apiError {
