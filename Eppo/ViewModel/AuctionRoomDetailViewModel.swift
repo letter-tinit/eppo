@@ -23,9 +23,9 @@ class AuctionRoomDetailViewModel {
     var hasError = false
     var errorMessage: String?
     
-    func getRegistedAuctionRoomById(userRoomId: Int) {
+    func getRegistedAuctionRoomById(roomId: Int) {
         self.isLoading = true
-        APIManager.shared.getRegistedAuctonById(userRoomId: userRoomId)
+        APIManager.shared.getRegistedAuctonById(roomId: roomId)
             .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 self.isLoading = false

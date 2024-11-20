@@ -45,8 +45,8 @@ class AuctionRoomViewModel {
             .store(in: &cancellables)
     }
     
-    func getRegistedAuctionRoomById(userRoomId: Int) {
-        APIManager.shared.getRegistedAuctonById(userRoomId: userRoomId)
+    func getRegistedAuctionRoomById(roomId: Int) {
+        APIManager.shared.getRegistedAuctonById(roomId: roomId)
             .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 switch completion {

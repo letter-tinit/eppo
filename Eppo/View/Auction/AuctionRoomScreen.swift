@@ -71,7 +71,7 @@ struct AuctionRoomScreen: View {
                     LazyVGrid(columns: adaptiveColumn, spacing: 20) {
                         ForEach(viewModel.userRooms) { userRoom in
                             NavigationLink {
-                                AuctionRoomDetailScreen(userRoomId: userRoom.id)
+                                AuctionRoomDetailScreen(roomId: userRoom.roomId)
                             } label: {
                                 AuctionRoomItem(imageURL: userRoom.room.plant.mainImage, itemName: userRoom.room.plant.name, roomNumber: "P\(userRoom.roomId)", time: userRoom.room.activeDate)
                             }

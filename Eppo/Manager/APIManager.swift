@@ -756,11 +756,11 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func getRegistedAuctonById(userRoomId: Int) -> AnyPublisher<RegistedRoomResponse, Error> {
+    func getRegistedAuctonById(roomId: Int) -> AnyPublisher<RegistedRoomResponse, Error> {
         let url = APIConstants.Room.getRegistedAuctionRoomById
         
         let param: [String: Any] = [
-            "userRoomId": userRoomId
+            "roomId": roomId
         ]
         
         let headers = setupHeaderToken()

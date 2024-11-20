@@ -20,7 +20,7 @@ class AuctionWebSocket: ObservableObject {
     
     /// Connects to the WebSocket and sends the authentication token.
     func connectWebSocket(token: String) {
-        guard let url = URL(string: "wss://sep490ne-001-site1.atempurl.com/ws/chat") else {
+        guard let url = URL(string: "wss://sep490ne-001-site1.atempurl.com/ws/auction") else {
             print("Invalid WebSocket URL")
             return
         }

@@ -9,7 +9,7 @@ import SwiftUI
 struct AuctionRoomDetailScreen: View {
     // MARK: - PROPERTY
     @State var viewModel: AuctionRoomDetailViewModel = AuctionRoomDetailViewModel()
-    let userRoomId: Int
+    let roomId: Int
     let customers = Array(0..<3)
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -33,7 +33,7 @@ struct AuctionRoomDetailScreen: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.red)
                     Button("Thử lại") {
-                        viewModel.getRegistedAuctionRoomById(userRoomId: self.userRoomId)
+                        viewModel.getRegistedAuctionRoomById(roomId: roomId)
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -70,7 +70,6 @@ struct AuctionRoomDetailScreen: View {
                     
                     ZStack(alignment: .center) {
                         LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                        
                         VStack(alignment: .leading) {
                             Text("Số người đăng ký")
                                 .fontWeight(.semibold)
@@ -192,7 +191,12 @@ struct AuctionRoomDetailScreen: View {
         .ignoresSafeArea(.all, edges: .vertical)
         .navigationBarBackButtonHidden()
         .onAppear {
-            viewModel.getRegistedAuctionRoomById(userRoomId: self.userRoomId)
+            viewModel.getRegistedAuctionRoomById(roomId: self.roomId)
+            if let token = UserSession.shared.token {
+                AuctionWebSocket.shared.connectWebSocket(token: token)
+            } else {
+                print("No token to connect web socket")
+            }
         }
     }
     
@@ -209,5 +213,5 @@ struct AuctionRoomDetailScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    AuctionRoomDetailScreen(userRoomId: 1)
+    AuctionRoomDetailScreen(roomId: 1)
 }
