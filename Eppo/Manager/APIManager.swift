@@ -8,6 +8,9 @@
 import Foundation
 import Alamofire
 import Combine
+import UIKit
+import ImageIO
+import UniformTypeIdentifiers
 
 enum APIError: Error {
     case dataNotFound
@@ -41,6 +44,7 @@ struct APIConstants {
         static let getByType = baseURL + "api/v1/GetList/Plants/Filter/ByTypeEcommerceId"
         static let getByTypeAndCate = baseURL + "api/v1/GetList/Plants/Filter/TypeEcommerceIdAndCategoryId"
         static let getById = baseURL + "api/v1/Plant/"
+        static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
     }
     
     struct Room {
@@ -50,7 +54,7 @@ struct APIConstants {
         static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/Id"
-
+        
     }
     
     struct Category {
@@ -404,7 +408,7 @@ class APIManager {
                 if (200...299).contains(statusCode) {
                     return (statusCode, "Đơn hàng đã đặt thành công")
                 }
-
+                
                 
                 // Check for 500 (Server Error) and get the response message
                 if statusCode == 500 {
@@ -447,7 +451,7 @@ class APIManager {
                     print("Request failed with error: \(error.localizedDescription)")
                 }
             }
-            .publishDecodable(type: UserResponse.self)
+            .publishDecodable(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error
@@ -665,7 +669,7 @@ class APIManager {
             }
             .eraseToAnyPublisher()
     }
-
+    
     func getBuyOrderHistory(pageIndex: Int, pageSize: Int, status: Int) -> AnyPublisher<BuyHistoryResponse, Error> {
         let url = APIConstants.Order.getBuyOrderHistory
         
@@ -724,7 +728,7 @@ class APIManager {
         
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .validate()
-            .publishDecodable(type: [TransactionAPI].self)
+            .publishDecodable(type: [TransactionAPI].self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error
@@ -769,6 +773,91 @@ class APIManager {
                 return error as Error
             }
             .eraseToAnyPublisher()
+    }
+    
+    // MARK: - OWNER
+    func createPlant(plantData: [String: String], mainImage: UIImage?, additionalImages: [UIImage]) -> AnyPublisher<PlantResponse, APIError> {
+        let url = APIConstants.Plant.createPlant
+        let headers = setupHeaderToken()
+        
+        // Tạo multipart form data cho yêu cầu upload hình ảnh
+        let multipartFormData = MultipartFormData()
+        
+        // Thêm các tham số vào multipart form data
+        for (key, value) in plantData {
+            multipartFormData.append(value.data(using: .utf8)!, withName: key)
+        }
+        
+        // Kiểm tra và thêm main image vào request
+        if let mainImage = mainImage, let imageData = mainImage.jpegData(compressionQuality: 0.5) {
+            print("Main Image Data: \(imageData.count) bytes")
+            multipartFormData.append(imageData, withName: "mainImageFile", fileName: "mainImage.jpg", mimeType: "image/jpeg")
+        } else {
+            print("Invalid main image format.")
+            // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+        }
+        
+        // Kiểm tra và thêm các ảnh phụ vào request
+        for (index, image) in additionalImages.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .post, headers: headers)
+            .validate(statusCode: 200..<300) // Ensure this includes all success codes
+            .publishData()
+            .tryMap { response in
+                // Log thông tin phản hồi để xem chi tiết
+                if let statusCode = response.response?.statusCode {
+                    print("Response Status Code: \(statusCode)") // Log statusCode
+                }
+                
+                if let responseData = response.data {
+                    print("Response Data: \(String(data: responseData, encoding: .utf8) ?? "No Data")") // Log body response
+                }
+                
+                if response.data == nil {
+                    print("No data returned, raw response: \(String(describing: response.data))")
+                    throw APIError.noData
+                }
+                return response.data ?? Data()
+            }
+            .decode(type: PlantResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                // Xử lý lỗi chi tiết
+                print("Error occurred: \(error)") // Log lỗi để xem chi tiết
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError // Nếu không phải lỗi APIError, coi là lỗi mạng
+                }
+            }
+            .eraseToAnyPublisher()
+
+    }
+    
+    // MARK: - Helper function to check image MIME type
+    func getMimeType(from imageData: Data) -> String? {
+        guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else { return nil }
+        guard let uti = CGImageSourceGetType(imageSource) else { return nil }
+        
+        // Chuyển đổi CFString thành String để so sánh
+        let utiString = uti as String
+        
+        if utiString == UTType.jpeg.identifier {
+            return "image/jpeg"
+        } else if utiString == UTType.png.identifier {
+            return "image/png"
+        } else if utiString == UTType.gif.identifier {
+            return "image/gif"
+        } else {
+            return nil
+        }
     }
     
     func setupHeaderToken() -> HTTPHeaders? {

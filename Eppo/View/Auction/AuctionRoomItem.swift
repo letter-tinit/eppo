@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AuctionRoomItem: View {
     // MARK: - PROPERTY
-    var image: Image
+    let imageURL: String
     var itemName: String
     var roomNumber: String
     var time: Date
@@ -18,11 +18,7 @@ struct AuctionRoomItem: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Image("sample-bonsai-01")
-                .resizable()
-                .frame(width: 164, height: 100, alignment: .top)
-                .scaledToFit()
-                .clipped()
+            CustomAsyncImage(imageUrl: imageURL, width: 164, height: 100)
             
             VStack(alignment: .leading, spacing: 8) {
                 
@@ -77,5 +73,5 @@ struct AuctionRoomItem: View {
 
 // MARK: - PREVIEW
 #Preview {
-    AuctionRoomItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", roomNumber: "P100", time: Date())
+    AuctionRoomItem(imageURL: "https://www.hackingwithswift.com/samples/paul2.jpg", itemName: "Sen Đá Kim Cương Haworthia Cooperi", roomNumber: "P100", time: Date())
 }

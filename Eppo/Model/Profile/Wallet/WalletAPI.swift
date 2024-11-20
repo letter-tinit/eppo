@@ -17,24 +17,38 @@ struct WalletResponse: Codable {
 struct Wallet: Codable {
     let walletId: Int
     let numberBalance: Double
-    let creationDate: String
-    let modificationDate: String
+    let creationDate: Date
+    let modificationDate: Date
     let status: Int
     let transactions: [TransactionAPI]
 }
 
 // MARK: - Transaction
-struct TransactionAPI: Codable {
-    let transactionId: Int
+struct TransactionAPI: Codable, Identifiable {
+    let id: Int
     let walletId: Int
     let description: String
     let withdrawNumber: Double?
     let rechargeNumber: Double?
     let paymentId: Int?
     let isActive: Bool?
-    let rechargeDate: String?
-    let withdrawDate: String?
-    let creationDate: String?
+    let rechargeDate: Date?
+    let withdrawDate: Date?
+    let creationDate: Date?
     let status: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "transactionId"
+        case walletId
+        case description
+        case withdrawNumber
+        case rechargeNumber
+        case paymentId
+        case isActive
+        case rechargeDate
+        case withdrawDate
+        case creationDate
+        case status
+    }
 }
 

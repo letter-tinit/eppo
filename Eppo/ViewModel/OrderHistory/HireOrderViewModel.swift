@@ -16,8 +16,10 @@ class HireOrderViewModel {
     
     var orders: [HireHistoryOrder] = []
     var cancellables: Set<AnyCancellable> = []
+    var isLoading = false
     
     func getHireOrderHistory() {
+        isLoading = true
         var orderState = 1
         
         switch selectedOrderState {
@@ -35,6 +37,7 @@ class HireOrderViewModel {
         
         APIManager.shared.getHireOrderHistory(pageIndex: 1, pageSize: 999, status: orderState)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break

@@ -10,9 +10,11 @@ import Foundation
 struct Plant: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
-    let price: Double
+    let title: String
     let finalPrice: Double
     let description: String
+    let mainImage: String
+    let imagePlants: [ImagePlantResponse]
     
     // computed value
     var isSelected: Bool = false
@@ -20,9 +22,21 @@ struct Plant: Codable, Identifiable, Hashable {
     enum CodingKeys: String, CodingKey {
         case id = "plantId"
         case name = "plantName"
-        case price = "price"
+        case title
         case finalPrice = "finalPrice"
         case description = "description"
+        case mainImage
+        case imagePlants = "imagePlants"
+    }
+}
+
+struct ImagePlantResponse: Codable, Identifiable, Hashable {
+    var id: Int
+    var imageUrl: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "plantId"
+        case imageUrl
     }
 }
 

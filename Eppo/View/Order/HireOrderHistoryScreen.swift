@@ -45,27 +45,28 @@ struct HireOrderHistoryScreen: View {
                 }
             }
                 
-            if viewModel.orders.isEmpty {
-                Spacer()
-                
-                Text("Không tìm thấy đơn hàng")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
-                
-                Spacer()
-                
-            } else {
+            if viewModel.isLoading {
+                CenterView {
+                    ProgressView("Đang tải")
+                }
+            } else if !viewModel.orders.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach (viewModel.orders) { ordersHireHistoryOrder in
                         if let orderDetail = ordersHireHistoryOrder.orderDetails.first
                         {
-                            HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail)
+                            HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail, isCancellable: viewModel.selectedOrderState == .waitingForConfirm)
                         }
                     }
                     .padding(.vertical, 10)
                     .background(Color(uiColor: UIColor.systemGray5))
                 }
                 .padding(.bottom, 30)
+            } else {
+                CenterView {
+                    Text("Không tìm thấy dữ liệu")
+                        .font(.headline)
+                        .foregroundStyle(.gray)
+                }
             }
         }
         .background(.white)

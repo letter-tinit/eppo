@@ -21,13 +21,22 @@ import Combine
 
     var cancellables: Set<AnyCancellable> = []
     
+    // MARK: - UILOADING
+    var isLoading = false
+    var hasError = false
+    
     func getRoomById(roomId: Int) {
+        isLoading = true
+        hasError = false
+        
         APIManager.shared.getRoomById(id: 10)
             .sink { result in
+                self.isLoading = false
                 switch result {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.hasError = true
                     print(error.localizedDescription)
                 }
             } receiveValue: { auctionDetailResponse in

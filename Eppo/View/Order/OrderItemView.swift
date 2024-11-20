@@ -31,7 +31,7 @@ struct OrderItemView: View {
                     .foregroundStyle(.gray)
                     .font(.caption)
                 
-                Text(plant.price, format: .currency(code: "VND"))
+                Text(plant.finalPrice, format: .currency(code: "VND"))
                     .lineLimit(1)
                     .fontWeight(.medium)
                     .foregroundStyle(.red)

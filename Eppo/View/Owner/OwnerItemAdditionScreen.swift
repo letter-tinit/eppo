@@ -5,128 +5,145 @@
 //
 
 import SwiftUI
+import UIKit
 import PhotosUI
 
 struct OwnerItemAdditionScreen: View {
-    // MARK: - PROPERTY
-    @State private var itemName: String = ""
-    @State private var itemDescription: String = ""
-    
-    @State private var selectedImages: [UIImage] = []
-    @State private var photoPickerItems: [PhotosPickerItem] = []
-    private let maxImages = 5
-    
-    // MARK: - BODY
+    @StateObject private var viewModel = OwnerItemAdditionViewModel()
+    @State private var mainImagePickerItem: PhotosPickerItem? = nil
+    @State private var additionalImagePickerItems: [PhotosPickerItem] = []
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         VStack(alignment: .leading) {
             SingleHeaderView(title: "Thêm sản phẩm")
             
-            VStack(alignment: .leading) {
-                Text("Tên sản phẩm")
-                    .foregroundStyle(.textDarkBlue)
-                    .font(.system(size: 16, weight: .semibold))
-                    .padding(.top, 20)
-                
-                BorderTextField {
-                    TextField("Nhập tên", text: $itemName)
-                }
-                .frame(height: 50)
-                
-                Text("Mô tả")
-                    .foregroundStyle(.textDarkBlue)
-                    .font(.system(size: 16, weight: .semibold))
-                    .padding(.top, 20)
-                BorderTextField {
-                    TextField("Nhập mô tả", text: $itemDescription)
-                }
-                .frame(height: 50)
-                
-                Text("Giá sản phẩm")
-                    .foregroundStyle(.textDarkBlue)
-                    .font(.system(size: 16, weight: .semibold))
-                    .padding(.top, 20)
-                
-                BorderTextField {
-                    HStack {
-                        TextField("Nhập giá tiền", text: $itemDescription)
-                            .keyboardType(.numberPad)
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Group {
+                        Text("Tên sản phẩm").font(.headline)
+                        BorderTextField {
+                            TextField("Nhập tên", text: $viewModel.itemName)
+                        }
+                        .frame(height: 50)
                         
-                        Text("₫")
-                            .font(.title)
-                            .foregroundStyle(.orange)
+                        Text("Tiêu đề phụ").font(.headline)
+                        BorderTextField {
+                            TextField("Nhập tiêu đề phụ", text: $viewModel.itemTitle)
+                        }
+                        .frame(height: 50)
+                        
+                        Text("Mô tả").font(.headline)
+                        BorderTextField {
+                            TextField("Nhập mô tả", text: $viewModel.itemDescription)
+                        }
+                        .frame(height: 50)
+
+                        Text("Giá sản phẩm").font(.headline)
+                        BorderTextField {
+                            TextField("Nhập giá tiền", text: $viewModel.price)
+                                .keyboardType(.numberPad)
+                        }
+                        .frame(height: 50)
+                                            
+                        Text("Kích thước (cm)").font(.headline)
+                        HStack {
+                            BorderTextField {
+                                TextField("Rộng", text: $viewModel.width)
+                                    .keyboardType(.numberPad)
+                            }
+                            .frame(height: 40)
+
+                            BorderTextField {
+                                TextField("Dài", text: $viewModel.length)
+                                    .keyboardType(.numberPad)
+                            }                
+                            .frame(height: 40)
+
+                            
+                            BorderTextField {
+                                TextField("Cao", text: $viewModel.height)
+                                    .keyboardType(.numberPad)
+                            }          
+                            .frame(height: 40)
+
+                        }
                     }
-                }
-                .overlay(alignment: .trailing) {
-                }
-                .frame(height: 50)
-                
-                Text("Thêm hình ảnh")
-                    .foregroundStyle(.textDarkBlue)
-                    .font(.system(size: 16, weight: .semibold))
-                    .padding(.top, 20)
-                
-                PhotosPicker(selection: $photoPickerItems, matching: .images, photoLibrary: .shared()) {
-                    Image(systemName: "photo.badge.plus")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 60, height: 60)
-                        .font(.headline)
-                        .foregroundStyle(.green)
-                }
-                .padding(.top, 20)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(selectedImages, id: \.self) { image in
-                            Image(uiImage: image)
+                    
+                    // Main Image Picker
+                    Text("Hình ảnh chính").font(.headline)
+                    PhotosPicker(selection: $mainImagePickerItem, matching: .images) {
+                        if let mainImage = viewModel.mainImage {
+                            Image(uiImage: mainImage)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)
-                                .border(.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        } else {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .foregroundColor(.gray)
                         }
                     }
-                }
-                .frame(height: 110)
-            }
-            .padding(.horizontal)
-            .onChange(of: photoPickerItems) { _, _ in
-                Task {
-                    selectedImages.removeAll() // Reset the images
-                    for photoPickerItem in photoPickerItems {
-                        if let data = try? await photoPickerItem.loadTransferable(type: Data.self),
-                           let image = UIImage(data: data) {
-                            selectedImages.append(image)
+                    .onChange(of: mainImagePickerItem) { _, newValue in
+                        Task {
+                            await viewModel.handleMainImagePicker(newValue)
                         }
                     }
-                }
-            }
-            
-            Spacer()
-            
-            Button {
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(height: 60)
-                        .foregroundStyle(
-                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
-                        )
                     
-                    Text("Đăng Ký")
-                        .foregroundStyle(.black)
-                        .font(.system(size: 16, weight: .bold))
+                    // Additional Images Picker
+                    Text("Hình ảnh bổ sung").font(.headline)
+                    PhotosPicker(selection: $additionalImagePickerItems, matching: .images) {
+                        Image(systemName: "photo.on.rectangle.angled")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.blue)
+                    }
+                    .onChange(of: additionalImagePickerItems) { _, newValue in
+                        Task {
+                            await viewModel.handleAdditionalImagesPicker(newValue)
+                        }
+                    }
+                    
+                    // Display Selected Additional Images
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(viewModel.additionalImages, id: \.self) { image in
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+                    }
                 }
-                .padding(.horizontal)
-                
-            } // LOGIN BUTTON
+                .padding()
+            }
             
-            Spacer()
-            
-        } // TEXT FIELD STACK
-        .ignoresSafeArea(.container, edges: .top)
-    }
+            Button(action: {
+//                if viewModel.isValid {
+                    viewModel.createOwnerItem()
+//                } else {
+//                    alertMessage = viewModel.validationMessage
+//                    showAlert = true
+//                }
+            }) {
+                Text("Xác nhận")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            .padding()
+            .alert(alertMessage, isPresented: $showAlert) {
+                Button("OK", role: .cancel) { }
+            }
+        }
+    }    
 }
 
 // MARK: - PREVIEW

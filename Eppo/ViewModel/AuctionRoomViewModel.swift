@@ -28,6 +28,7 @@ class AuctionRoomViewModel {
         errorMessage = nil
         
         APIManager.shared.getListRegisteredAuction(pageIndex: 1, pageSize: 999)
+            .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 self.isLoading = false
                 switch completion {
@@ -35,6 +36,8 @@ class AuctionRoomViewModel {
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.hasError = true
+                    self.errorMessage = error.localizedDescription
                 }
             } receiveValue: { registeredRoomsResponse in
                 self.userRooms = registeredRoomsResponse.data
@@ -44,7 +47,7 @@ class AuctionRoomViewModel {
     
     func getRegistedAuctionRoomById(userRoomId: Int) {
         APIManager.shared.getRegistedAuctonById(userRoomId: userRoomId)
-            .timeout(12, scheduler: DispatchQueue.main)
+            .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .finished:

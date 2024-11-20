@@ -35,7 +35,7 @@ struct BuyOrderRowView: View {
                             .font(.headline)
                             .lineLimit(1)
                         
-                        Text(orderDetail.plant.price, format: .currency(code: "VND"))
+                        Text(orderDetail.plant.finalPrice, format: .currency(code: "VND"))
                             .fontWeight(.semibold)
                             .foregroundStyle(.red)
                             .font(.subheadline)

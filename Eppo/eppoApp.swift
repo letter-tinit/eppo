@@ -11,12 +11,21 @@ import SwiftUI
 struct EppoApp: App {
     @State private var networkMonitor = NetworkMonitor()
     @AppStorage("isLogged") var isLogged: Bool = false
-    
+    @AppStorage("isCustomer") var isCustomer: Bool = false
+    @AppStorage("isOwner") var isOwner: Bool = false
+
     var body: some Scene {
         WindowGroup {
             if isLogged {
-                MainTabView()
-                    .environment(networkMonitor)
+                if isCustomer {
+                    MainTabView()
+                        .environment(networkMonitor)
+                } else if isOwner {
+                    OwnerMainTabView()
+                        .environment(networkMonitor)
+                } else {
+                    EmptyView()
+                }
             } else {
                 LoginScreen()
             }

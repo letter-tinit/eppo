@@ -17,8 +17,6 @@ enum OwnerTab: String, CaseIterable {
 
 struct OwnerMainTabView: View {
     // MARK: - PROPERTY
-    @AppStorage("isOwnerChatting") var isOwnerChatting: Bool = false
-    
     @State private var selectedTab: OwnerTab = .addition
     
     init () {
@@ -28,53 +26,47 @@ struct OwnerMainTabView: View {
     
     // MARK: - BODY
     var body: some View {
-        if !isOwnerChatting {
+        TabView(selection: $selectedTab) {
             NavigationStack {
-                TabView(selection: $selectedTab) {
-                    OwnerItemAdditionScreen()
-                        .tabItem {
-                            Label("Thêm", systemImage: "plus.circle")
-                        }
-                        .tag(OwnerTab.addition)
-                    
-                    NotificationScreen()
-                        .tabItem {
-                            Label("Thông báo", systemImage: "bell")
-                        }
-                        .tag(OwnerTab.notification)
-                    
-                    OwnerHome()
-                        .tabItem {
-                            Label("Trang Chủ", systemImage: "house")
-                        }
-                        .tag(OwnerTab.home)
-                    
-                    OwnerChatScreen()
-                        .tabItem {
-                            Label("Nhắn tin", systemImage: "message")
-                        }
-                        .tag(OwnerTab.message)
-                    
-                    OwnerProfileScreen()
-                        .tabItem {
-                            Label("Tài khoản", systemImage: "person.fill")
-                        }
-                        .tag(OwnerTab.profile)
-                }
-                .tint(.black)
-                .onChange(of: selectedTab) { oldTab, newTab in
-                    if newTab == .message {
-                        isOwnerChatting = true
-                        selectedTab = oldTab
-                    }
-                }
+                OwnerItemAdditionScreen()
             }
-            .navigationBarBackButtonHidden()
-        } else {
-            OwnerChatScreen()
+            .tabItem {
+                Label("Thêm", systemImage: "plus.circle")
+            }
+            .tag(OwnerTab.addition)
+            
+            NavigationStack {
+                NotificationScreen()
+            }
+            .tabItem {
+                Label("Thông báo", systemImage: "bell")
+            }
+            .tag(OwnerTab.notification)
+            
+            NavigationStack {
+                OwnerHome()
+            }
+            .tabItem {
+                Label("Trang Chủ", systemImage: "house")
+            }
+            .tag(OwnerTab.home)
+            
+            NavigationStack {
+                OwnerProfileScreen()
+            }
+            .tabItem {
+                Label("Tài khoản", systemImage: "person.fill")
+            }
+            .tag(OwnerTab.profile)
+        }
+        .tint(.black)
+        .navigationBarBackButtonHidden()
+        .onAppear {
+            print(UserSession.shared.token)
         }
     }
 }
+
 
 #Preview {
     OwnerMainTabView()

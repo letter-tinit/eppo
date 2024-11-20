@@ -7,64 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EE0A768A-7FD3-4A8F-9B1D-3B2A20770106"
+            uuid = "2D991351-795D-4193-8A8F-BD8DE5F82319"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Eppo/ViewModel/AuctionRoomViewModel.swift"
+            filePath = "Eppo/ViewModel/Owner/OwnerItemAdditionViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "getListRegistedAuctionRoom()"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "createOwnerItem()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1088A5E4-950A-4568-BCA5-FA502759413B"
+            uuid = "1F306E3C-4D09-4470-A4E7-E57F71865FE6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Eppo/ViewModel/AuctionRoomViewModel.swift"
+            filePath = "Eppo/Manager/APIManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "getListRegistedAuctionRoom()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "ADE4DF14-C5D8-49CA-AE82-8C0A1C87176D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Eppo/ViewModel/AuctionRoomViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "getRegistedAuctionRoomById(userRoomId:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6F66D5F0-F669-4B45-8106-5E864F49114A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Eppo/ViewModel/AuctionRoomViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "getRegistedAuctionRoomById(userRoomId:)"
+            startingLineNumber = "815"
+            endingLineNumber = "815"
+            landmarkName = "createPlant(plantData:mainImage:additionalImages:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

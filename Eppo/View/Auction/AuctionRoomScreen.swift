@@ -20,7 +20,7 @@ struct AuctionRoomScreen: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true, isReturnMain: true)
+            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
             
             HStack(spacing: 15) {
                 SearchBar(searchText: $searchText)
@@ -49,24 +49,45 @@ struct AuctionRoomScreen: View {
             }
             .padding(.horizontal)
             
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVGrid(columns: adaptiveColumn, spacing: 20) {
-                    ForEach(viewModel.userRooms) { userRoom in
-                        NavigationLink {
-                            AuctionRoomDetailScreen(userRoomId: userRoom.id)
+            if viewModel.hasError {
+                CenterView {
+                    VStack {
+                        Text("Tải thất bại")
+                            .foregroundStyle(.gray)
+                        
+                        Button {
+                            viewModel.getListRegistedAuctionRoom()
                         } label: {
-                            AuctionRoomItem(image: Image("sample-bonsai-01"), itemName: userRoom.room.plant.name, roomNumber: "P\(userRoom.roomId)", time: userRoom.room.activeDate)
+                            Text("Thử lại")
+                                .foregroundStyle(.blue)
+                                .underline()
                         }
                     }
+                    .font(.headline)
                 }
-                .padding(.bottom, 70)
-                .padding(.horizontal, 8)
+                
+            } else {
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVGrid(columns: adaptiveColumn, spacing: 20) {
+                        ForEach(viewModel.userRooms) { userRoom in
+                            NavigationLink {
+                                AuctionRoomDetailScreen(userRoomId: userRoom.id)
+                            } label: {
+                                AuctionRoomItem(imageURL: userRoom.room.plant.mainImage, itemName: userRoom.room.plant.name, roomNumber: "P\(userRoom.roomId)", time: userRoom.room.activeDate)
+                            }
+                        }
+                        .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
+                    }
+                    .padding(.bottom, 70)
+                    .padding(.horizontal, 8)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
         .ignoresSafeArea(.all)
         .navigationBarBackButtonHidden()
+        .foregroundStyle(.black)
         .onAppear {
             viewModel.getListRegistedAuctionRoom()
         }

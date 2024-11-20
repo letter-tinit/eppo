@@ -77,7 +77,7 @@ struct AuctionScreen: View {
                             NavigationLink {
                                 AuctionDetailScreen(roomId: room.roomId)
                             } label: {
-                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: room.plant.name, price: room.plant.price, time: room.activeDate)
+                                ToAuctionItem(imageURL: room.plant.mainImage, itemName: room.plant.name, price: room.plant.finalPrice, time: room.activeDate)
                             }
                         }
                     }

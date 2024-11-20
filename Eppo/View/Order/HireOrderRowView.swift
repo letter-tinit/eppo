@@ -14,16 +14,10 @@ struct HireOrderRowView: View {
 
     var totalPrice: Double
     var deliveriteFree: Double
-    var isCancellable: Bool = false
     var numberOfMonth: Int
-    
-//    let plants: [Plant] = [
-//        Plant(id: 1, name: "Rose", price: 15.99, description: "A beautiful red rose."),
-//        Plant(id: 2, name: "Tulip", price: 10.50, description: "A vibrant spring tulip."),
-//        Plant(id: 3, name: "Orchid", price: 25.75, description: "An elegant and exotic orchid.")
-//    ]
     let orderDetail: HireHistoryOrderDetail
-    
+    var isCancellable: Bool = false
+
     // MARK: - BODY
 
     var body: some View {
@@ -41,7 +35,7 @@ struct HireOrderRowView: View {
                         .font(.headline)
                         .lineLimit(1)
                     
-                    Text(orderDetail.plant.price, format: .currency(code: "VND"))
+                    Text(orderDetail.plant.finalPrice, format: .currency(code: "VND"))
                         .fontWeight(.semibold)
                         .foregroundStyle(.red)
                         .font(.subheadline)
@@ -87,21 +81,22 @@ struct HireOrderRowView: View {
             }
             .padding(.horizontal, 10)
 
-            Button {
-                viewModel.cancelOrder(id: id)
-            } label: {
-                Text("Huỷ")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .foregroundStyle(.red)
-                    )
-                    .foregroundStyle(.white)
+            if isCancellable {
+                Button {
+                    viewModel.cancelOrder(id: id)
+                } label: {
+                    Text("Huỷ đơn hàng")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .foregroundStyle(.red)
+                        )
+                        .foregroundStyle(.white)
+                }
+                .padding(.horizontal, 10)
             }
-            
-            .padding(.horizontal, 10)
         }
         .scaledToFit()
         .padding(.vertical)

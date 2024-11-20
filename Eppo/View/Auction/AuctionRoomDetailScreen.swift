@@ -126,7 +126,7 @@ struct AuctionRoomDetailScreen: View {
                 }
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    PictureSlider()
+                    PictureSlider(imagePlants: registedRoomResponseData.room.room.plant.imagePlants)
                         .shadow(radius: 4)
                         .padding(.top)
                     

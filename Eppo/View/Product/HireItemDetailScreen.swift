@@ -10,7 +10,6 @@ struct HireItemDetailScreen: View {
     // MARK: - PROPERTY
     let id: Int
     @State var viewModel = ItemDetailsViewModel()
-    let images = ["sample-bonsai", "sample-bonsai-01"]
     
     @Environment(\.dismiss) var dismiss
     
@@ -21,7 +20,7 @@ struct HireItemDetailScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     // MARK: - PICTURE SLIDER
-                    PictureSlider()
+                    PictureSlider(imagePlants: viewModel.plant?.imagePlants ?? [])
                     
                     // MARK: - CONTENT HEADER
                     VStack(alignment: .leading, spacing: 20) {
@@ -29,7 +28,7 @@ struct HireItemDetailScreen: View {
                             Text("Giá chỉ:")
                                 .font(.system(size: 18, weight: .medium))
                             
-                            if let price = viewModel.plant?.price {
+                            if let price = viewModel.plant?.finalPrice {
                                 HStack(spacing: 0) {
                                     Text(price, format: .currency(code: "VND"))
                                         .font(.system(size: 18, weight: .medium))
@@ -50,7 +49,7 @@ struct HireItemDetailScreen: View {
                             .font(.system(size: 24, weight: .medium))
                             .foregroundStyle(.black)
                         
-                        Text(viewModel.plant?.description ?? "Đang tải")
+                        Text(viewModel.plant?.title ?? "Đang tải")
                             .font(.system(size: 18, weight: .regular))
                             .foregroundStyle(.secondary)
                     }// CONTENT VSTACK
@@ -201,7 +200,7 @@ struct HireItemDetailScreen: View {
                 } label: {
                     VStack(alignment: .leading) {
                         Text("Thuê cây")
-                        if let price = viewModel.plant?.price {
+                        if let price = viewModel.plant?.finalPrice {
                             HStack(spacing: 0) {
                                 Text(price, format: .currency(code: "VND"))
                                 Text("/tháng")

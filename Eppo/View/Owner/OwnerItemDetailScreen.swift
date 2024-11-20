@@ -20,7 +20,7 @@ struct OwnerItemDetailScreen: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 15) {
                     // MARK: - PICTURE SLIDER
-                    PictureSlider()
+//                    PictureSlider()
                     
                     // MARK: - CONTENT HEADER
                     VStack(alignment: .leading, spacing: 20) {

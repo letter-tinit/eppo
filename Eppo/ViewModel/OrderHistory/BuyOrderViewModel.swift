@@ -16,8 +16,10 @@ class BuyOrderViewModel {
     
     var orders: [BuyHistoryOrder] = []
     var cancellables: Set<AnyCancellable> = []
+    var isLoading = false
     
     func getBuyOrderHistory() {
+        self.isLoading = true
         var orderState = 1
         
         switch selectedOrderState {
@@ -35,6 +37,7 @@ class BuyOrderViewModel {
         
         APIManager.shared.getBuyOrderHistory(pageIndex: 1, pageSize: 999, status: orderState)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break

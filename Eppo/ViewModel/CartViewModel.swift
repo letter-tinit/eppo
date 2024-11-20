@@ -83,7 +83,7 @@ import Observation
     func totalPrice() -> Double {
         return orderDetails
             .filter { $0.isSelected }
-            .map { $0.price }
+            .map { $0.finalPrice }
             .reduce(0, +)
     }
     

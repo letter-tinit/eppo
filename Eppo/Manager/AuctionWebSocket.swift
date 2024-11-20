@@ -24,7 +24,7 @@ class AuctionWebSocket: ObservableObject {
             print("Invalid WebSocket URL")
             return
         }
-        
+                
         let session = URLSession(configuration: .default)
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()

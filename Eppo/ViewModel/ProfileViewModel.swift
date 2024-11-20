@@ -38,6 +38,14 @@ class ProfileViewModel {
     var addressTextField: String = ""
     var addresses: [Address] = []
     
+    // MARK: - TRANSACTION HISTORY SCREEN
+    var transactions: [TransactionAPI] = []
+    
+    // MARK: - Trạng thái cho UI
+        var isLoading = false
+        var hasError = false
+        var errorMessage: String?
+    
     func getMyInformation() {
         APIManager.shared.getMyInformation()
             .sink { completion in
@@ -165,21 +173,30 @@ class ProfileViewModel {
     }
     
     func getTransactionHistory() {
+        isLoading = true
+        hasError = false
+        errorMessage = nil
+        
         guard let userResponse = self.userResponse,
               let walletId = userResponse.data.walletId else {
             return
         }
         
         APIManager.shared.getTransactionHistory(pageIndex: 1, pageSize: 999, walletId: walletId)
+            .timeout(.seconds(1), scheduler: DispatchQueue.main)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                    self.hasError = true
                     self.handleAPIError(error)
                 }
             } receiveValue: { transactions in
                 print(transactions)
+                self.transactions = transactions
             }
             .store(in: &cancellables)
 

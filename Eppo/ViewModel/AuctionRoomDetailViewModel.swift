@@ -26,13 +26,15 @@ class AuctionRoomDetailViewModel {
     func getRegistedAuctionRoomById(userRoomId: Int) {
         self.isLoading = true
         APIManager.shared.getRegistedAuctonById(userRoomId: userRoomId)
-            .timeout(12, scheduler: DispatchQueue.main)
+            .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 self.isLoading = false
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.hasError = true
+                    self.errorMessage = error.localizedDescription
                     print(error.localizedDescription)
                 }
             } receiveValue: { registedRoomResponse in

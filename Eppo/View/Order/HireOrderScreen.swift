@@ -36,7 +36,7 @@ struct HireOrderScreen: View {
                                 .fontWeight(.regular)
                             Spacer()
                             HStack(spacing: 0) {
-                                Text(viewModel.plant?.price ?? 0, format: .currency(code: "VND"))
+                                Text(viewModel.plant?.finalPrice ?? 0, format: .currency(code: "VND"))
                                 
                                 Text("/tháng")
                             }
