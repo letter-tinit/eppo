@@ -1,8 +1,8 @@
 //
-//  ProfileViewModel.swift
+//  AddressViewModel.swift
 //  Eppo
 //
-//  Created by Letter on 05/10/2024.
+//  Created by Letter on 22/11/2024.
 //
 
 import Foundation
@@ -10,74 +10,73 @@ import Combine
 import Observation
 
 @Observable
-class ProfileViewModel {
-    
-    var user: User
-    
+class AddressViewModel {
     var cancellables: Set<AnyCancellable> = []
-    
+    var addressTextField: String = ""
+    var addresses: [Address] = []
     var message: String?
-    
-    // MARK: - MY ACCOUNT SCREEN BINDING
     var isShowingAlert: Bool = false
+    var isLoading: Bool = false
     var isPopup: Bool = false
-    
-    // MARK: - TRANSACTION HISTORY SCREEN
-    var transactions: [TransactionAPI] = []
-    
-    // MARK: - Trạng thái cho UI
-    var isLoading = false
     var hasError = false
-    var errorMessage: String?
     
-    init() {
-        self.user = User(userId: 1, userName: "", fullName: "", gender: "Nam", dateOfBirth: Date(), phoneNumber: "", email: "", imageUrl: "", identificationCard: "")
+    func getAddress() {
+        isLoading = true
+        hasError = false
+        message = nil
+        
+        APIManager.shared.getAddress()
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self?.handleAPIError(error)
+                    self?.hasError = true
+                }
+            } receiveValue: { addressResponse in
+                self.addresses = addressResponse.data
+            }
+            .store(in: &cancellables)
     }
     
-    func getMyInformation() {
+    func createAddress() {
         isLoading = true
-        APIManager.shared.getMyInformation()
-            .sink { completion in
-                self.isLoading = false
+        APIManager.shared.createAddress(createAddressResponse: CreateAddessRequest(description: self.addressTextField))
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                self?.isShowingAlert = true
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self?.message = error.localizedDescription
                 }
-            } receiveValue: { userResponse in
-                self.user = userResponse.data
+            } receiveValue: { createAddressResponse in
+                print(createAddressResponse)
+                self.message = createAddressResponse.message
             }
             .store(in: &cancellables)
     }
-        
-    func getTransactionHistory() {
+    
+    func deleteAddress(by addressId: Int) {
         isLoading = true
-        hasError = false
-        errorMessage = nil
-        
-        guard let walletId = user.walletId else {
-            return
-        }
-        
-        APIManager.shared.getTransactionHistory(pageIndex: 1, pageSize: 999, walletId: walletId)
-            .timeout(.seconds(1), scheduler: DispatchQueue.main)
+        APIManager.shared.deleteAddress(addressId: addressId)
             .sink { completion in
                 self.isLoading = false
+                self.isShowingAlert = true
                 switch completion {
                 case .finished:
+                    self.message = "Xoá thành công"
+                    self.getAddress()
                     break
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    self.hasError = true
                     self.handleAPIError(error)
                 }
-            } receiveValue: { transactions in
-                print(transactions)
-                self.transactions = transactions
-            }
+            } receiveValue: {}
             .store(in: &cancellables)
-        
     }
     
     private func handleAPIError(_ error: Error) {
@@ -109,9 +108,5 @@ class ProfileViewModel {
         } else {
             self.message = "Lỗi không xác định, vui lòng thử lại sau."
         }
-    }
-    
-    func logout() {
-        UserSession.shared.clearSession()
     }
 }

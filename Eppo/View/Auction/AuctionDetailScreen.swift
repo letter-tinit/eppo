@@ -48,7 +48,7 @@ struct AuctionDetailScreen: View {
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.black)
                             
-                            Text(1000, format: .number)
+                            Text(viewModel.registedNumber, format: .number)
                                 .fontWeight(.medium)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.white)
@@ -95,7 +95,7 @@ struct AuctionDetailScreen: View {
                                 LinearGradient(colors: [.red, .pink, .orange] , startPoint: .topLeading, endPoint: .bottomTrailing)
                             )
                         
-                        TimerView(timeRemaining: $timeRemaining)
+                        TimerView(timeRemaining: $viewModel.opeiningCooldown)
                             .padding(.horizontal)
                     }
                     .padding(.top)

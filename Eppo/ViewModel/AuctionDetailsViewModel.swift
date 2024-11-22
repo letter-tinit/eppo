@@ -11,6 +11,8 @@ import Combine
 
 @Observable class AuctionDetailsViewModel {
     var room: Room?
+    var registedNumber: Int = 0
+    var opeiningCooldown: Int = 1
     var message: String? {
         didSet {
             isAlertShowing = message != nil
@@ -40,7 +42,9 @@ import Combine
                     print(error.localizedDescription)
                 }
             } receiveValue: { auctionDetailResponse in
-                self.room = auctionDetailResponse.data
+                self.room = auctionDetailResponse.data.room
+                self.registedNumber = auctionDetailResponse.data.registeredCount
+                self.opeiningCooldown = auctionDetailResponse.data.openingCoolDown
             }
             .store(in: &cancellables)
     }

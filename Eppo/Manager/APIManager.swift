@@ -53,7 +53,7 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/GetList/Rooms/Id"
         static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
-        static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/Id"
+        static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
         
     }
     
@@ -254,7 +254,7 @@ class APIManager {
         
         // Set query parameters
         urlComponents.queryItems = [
-            URLQueryItem(name: "id", value: String(id))
+            URLQueryItem(name: "roomId", value: String(id))
         ]
         
         guard let url = urlComponents.url else {
@@ -859,6 +859,57 @@ class APIManager {
             return nil
         }
     }
+    
+    func updateUserInformation(userInput: User, avatar: UIImage?) -> AnyPublisher<UserResponse, APIError> {
+            let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetUser/Users/Update/Information/Id"
+            let headers = setupHeaderToken()
+            
+            // Tạo multipart form data
+            let multipartFormData = MultipartFormData()
+            
+            // Thêm các tham số vào form data
+            multipartFormData.append(userInput.gender.data(using: .utf8)!, withName: "gender")
+            multipartFormData.append(userInput.phoneNumber.data(using: .utf8)!, withName: "phoneNumber")
+            multipartFormData.append(userInput.dateOfBirth.iso8601String.data(using: .utf8)!, withName: "dateOfBirth")
+            multipartFormData.append(userInput.fullName.data(using: .utf8)!, withName: "fullName")
+            multipartFormData.append(userInput.email.data(using: .utf8)!, withName: "email")
+            multipartFormData.append(userInput.identificationCard.data(using: .utf8)!, withName: "identificationCard")
+            
+            // Kiểm tra nếu có avatar, thêm ảnh vào request
+            if let avatarImage = avatar, let avatarData = avatarImage.jpegData(compressionQuality: 0.5) {
+                multipartFormData.append(avatarData, withName: "imageFile", fileName: "avatar.jpg", mimeType: "image/jpeg")
+            }
+            
+            // Gửi request PUT
+            return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
+                .validate(statusCode: 200..<300)
+                .publishData()
+                .tryMap { response in
+                    if let statusCode = response.response?.statusCode {
+                        print("Response Status Code: \(statusCode)")
+                    }
+                    
+                    if let responseData = response.data {
+                        print("Response Data: \(String(data: responseData, encoding: .utf8) ?? "No Data")")
+                    }
+                    
+                    if response.data == nil {
+                        throw APIError.noData
+                    }
+                    return response.data ?? Data()
+                }
+                .decode(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
+                .mapError { error in
+                    print("Error occurred: \(error)")
+                    if let apiError = error as? APIError {
+                        return apiError
+                    } else {
+                        return APIError.networkError
+                    }
+                }
+                .eraseToAnyPublisher()
+        }
+
     
     func setupHeaderToken() -> HTTPHeaders? {
         guard let token = UserSession.shared.token else {

@@ -1,8 +1,8 @@
 //
-//  ProfileViewModel.swift
+//  OwnerProfileViewModel.swift
 //  Eppo
 //
-//  Created by Letter on 05/10/2024.
+//  Created by Letter on 21/11/2024.
 //
 
 import Foundation
@@ -10,20 +10,29 @@ import Combine
 import Observation
 
 @Observable
-class ProfileViewModel {
-    
+class OwnerProfileViewModel {
     var user: User
-    
+
     var cancellables: Set<AnyCancellable> = []
     
     var message: String?
     
     // MARK: - MY ACCOUNT SCREEN BINDING
+    var usernameTextField: String = ""
+    var phoneNumberTextField: String = ""
+    var emailTextField: String = ""
+    //    var addressTextField: String = ""
+    var idCodeTextField: String = ""
+    var date = Date()
+    var isFemale: Bool = false
+    var isMale: Bool = true
+    var isSelectedDate: Bool = false
     var isShowingAlert: Bool = false
     var isPopup: Bool = false
-    
-    // MARK: - TRANSACTION HISTORY SCREEN
-    var transactions: [TransactionAPI] = []
+
+    // MARK: - MY ADDRESS SCREEN BINDING
+    var addressTextField: String = ""
+    var addresses: [Address] = []
     
     // MARK: - Trạng thái cho UI
     var isLoading = false
@@ -33,12 +42,9 @@ class ProfileViewModel {
     init() {
         self.user = User(userId: 1, userName: "", fullName: "", gender: "Nam", dateOfBirth: Date(), phoneNumber: "", email: "", imageUrl: "", identificationCard: "")
     }
-    
     func getMyInformation() {
-        isLoading = true
         APIManager.shared.getMyInformation()
             .sink { completion in
-                self.isLoading = false
                 switch completion {
                 case .finished:
                     break
@@ -50,34 +56,24 @@ class ProfileViewModel {
             }
             .store(in: &cancellables)
     }
+  
+    func updateInfomation() {
         
-    func getTransactionHistory() {
-        isLoading = true
-        hasError = false
-        errorMessage = nil
+    }
+    
+    func setIsMale(_ isMale: Bool) {
+        self.isMale = isMale
+        self.isFemale = !isMale
+    }
+    
+    func selectedDate() -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         
-        guard let walletId = user.walletId else {
-            return
-        }
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy-MM-dd"
         
-        APIManager.shared.getTransactionHistory(pageIndex: 1, pageSize: 999, walletId: walletId)
-            .timeout(.seconds(1), scheduler: DispatchQueue.main)
-            .sink { completion in
-                self.isLoading = false
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                    self.hasError = true
-                    self.handleAPIError(error)
-                }
-            } receiveValue: { transactions in
-                print(transactions)
-                self.transactions = transactions
-            }
-            .store(in: &cancellables)
-        
+        return outputFormatter.string(from: self.date)
     }
     
     private func handleAPIError(_ error: Error) {

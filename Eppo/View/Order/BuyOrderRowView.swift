@@ -74,7 +74,7 @@ struct BuyOrderRowView: View {
 
             if isCancellable {
                 Button {
-                    viewModel.cancelOrder(id: orderId)
+                    viewModel.isAlertShowing = true
                 } label: {
                     Text("Huỷ đơn hàng")
                         .frame(width: 140, height: 40)
@@ -93,6 +93,11 @@ struct BuyOrderRowView: View {
         .padding(.vertical)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+                self.viewModel.cancelOrder(id: orderId)
+            }))
+        }
     }
 }
 

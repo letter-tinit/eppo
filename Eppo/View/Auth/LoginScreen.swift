@@ -119,6 +119,21 @@ struct LoginScreen: View {
                         .padding(.top, 40)
                     }// CONTENT
                     .padding(.horizontal, 20)
+                    
+                    HStack(spacing: 6) {
+                        Text("Chưa có tài khoản?")
+                            .foregroundStyle(.gray)
+                            .font(.system(size: 16, weight: .semibold))
+                        
+                        NavigationLink {
+                            ActiveScreen()
+                        } label: {
+                            Text("Đăng Ký")
+                                .foregroundStyle(.textDarkBlue)
+                                .font(.system(size: 16, weight: .semibold))
+                        }
+                    }
+                    .padding(.top, 30)
                     Spacer()
                     
                 }
@@ -156,9 +171,9 @@ struct LoginScreen: View {
                 MainTabView()
             }
         }
-        .onAppear {
-            viewModel.login(userName: "customer", password: "123")
-        }
+//        .onAppear {
+//            viewModel.login(userName: "customer", password: "123")
+//        }
         .onChange(of: viewModel.isCustomer) { oldValue, newValue in
             self.isCustomer = newValue
             if newValue { self.isOwner = false } // Đảm bảo không trùng trạng thái

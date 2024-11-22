@@ -17,7 +17,7 @@ enum Tab: String, CaseIterable {
 
 struct MainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: Tab = .auction
+    @State private var selectedTab: Tab = .profile
     @State var viewModel = LoginViewModel()
     
     init () {

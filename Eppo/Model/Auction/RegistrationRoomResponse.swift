@@ -34,7 +34,7 @@ struct RegistedRoomResponse: Codable {
 struct RegistedRoomResponseData: Codable {
     let room: RegistedRoomById
     let registeredCount: Int
-    let openingCoolDown: Int?
+    let openingCoolDown: Int
     let closingCoolDown: Int
 }
 

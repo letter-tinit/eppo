@@ -65,13 +65,10 @@ struct AuctionRoomScreen: View {
                     }
                     .font(.headline)
                 }
-                
-            } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVGrid(columns: adaptiveColumn, spacing: 20) {
+                } else { ScrollView(.vertical, showsIndicators: false) { LazyVGrid(columns: adaptiveColumn, spacing: 20) {
                         ForEach(viewModel.userRooms) { userRoom in
                             NavigationLink {
-                                AuctionRoomDetailScreen(roomId: userRoom.roomId)
+                                AuctionRoomDetailScreen(viewModel: AuctionRoomDetailViewModel(roomId: userRoom.roomId))
                             } label: {
                                 AuctionRoomItem(imageURL: userRoom.room.plant.mainImage, itemName: userRoom.room.plant.name, roomNumber: "P\(userRoom.roomId)", time: userRoom.room.activeDate)
                             }

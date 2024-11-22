@@ -8,24 +8,22 @@
 import SwiftUI
 
 struct AddressScreen: View {
-    @Bindable var viewModel:ProfileViewModel
+    @State var viewModel: AddressViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
             CustomHeaderView(title: "Địa chỉ của Tôi")
             
-            if viewModel.addresses.isEmpty {
-                Spacer()
-                
-                Text("Bạn chưa có địa chỉ nào")
-                
-                Spacer()
-            } else {
+            if viewModel.isLoading {
+                CenterView {
+                    ProgressView("Đang tải")
+                }
+            } else if !viewModel.addresses.isEmpty {
                 List {
                     ForEach(viewModel.addresses) { address in
                         Text(address.description)
                     }
                     .onDelete { indices in
-                        // Pass the ID of the address to delete
                         indices.forEach { index in
                             let addressId = viewModel.addresses[index].id
                             viewModel.deleteAddress(by: addressId)
@@ -35,6 +33,10 @@ struct AddressScreen: View {
                 .font(.headline)
                 .fontWeight(.medium)
                 .fontDesign(.rounded)
+            } else {
+                CenterView {
+                    Text("Bạn chưa có địa chỉ nào")
+                }
             }
             
             Button {
@@ -92,5 +94,5 @@ struct AddressScreen: View {
 }
 
 #Preview {
-    AddressScreen(viewModel: ProfileViewModel())
+    AddressScreen(viewModel: AddressViewModel())
 }

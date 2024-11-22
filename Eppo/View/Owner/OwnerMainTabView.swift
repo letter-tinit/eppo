@@ -17,7 +17,7 @@ enum OwnerTab: String, CaseIterable {
 
 struct OwnerMainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: OwnerTab = .addition
+    @State private var selectedTab: OwnerTab = .profile
     
     init () {
         //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -62,7 +62,7 @@ struct OwnerMainTabView: View {
         .tint(.black)
         .navigationBarBackButtonHidden()
         .onAppear {
-            print(UserSession.shared.token)
+            print(UserSession.shared.token as Any)
         }
     }
 }
