@@ -8,8 +8,8 @@ import SwiftUI
 
 struct FooterToolBar: View {
     // MARK: - PROPERTY
+    @Bindable var viewModel: ChatViewModel
     @Binding var messageTextField: String
-    @State private var isTyping: Bool = false
     
     // MARK: - BODY
     
@@ -31,30 +31,20 @@ struct FooterToolBar: View {
                     .foregroundStyle(.green)
             }
             
-            TextField("Nhập tin nhắn", text: $messageTextField, onEditingChanged: { isEditing in
-                isTyping = isEditing
-            })
+            TextField("Nhập tin nhắn", text: $messageTextField)
             .padding(10)
             .background(
                 Capsule()
                     .foregroundStyle(Color(uiColor: UIColor.systemGray6))
             )
-            if isTyping {
-                Button {
-                    sendMessage()
-                } label: {
-                    Image(systemName: "paperplane.fill")
-                        .font(.title)
-                }
-                .disabled(messageTextField.isEmpty)
-            } else {
-                Button {
-                    
-                } label: {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .font(.title)
-                }
+            
+            Button {
+                sendMessage()
+            } label: {
+                Image(systemName: "paperplane.fill")
+                    .font(.title)
             }
+            .disabled(messageTextField.isEmpty)
         }
         .padding(.horizontal)
         .padding(.top, 10)
@@ -64,12 +54,11 @@ struct FooterToolBar: View {
     }
     
     private func sendMessage() {
-        WebSocketManager.shared.sendMessage(conversationId: 1, message: messageTextField)
-        messageTextField = ""
+        viewModel.sendMessage()
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    FooterToolBar(messageTextField: .constant("Xin chào!"))
+    FooterToolBar(viewModel: ChatViewModel(), messageTextField: .constant("Xin chào!"))
 }

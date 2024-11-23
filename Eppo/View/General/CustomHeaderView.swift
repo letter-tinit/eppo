@@ -37,7 +37,7 @@ struct CustomHeaderView: View {
                 .frame(alignment: .center)
                 .padding(.leading, -buttonWidth)
                 .padding(.bottom, 6)
-
+            
             Spacer()
         }
         .padding(.horizontal, 20)

@@ -15,7 +15,7 @@ struct User: Codable {
     var dateOfBirth: Date
     var phoneNumber: String
     var email: String
-    var imageUrl: String
+    var imageUrl: String?
     var identificationCard: String
     var walletId: Int?
     var wallet: Wallet?

@@ -13,6 +13,7 @@ struct EppoApp: App {
     @AppStorage("isLogged") var isLogged: Bool = false
     @AppStorage("isCustomer") var isCustomer: Bool = false
     @AppStorage("isOwner") var isOwner: Bool = false
+    @AppStorage("isSigned") var isSigned: Bool = false
 
     var body: some Scene {
         WindowGroup {
@@ -21,8 +22,13 @@ struct EppoApp: App {
                     MainTabView()
                         .environment(networkMonitor)
                 } else if isOwner {
-                    OwnerMainTabView()
-                        .environment(networkMonitor)
+                    if isSigned {
+                        OwnerMainTabView()
+                            .environment(networkMonitor)
+                    } else {
+                        OwnerContractView()
+                            .environment(networkMonitor)
+                    }
                 } else {
                     EmptyView()
                 }

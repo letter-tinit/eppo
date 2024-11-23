@@ -34,6 +34,7 @@ import Combine
             if isOwner { isCustomer = false }
         }
     }
+    var isSigned: Bool = true
 
     private var cancellables = Set<AnyCancellable>()
     
@@ -70,6 +71,10 @@ import Combine
                 // Cập nhật dữ liệu vào ViewModel
                 let role = Role.from(roleName: loginResponse.roleName)
                 self.handleRole(role: role, token: loginResponse.token)
+                if let isSigned = loginResponse.isSigned,
+                   !isSigned {
+                    self.isSigned = isSigned
+                }
             })
             .store(in: &cancellables)
     }

@@ -38,6 +38,8 @@ struct APIConstants {
     
     struct Auth {
         static let login = baseURL + "api/v1/Users/Login"
+        static let createOwner = baseURL + "api/v1/Owner/CreateAccount/Owner"
+        static let createCustomer = baseURL + "api/v1/Customer/CreateAccount/Customer"
     }
     
     struct Plant {
@@ -88,10 +90,15 @@ struct APIConstants {
     struct Contract {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
+        static let createOwner = baseURL + "api/v1/GetList/Contracts/Create/Contract/Ownership"
     }
     
     struct Transaction {
         static let getHistory = baseURL + "api/v1/Transaction/GetAllTransactionsInWallet"
+    }
+    
+    struct Conversation {
+        static let getAll = baseURL + "api/Conversation/GetByUser"
     }
 }
 
@@ -144,6 +151,52 @@ class APIManager {
                 } else {
                     return APIError.decodingError
                 }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createCustomer(signUpUser: SignUpUser) -> AnyPublisher<SignUpResponse, Error> {
+        let url = APIConstants.Auth.createCustomer
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: signUpUser, encoder: JSONParameterEncoder.iso8601, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData() // Use `publishData` to inspect the response data
+            .tryMap { response in
+                if let statusCode = response.response?.statusCode, statusCode == 409 {
+                    // Return a custom error message for status code 400
+                    throw APIError.custom(message: "Tên đăng nhập hoặc email đã tồn tại")
+                }
+                return response.data ?? Data()
+            }
+            .decode(type: SignUpResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                // Handle or map other errors here if needed
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createOwner(signUpUser: SignUpUser) -> AnyPublisher<SignUpResponse, Error> {
+        let url = APIConstants.Auth.createOwner
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .post, parameters: signUpUser, encoder: JSONParameterEncoder.iso8601, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData() // Use `publishData` to inspect the response data
+            .tryMap { response in
+                if let statusCode = response.response?.statusCode, statusCode == 409 {
+                    // Return a custom error message for status code 400
+                    throw APIError.custom(message: "Tên đăng nhập hoặc email đã tồn tại")
+                }
+                return response.data ?? Data()
+            }
+            .decode(type: SignUpResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                // Handle or map other errors here if needed
+                return error as Error
             }
             .eraseToAnyPublisher()
     }
@@ -838,7 +891,7 @@ class APIManager {
                 }
             }
             .eraseToAnyPublisher()
-
+        
     }
     
     // MARK: - Helper function to check image MIME type
@@ -861,55 +914,99 @@ class APIManager {
     }
     
     func updateUserInformation(userInput: User, avatar: UIImage?) -> AnyPublisher<UserResponse, APIError> {
-            let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetUser/Users/Update/Information/Id"
-            let headers = setupHeaderToken()
-            
-            // Tạo multipart form data
-            let multipartFormData = MultipartFormData()
-            
-            // Thêm các tham số vào form data
-            multipartFormData.append(userInput.gender.data(using: .utf8)!, withName: "gender")
-            multipartFormData.append(userInput.phoneNumber.data(using: .utf8)!, withName: "phoneNumber")
-            multipartFormData.append(userInput.dateOfBirth.iso8601String.data(using: .utf8)!, withName: "dateOfBirth")
-            multipartFormData.append(userInput.fullName.data(using: .utf8)!, withName: "fullName")
-            multipartFormData.append(userInput.email.data(using: .utf8)!, withName: "email")
-            multipartFormData.append(userInput.identificationCard.data(using: .utf8)!, withName: "identificationCard")
-            
-            // Kiểm tra nếu có avatar, thêm ảnh vào request
-            if let avatarImage = avatar, let avatarData = avatarImage.jpegData(compressionQuality: 0.5) {
-                multipartFormData.append(avatarData, withName: "imageFile", fileName: "avatar.jpg", mimeType: "image/jpeg")
-            }
-            
-            // Gửi request PUT
-            return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
-                .validate(statusCode: 200..<300)
-                .publishData()
-                .tryMap { response in
-                    if let statusCode = response.response?.statusCode {
-                        print("Response Status Code: \(statusCode)")
-                    }
-                    
-                    if let responseData = response.data {
-                        print("Response Data: \(String(data: responseData, encoding: .utf8) ?? "No Data")")
-                    }
-                    
-                    if response.data == nil {
-                        throw APIError.noData
-                    }
-                    return response.data ?? Data()
-                }
-                .decode(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
-                .mapError { error in
-                    print("Error occurred: \(error)")
-                    if let apiError = error as? APIError {
-                        return apiError
-                    } else {
-                        return APIError.networkError
-                    }
-                }
-                .eraseToAnyPublisher()
+        let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetUser/Users/Update/Information/Id"
+        let headers = setupHeaderToken()
+        
+        // Tạo multipart form data
+        let multipartFormData = MultipartFormData()
+        
+        // Thêm các tham số vào form data
+        multipartFormData.append(userInput.gender.data(using: .utf8)!, withName: "gender")
+        multipartFormData.append(userInput.phoneNumber.data(using: .utf8)!, withName: "phoneNumber")
+        multipartFormData.append(userInput.dateOfBirth.iso8601String.data(using: .utf8)!, withName: "dateOfBirth")
+        multipartFormData.append(userInput.fullName.data(using: .utf8)!, withName: "fullName")
+        multipartFormData.append(userInput.email.data(using: .utf8)!, withName: "email")
+        multipartFormData.append(userInput.identificationCard.data(using: .utf8)!, withName: "identificationCard")
+        
+        // Kiểm tra nếu có avatar, thêm ảnh vào request
+        if let avatarImage = avatar, let avatarData = avatarImage.jpegData(compressionQuality: 0.5) {
+            multipartFormData.append(avatarData, withName: "imageFile", fileName: "avatar.jpg", mimeType: "image/jpeg")
         }
-
+        
+        // Gửi request PUT
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+                    }
+                }
+            }
+            .decode(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getAllConversation() -> AnyPublisher<[Conversation], Error>{
+        let url = APIConstants.Conversation.getAll
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: [Conversation].self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createOwnerContract() -> AnyPublisher<OwnerContractResponse, Error> {
+        let url = APIConstants.Contract.createOwner
+        
+        let headers = setupHeaderToken()
+        
+        let parameters: [String: Any] = [
+            "contractUrl": "",
+            "contractDetails": []
+        ]
+        
+        return AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: OwnerContractResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
     
     func setupHeaderToken() -> HTTPHeaders? {
         guard let token = UserSession.shared.token else {

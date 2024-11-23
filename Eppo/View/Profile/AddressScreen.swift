@@ -68,6 +68,7 @@ struct AddressScreen: View {
                 
                 Button {
                     viewModel.createAddress()
+                    viewModel.isPopup = false
                 } label: {
                     Text("Tạo")
                         .font(.headline)
@@ -83,7 +84,7 @@ struct AddressScreen: View {
                 
                 Spacer()
             }
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.medium])
         })
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .top)

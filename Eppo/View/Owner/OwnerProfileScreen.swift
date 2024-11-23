@@ -127,6 +127,7 @@ struct OwnerProfileScreen: View {
         .onAppear {
             viewModel.getMyInformation()
         }
+        .redacted(reason: viewModel.isLoading ? .placeholder : .privacy)
     }
 }
 

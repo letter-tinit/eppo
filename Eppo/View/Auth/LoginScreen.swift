@@ -11,6 +11,7 @@ struct LoginScreen: View {
     @AppStorage("isLogged") var isLogged: Bool = false
     @AppStorage("isCustomer") var isCustomer: Bool = false
     @AppStorage("isOwner") var isOwner: Bool = false
+    @AppStorage("isSigned") var isSigned: Bool = false
     @State var viewModel = LoginViewModel()
     @State private var usernameTextField: String = ""
     @State private var passwordTextField: String = ""
@@ -184,6 +185,9 @@ struct LoginScreen: View {
         }
         .onChange(of: viewModel.isLogged) { _, newValue in
             self.isLogged = newValue
+        }
+        .onChange(of: viewModel.isSigned) { oldValue, newValue in
+            self.isSigned = newValue
         }
     }
 }

@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct SignUpResponse: Codable {
+    let statusCode: Int
+    let message: String
+}
+
 struct SignUpUser: Codable {
     var userName: String
     var fullName: String

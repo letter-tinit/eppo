@@ -34,7 +34,7 @@ struct HireItemDetailScreen: View {
                                         .font(.system(size: 18, weight: .medium))
                                         .foregroundStyle(.red)
                                     
-                                    Text("Ngày")
+                                    Text("/tháng")
                                         .font(.system(size: 18, weight: .medium))
                                         .foregroundStyle(.red)
                                 }

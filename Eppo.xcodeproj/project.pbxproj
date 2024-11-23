@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C05DE4E2CF18229008E2D75 /* zpdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C05DE4D2CF18228008E2D75 /* zpdk.framework */; };
 		2C0807CA2CE0706C00598AD0 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0807C92CE0706C00598AD0 /* NotificationViewModel.swift */; };
 		2C0807CD2CE0712A00598AD0 /* NotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0807CC2CE0712A00598AD0 /* NotificationResponse.swift */; };
+		2C129E5B2CF0CFFF002AC952 /* OwnerContractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */; };
+		2C129E5D2CF0D3FA002AC952 /* OwnerContractAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */; };
+		2C129E5F2CF0D535002AC952 /* OwnerContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */; };
+		2C129E632CF0DB66002AC952 /* PDFWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E622CF0DB66002AC952 /* PDFWebView.swift */; };
 		2C2135592C7992DA0076D82F /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2135582C7992DA0076D82F /* CustomHeaderView.swift */; };
 		2C21355D2C799E870076D82F /* CustomAvatarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */; };
 		2C21355F2C799F8E0076D82F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355E2C799F8E0076D82F /* CircleImageView.swift */; };
@@ -99,6 +104,8 @@
 		2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */; };
 		2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */; };
 		2C907EF22CE25B0B005CDBD5 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C907EF12CE25B0B005CDBD5 /* CartViewModel.swift */; };
+		2C97D8BA2CF0489F009FE7BF /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97D8B92CF0489F009FE7BF /* Conversation.swift */; };
+		2C97D8BC2CF04C2F009FE7BF /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */; };
 		2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */; };
 		2CA147302CEB006B00E26D4E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */; };
 		2CA147322CEB660600E26D4E /* AuctionRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA147312CEB660600E26D4E /* AuctionRoomViewModel.swift */; };
@@ -148,8 +155,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C05DE4D2CF18228008E2D75 /* zpdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = zpdk.framework; sourceTree = "<group>"; };
 		2C0807C92CE0706C00598AD0 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		2C0807CC2CE0712A00598AD0 /* NotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationResponse.swift; sourceTree = "<group>"; };
+		2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractView.swift; sourceTree = "<group>"; };
+		2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractAPI.swift; sourceTree = "<group>"; };
+		2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContactViewModel.swift; sourceTree = "<group>"; };
+		2C129E622CF0DB66002AC952 /* PDFWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFWebView.swift; sourceTree = "<group>"; };
 		2C2135582C7992DA0076D82F /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarHeader.swift; sourceTree = "<group>"; };
 		2C21355E2C799F8E0076D82F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
@@ -240,6 +252,8 @@
 		2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderItemView.swift; sourceTree = "<group>"; };
 		2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateOrderRequest.swift; sourceTree = "<group>"; };
 		2C907EF12CE25B0B005CDBD5 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		2C97D8B92CF0489F009FE7BF /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		2CA147312CEB660600E26D4E /* AuctionRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionRoomViewModel.swift; sourceTree = "<group>"; };
@@ -295,12 +309,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CAA6AB42CB022E300003EC1 /* Alamofire in Frameworks */,
+				2C05DE4E2CF18229008E2D75 /* zpdk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C05DE4C2CF18201008E2D75 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C05DE4D2CF18228008E2D75 /* zpdk.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		2C0807C82CE05FE100598AD0 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +363,7 @@
 				2C45B5E52CDC95C0008670F1 /* OwnerItemDetailScreen.swift */,
 				2C45B5E62CDC95C0008670F1 /* OwnerMainTabView.swift */,
 				2C45B5E72CDC95C0008670F1 /* OwnerProfileScreen.swift */,
+				2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */,
 			);
 			name = Owner;
 			path = View/Owner;
@@ -400,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				2C61ACA02CEC8BFF001E2DF5 /* PlantCreation.swift */,
+				2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */,
 			);
 			path = Owner;
 			sourceTree = "<group>";
@@ -525,6 +550,14 @@
 			path = Category;
 			sourceTree = "<group>";
 		};
+		2C97D8B82CF04891009FE7BF /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				2C97D8B92CF0489F009FE7BF /* Conversation.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		2CA3568A2CE3267300FEB033 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -573,6 +606,8 @@
 				2C61AC962CEC4BC5001E2DF5 /* AuctionRoomDetailViewModel.swift */,
 				2CC4C3552CEF6D880084582E /* SignUpViewModel.swift */,
 				2C8C6CB32CF00B9700FC412D /* AddressViewModel.swift */,
+				2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */,
+				2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -597,6 +632,7 @@
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2C97D8B82CF04891009FE7BF /* Chat */,
 				2C61AC9C2CEC85B9001E2DF5 /* Owner */,
 				2CF1BAC52CE70A0B0021D051 /* OrderHistory */,
 				2C8C5F972CE641E50057183C /* Order */,
@@ -631,6 +667,7 @@
 		2CC5A21A2C5A019300D0035D = {
 			isa = PBXGroup;
 			children = (
+				2C05DE4C2CF18201008E2D75 /* Frameworks */,
 				2CC5A2252C5A019300D0035D /* Eppo */,
 				2CC5A2242C5A019300D0035D /* Products */,
 			);
@@ -705,6 +742,7 @@
 				2C61AC9A2CEC5056001E2DF5 /* CenterTextView.swift */,
 				2C61ACA22CECC288001E2DF5 /* CustomAsyncImage.swift */,
 				2C30BCA82CEEFF510077FB14 /* CustomCircleAsyncImage.swift */,
+				2C129E622CF0DB66002AC952 /* PDFWebView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -827,6 +865,7 @@
 				2C61ACA32CECC288001E2DF5 /* CustomAsyncImage.swift in Sources */,
 				2CA147342CEB690B00E26D4E /* AuctionWebSocket.swift in Sources */,
 				2C0807CD2CE0712A00598AD0 /* NotificationResponse.swift in Sources */,
+				2C129E5D2CF0D3FA002AC952 /* OwnerContractAPI.swift in Sources */,
 				2C6C176D2C91E3F6004DB795 /* TimerView.swift in Sources */,
 				2C5920ED2CA794FA004E996F /* BuyOrderRowView.swift in Sources */,
 				2CA3568E2CE3708B00FEB033 /* AddressScreen.swift in Sources */,
@@ -873,6 +912,7 @@
 				2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */,
 				2C45B5DE2CDC9575008670F1 /* ItemDetailsViewModel.swift in Sources */,
 				2CEDE5262CAE295700F98469 /* CartItemView.swift in Sources */,
+				2C129E632CF0DB66002AC952 /* PDFWebView.swift in Sources */,
 				2C8FCC842CEDD4AD00338C1E /* AuctionWebsocketResponse.swift in Sources */,
 				2CC4C3582CEF71960084582E /* SignUp.swift in Sources */,
 				2CDB80992C9143AE0006D3E6 /* ToAuctionItem.swift in Sources */,
@@ -883,6 +923,7 @@
 				2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */,
 				2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */,
 				2C6B24612CA3F09D0021CA98 /* NotificationRow.swift in Sources */,
+				2C129E5F2CF0D535002AC952 /* OwnerContactViewModel.swift in Sources */,
 				2C61AC9E2CEC85CE001E2DF5 /* OwnerItemAdditionViewModel.swift in Sources */,
 				2C45B5D62CDC94C0008670F1 /* Room.swift in Sources */,
 				2C439FD92C97D99B00BE7DEE /* AuctionRoomDetailScreen.swift in Sources */,
@@ -896,9 +937,11 @@
 				2C45B5F12CDC95C0008670F1 /* OwnerProfileScreen.swift in Sources */,
 				2C4888672CA3D0A7009E93E6 /* RecommendSectionHeader.swift in Sources */,
 				2CAD5A652CABA9030038F795 /* RatingSubmitView.swift in Sources */,
+				2C97D8BC2CF04C2F009FE7BF /* ChatViewModel.swift in Sources */,
 				2CA48EF52C76F2DC00569212 /* BorderTextField.swift in Sources */,
 				2C45B5FA2CDCB10D008670F1 /* CategoryResponse.swift in Sources */,
 				2C37F60E2C8EF94B003D7468 /* RateItem.swift in Sources */,
+				2C97D8BA2CF0489F009FE7BF /* Conversation.swift in Sources */,
 				2C45B5EB2CDC95C0008670F1 /* OwnerCustomButtomImageLabel.swift in Sources */,
 				2C45B5E92CDC95C0008670F1 /* OwnerBalanceBox.swift in Sources */,
 				2CA3568C2CE3269000FEB033 /* ProfileAPI.swift in Sources */,
@@ -917,6 +960,7 @@
 				2CB4ED0D2C928AA10065BACC /* AuctionDetailItem.swift in Sources */,
 				2C439FD52C97D2A600BE7DEE /* AuctionRoomScreen.swift in Sources */,
 				2C8C5F9D2CE64E2D0057183C /* ContractScreen.swift in Sources */,
+				2C129E5B2CF0CFFF002AC952 /* OwnerContractView.swift in Sources */,
 				2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */,
 				2C255F0D2CAD598000280EE9 /* Cart.swift in Sources */,
 				2CB1063A2CB10B9000D4C07B /* WebSocketManager.swift in Sources */,
@@ -1073,6 +1117,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eppo/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
@@ -1110,6 +1158,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Eppo/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";

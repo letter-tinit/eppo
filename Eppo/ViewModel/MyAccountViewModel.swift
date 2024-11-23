@@ -67,7 +67,7 @@ class MyAccountViewModel {
                     self?.isAlertShowing = true
                 case .failure(let error):
                     print("Error occurred: \(error.localizedDescription)")
-                    self?.message = error.localizedDescription
+                    self?.handleAPIError(error)
                     self?.isAlertShowing = true
                 }
             } receiveValue: { response in
@@ -77,5 +77,36 @@ class MyAccountViewModel {
                 self.userInput = response.data
             }
             .store(in: &cancellables)
+    }
+    
+    private func handleAPIError(_ error: Error) {
+        if let apiError = error as? APIError {
+            switch apiError {
+            case .networkError:
+                self.message = "Không thể kết nối tới mạng."
+            case .serverError(let statusCode):
+                self.message = "Lỗi từ server: \(statusCode)"
+            case .decodingError:
+                self.message = "Dữ liệu trả về không hợp lệ."
+            case .custom(let message):
+                self.message = message
+            case .dataNotFound:
+                self.message = "Không tìm thấy dữ liệu"
+            case .failedToGetData:
+                self.message = "Không lấy được dữ liệu"
+            case .badUrl:
+                self.message = "Lỗi kết nối đến server"
+            case .transportError:
+                self.message = "Lỗi đường truyền"
+            case .invalidResponse:
+                self.message = "Dữ liệu trả về bị lỗi"
+            case .noData:
+                self.message = "Không có dữ liệu trả về"
+            case .unexpectedError:
+                self.message = "Lỗi không xác định, vui lòng thử lại sau."
+            }
+        } else {
+            self.message = "Lỗi không xác định, vui lòng thử lại sau."
+        }
     }
 }

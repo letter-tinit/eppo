@@ -43,8 +43,10 @@ class OwnerProfileViewModel {
         self.user = User(userId: 1, userName: "", fullName: "", gender: "Nam", dateOfBirth: Date(), phoneNumber: "", email: "", imageUrl: "", identificationCard: "")
     }
     func getMyInformation() {
+        isLoading = true
         APIManager.shared.getMyInformation()
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break

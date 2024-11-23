@@ -23,7 +23,6 @@ class AddressViewModel {
     func getAddress() {
         isLoading = true
         hasError = false
-        message = nil
         
         APIManager.shared.getAddress()
             .sink { [weak self] completion in
@@ -45,10 +44,11 @@ class AddressViewModel {
         isLoading = true
         APIManager.shared.createAddress(createAddressResponse: CreateAddessRequest(description: self.addressTextField))
             .sink { [weak self] completion in
-                self?.isLoading = false
-                self?.isShowingAlert = true
                 switch completion {
                 case .finished:
+                    self?.message = "Đã tạo thành công"
+                    self?.isShowingAlert = true
+                    self?.getAddress()
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
@@ -65,11 +65,10 @@ class AddressViewModel {
         isLoading = true
         APIManager.shared.deleteAddress(addressId: addressId)
             .sink { completion in
-                self.isLoading = false
-                self.isShowingAlert = true
                 switch completion {
                 case .finished:
                     self.message = "Xoá thành công"
+                    self.isShowingAlert = true
                     self.getAddress()
                     break
                 case .failure(let error):

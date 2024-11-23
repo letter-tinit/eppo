@@ -10,7 +10,7 @@ struct MyChatBox: View {
     // MARK: - PROPERTY
     var textMessage: String
     var textState: String
-    var textTime: String
+    var textTime: Date
     
     @State var degreesRotating = 0.0
     
@@ -23,9 +23,9 @@ struct MyChatBox: View {
             Spacer(minLength: 60)
             
             HStack {
-                VStack {
+                VStack(alignment: .trailing) {
                     if isShowingInformation {
-                        Text(textTime)
+                        Text(textTime, format: .dateTime)
                             .font(.system(size: 14))
                             .foregroundStyle(.gray)
                     }
@@ -62,8 +62,8 @@ struct MyChatBox: View {
                         
                         
                     }
-                    .padding(.trailing, 12)
                 }
+                .padding(.trailing, 12)
             }
         }
         .contentShape(Rectangle())
@@ -77,5 +77,5 @@ struct MyChatBox: View {
 
 // MARK: - PREVIEW
 #Preview {
-    MyChatBox(textMessage: "Xin chào", textState: "Sent", textTime: "10:10 AM")
+    MyChatBox(textMessage: "A", textState: "Sent", textTime: Date())
 }

@@ -10,7 +10,7 @@ struct PartnerChatBox: View {
     // MARK: - PROPERTY
     var avatar: Image
     var textMessage: String
-    var textTime: String
+    var textTime: Date
     
     @State var isShowingInformation: Bool = false
     
@@ -23,7 +23,7 @@ struct PartnerChatBox: View {
             
             VStack {
                 if isShowingInformation {
-                    Text(textTime)
+                    Text(textTime, format: .dateTime)
                         .font(.system(size: 14))
                         .foregroundStyle(.gray)
                 }
@@ -52,5 +52,5 @@ struct PartnerChatBox: View {
 
 // MARK: - PREVIEW
 #Preview {
-    PartnerChatBox(avatar: Image("avatar"), textMessage: "Xin chào! Mình muốn hỏi bạn một chút vấn đề về cây cảnh.", textTime: "11:00 AM")
+    PartnerChatBox(avatar: Image("avatar"), textMessage: "Xin chào! Mình muốn hỏi bạn một chút vấn đề về cây cảnh.", textTime: Date())
 }

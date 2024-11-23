@@ -77,6 +77,36 @@ class WebSocketManager: ObservableObject {
     // MARK: - Receiving Messages
     
     /// Continuously listens for incoming messages from the server.
+//    private func receiveMessage() {
+//        webSocketTask?.receive { [weak self] result in
+//            switch result {
+//            case .success(let message):
+//                switch message {
+//                case .string(let text):
+//                    DispatchQueue.main.async {
+//                        self?.receivedMessages.append(text)
+//                        print("Received message: \(text)")
+//                    }
+//                case .data(let data):
+//                    if let text = String(data: data, encoding: .utf8) {
+//                        DispatchQueue.main.async {
+//                            self?.receivedMessages.append(text)
+//                            print("Received message: \(text)")
+//                        }
+//                    }
+//                @unknown default:
+//                    break
+//                }
+//            case .failure(let error):
+//                print("Error receiving message: \(error)")
+//                self?.isConnected = false // Update connection state on failure
+//            }
+//            
+//            // Continue listening for more messages
+//            self?.receiveMessage()
+//        }
+//    }
+    
     private func receiveMessage() {
         webSocketTask?.receive { [weak self] result in
             switch result {
@@ -86,24 +116,68 @@ class WebSocketManager: ObservableObject {
                     DispatchQueue.main.async {
                         self?.receivedMessages.append(text)
                         print("Received message: \(text)")
+                        self?.processReceivedMessage(text)
                     }
                 case .data(let data):
                     if let text = String(data: data, encoding: .utf8) {
                         DispatchQueue.main.async {
                             self?.receivedMessages.append(text)
                             print("Received message: \(text)")
+                            self?.processReceivedMessage(text)
                         }
                     }
                 @unknown default:
-                    break
+                    print("Unknown message type received")
                 }
             case .failure(let error):
                 print("Error receiving message: \(error)")
-                self?.isConnected = false // Update connection state on failure
+                self?.isConnected = false
+                if let token = UserSession.shared.token {
+                    self?.connectWebSocket(token: token)
+                }
             }
             
-            // Continue listening for more messages
+            // Tiếp tục lắng nghe
             self?.receiveMessage()
+        }
+    }
+    
+    // MARK: - Xử lý Tin Nhắn Nhận Được
+    private func processReceivedMessage(_ message: String) {
+        // Case 3: JSON nội dung đấu giá mới
+        if let message = decodeMessage(from: message) {
+            print(message)
+            //                historyBids.append(historyBid)
+            //                historyBids.insert(historyBid, at: 0)
+        } else {
+            print("Decode thất bại")
+        }
+        // Unknown message
+        DispatchQueue.main.async {
+            print("Unknown message format: \(message)")
+        }
+    }
+    
+    // Hàm để giải mã JSON thành đối tượng Message
+    func decodeMessage(from jsonString: String) -> ReceiveMessage? {
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            print("Lỗi: Không thể chuyển chuỗi thành Data")
+            return nil
+        }
+
+        let decoder = JSONDecoder()
+
+        // Define a custom date format (with fractional seconds)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+        do {
+            let message = try decoder.decode(ReceiveMessage.self, from: jsonData)
+            return message
+        } catch {
+            print("Lỗi khi giải mã JSON: \(error)")
+            return nil
         }
     }
     
