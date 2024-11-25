@@ -154,6 +154,8 @@
 		2CF1BACB2CE74DFE0021D051 /* BuyHistoryAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF1BACA2CE74DFE0021D051 /* BuyHistoryAPI.swift */; };
 		2CF1BACD2CE74EF50021D051 /* BuyOrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF1BACC2CE74EF50021D051 /* BuyOrderViewModel.swift */; };
 		2CF1BACF2CE762E00021D051 /* BuyOrderDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF1BACE2CE762E00021D051 /* BuyOrderDetailsScreen.swift */; };
+		2CF209AE2CF4075500221F1A /* OwnerContactAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF209AD2CF4075500221F1A /* OwnerContactAPI.swift */; };
+		2CF209B02CF422BA00221F1A /* LoadingCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF209AF2CF422BA00221F1A /* LoadingCenterView.swift */; };
 		2CFC7CAD2CC77F6200D277EA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFC7CAC2CC77F6200D277EA /* User.swift */; };
 /* End PBXBuildFile section */
 
@@ -306,6 +308,8 @@
 		2CF1BACA2CE74DFE0021D051 /* BuyHistoryAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyHistoryAPI.swift; sourceTree = "<group>"; };
 		2CF1BACC2CE74EF50021D051 /* BuyOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyOrderViewModel.swift; sourceTree = "<group>"; };
 		2CF1BACE2CE762E00021D051 /* BuyOrderDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyOrderDetailsScreen.swift; sourceTree = "<group>"; };
+		2CF209AD2CF4075500221F1A /* OwnerContactAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContactAPI.swift; sourceTree = "<group>"; };
+		2CF209AF2CF422BA00221F1A /* LoadingCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCenterView.swift; sourceTree = "<group>"; };
 		2CFC7CAC2CC77F6200D277EA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -438,6 +442,7 @@
 		2C61AC9F2CEC8BED001E2DF5 /* Owner */ = {
 			isa = PBXGroup;
 			children = (
+				2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */,
 				2C61AC9D2CEC85CE001E2DF5 /* OwnerItemAdditionViewModel.swift */,
 				2C30BCA62CEEF0040077FB14 /* OwnerProfileViewModel.swift */,
 			);
@@ -525,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				2C8C5F8E2CE62E760057183C /* ContractAPI.swift */,
+				2CF209AD2CF4075500221F1A /* OwnerContactAPI.swift */,
 			);
 			path = Contract;
 			sourceTree = "<group>";
@@ -613,7 +619,6 @@
 				2CC4C3552CEF6D880084582E /* SignUpViewModel.swift */,
 				2C8C6CB32CF00B9700FC412D /* AddressViewModel.swift */,
 				2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */,
-				2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */,
 				2C05DE4F2CF18546008E2D75 /* PaymentViewModel.swift */,
 			);
 			path = ViewModel;
@@ -752,6 +757,7 @@
 				2C61ACA22CECC288001E2DF5 /* CustomAsyncImage.swift */,
 				2C30BCA82CEEFF510077FB14 /* CustomCircleAsyncImage.swift */,
 				2C129E622CF0DB66002AC952 /* PDFWebView.swift */,
+				2CF209AF2CF422BA00221F1A /* LoadingCenterView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -890,6 +896,7 @@
 				2C37F6082C8EDB41003D7468 /* ItemDetailScreen.swift in Sources */,
 				2C7330E22C8962E600A0F092 /* SearchBar.swift in Sources */,
 				2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */,
+				2CF209B02CF422BA00221F1A /* LoadingCenterView.swift in Sources */,
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
@@ -969,6 +976,7 @@
 				2CED22E22C7C358E0065025B /* BalanceBox.swift in Sources */,
 				2C8C5F8A2CE5CBA70057183C /* WalletAPI.swift in Sources */,
 				2CA147322CEB660600E26D4E /* AuctionRoomViewModel.swift in Sources */,
+				2CF209AE2CF4075500221F1A /* OwnerContactAPI.swift in Sources */,
 				2CB4ED0D2C928AA10065BACC /* AuctionDetailItem.swift in Sources */,
 				2C439FD52C97D2A600BE7DEE /* AuctionRoomScreen.swift in Sources */,
 				2C8C5F9D2CE64E2D0057183C /* ContractScreen.swift in Sources */,

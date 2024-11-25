@@ -12,15 +12,15 @@ import Combine
 @Observable
 class SignUpViewModel {
     let fakeSignUpUser = SignUpUser(
-        userName: "john_doe1",
-        fullName: "John Doe1",
+        userName: "john_doe2",
+        fullName: "John Doe2",
         password: "123",
         confirmPassword: "123",
         gender: "Nam",
         dateOfBirth: Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date(),
         phoneNumber: "0987654321",
         addressDescription: "123 Nguyễn Huệ, Quận 1, TP.HCM",
-        email: "johndoe1@example.com",
+        email: "johndoe2@example.com",
         identificationCard: "123456789",
         role: "Người bán"
     )
@@ -36,17 +36,17 @@ class SignUpViewModel {
     }
     
     func signUpAccount() {
-        guard signUpUser.isPasswordMatch() else {
-            isAlertShowing = true
-            message = "Mật khẩu và xác thực không giống nhau"
-            return
-        }
-        
-        guard signUpUser.isAllFieldsInputted() else {
-            isAlertShowing = true
-            message = "Bạn chưa điền đủ tất cả thông tin"
-            return
-        }
+//        guard signUpUser.isPasswordMatch() else {
+//            isAlertShowing = true
+//            message = "Mật khẩu và xác thực không giống nhau"
+//            return
+//        }
+//        
+//        guard signUpUser.isAllFieldsInputted() else {
+//            isAlertShowing = true
+//            message = "Bạn chưa điền đủ tất cả thông tin"
+//            return
+//        }
         
         if signUpUser.role == "Người bán" {
             createOwner()

@@ -45,3 +45,8 @@ struct PlantResponse: Codable {
     let message: String
     let data: Plant
 }
+
+struct PlantCreationResponse: Codable {
+    let statusCode: Int
+    let message: String
+}

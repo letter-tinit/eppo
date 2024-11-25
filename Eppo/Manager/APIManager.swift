@@ -57,7 +57,7 @@ struct APIConstants {
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
         static let getHistoryBid = baseURL + "api/HistoryBid/GetHistoryBidsByRoomId"
-
+        
     }
     
     struct Category {
@@ -92,6 +92,7 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
         static let createOwner = baseURL + "api/v1/GetList/Contracts/Create/Contract/Ownership"
+        static let updateContact = baseURL + "api/v1/GetList/Contracts/IsSigned/Contract/Id?contractId="
     }
     
     struct Transaction {
@@ -898,7 +899,7 @@ class APIManager {
     }
     
     // MARK: - OWNER
-    func createPlant(plantData: [String: String], mainImage: UIImage?, additionalImages: [UIImage]) -> AnyPublisher<PlantResponse, APIError> {
+    func createPlant(plantData: [String: String], mainImage: UIImage?, additionalImages: [UIImage]) -> AnyPublisher<PlantCreationResponse, APIError> {
         let url = APIConstants.Plant.createPlant
         let headers = setupHeaderToken()
         
@@ -917,6 +918,8 @@ class APIManager {
         } else {
             print("Invalid main image format.")
             // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                .eraseToAnyPublisher()
         }
         
         // Kiểm tra và thêm các ảnh phụ vào request
@@ -926,6 +929,8 @@ class APIManager {
                 multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
             } else {
                 print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
                 // Xử lý lỗi nếu định dạng ảnh không hợp lệ
             }
         }
@@ -935,8 +940,13 @@ class APIManager {
             .publishData()
             .tryMap { response in
                 // Log thông tin phản hồi để xem chi tiết
-                if let statusCode = response.response?.statusCode {
-                    print("Response Status Code: \(statusCode)") // Log statusCode
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.unexpectedError
+                }
+                print("Response Status Code: \(statusCode)") // Log statusCode
+
+                guard (200...299).contains(statusCode) else {
+                    throw APIError.custom(message: "Tạo cây thất bại")
                 }
                 
                 if let responseData = response.data {
@@ -949,7 +959,7 @@ class APIManager {
                 }
                 return response.data ?? Data()
             }
-            .decode(type: PlantResponse.self, decoder: JSONDecoder())
+            .decode(type: PlantCreationResponse.self, decoder: JSONDecoder())
             .mapError { error in
                 // Xử lý lỗi chi tiết
                 print("Error occurred: \(error)") // Log lỗi để xem chi tiết
@@ -1073,6 +1083,59 @@ class APIManager {
             .value()
             .mapError { error in
                 return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func updateContract(contractId: Int, status: Int) -> AnyPublisher<UpdateContractResponse, APIError>  {
+        let url = APIConstants.Contract.updateContact + String(describing: contractId)
+        
+        let param: [String: Any] = [
+            "status": status
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, parameters: param, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                // Kiểm tra mã trạng thái HTTP
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 200...299:
+                        // Nếu mã thành công, trả về dữ liệu thô
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData // Nếu không có dữ liệu, ném lỗi thích hợp
+                        }
+                    case 400...499:
+                        throw APIError.serverError(statusCode: statusCode)
+                    case 401:
+                        throw APIError.custom(message: "Chưa được xác thực.")
+                    case 403:
+                        throw APIError.custom(message: "Không có quyền truy cập.")
+                    case 404:
+                        throw APIError.custom(message: "Không tìm thấy dữ liệu.")
+                    case 500...599:
+                        throw APIError.serverError(statusCode: statusCode)
+                    default:
+                        // Lỗi khác
+                        throw APIError.unexpectedError
+                    }
+                } else {
+                    throw APIError.networkError
+                }
+            }
+            .decode(type: UpdateContractResponse.self, decoder: JSONDecoder()) // Giải mã dữ liệu
+            .mapError { error in
+                // Chuyển đổi lỗi thành APIError
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.decodingError
+                }
             }
             .eraseToAnyPublisher()
     }

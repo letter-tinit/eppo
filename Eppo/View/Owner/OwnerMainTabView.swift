@@ -17,7 +17,8 @@ enum OwnerTab: String, CaseIterable {
 
 struct OwnerMainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: OwnerTab = .profile
+    @State private var selectedTab: OwnerTab = .addition
+    @State var viewModel = LoginViewModel()
     
     init () {
         //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -26,42 +27,37 @@ struct OwnerMainTabView: View {
     
     // MARK: - BODY
     var body: some View {
-        TabView(selection: $selectedTab) {
-            NavigationStack {
+        NavigationStack {
+            TabView(selection: $selectedTab) {
                 OwnerItemAdditionScreen()
-            }
-            .tabItem {
-                Label("Thêm", systemImage: "plus.circle")
-            }
-            .tag(OwnerTab.addition)
-            
-            NavigationStack {
+                    .tabItem {
+                        Label("Thêm", systemImage: "plus.circle")
+                    }
+                    .tag(OwnerTab.addition)
+                
                 NotificationScreen()
-            }
-            .tabItem {
-                Label("Thông báo", systemImage: "bell")
-            }
-            .tag(OwnerTab.notification)
-            
-            NavigationStack {
+                    .tabItem {
+                        Label("Thông báo", systemImage: "bell")
+                    }
+                    .tag(OwnerTab.notification)
+                
                 OwnerHome()
-            }
-            .tabItem {
-                Label("Trang Chủ", systemImage: "house")
-            }
-            .tag(OwnerTab.home)
-            
-            NavigationStack {
+                    .tabItem {
+                        Label("Trang Chủ", systemImage: "house")
+                    }
+                    .tag(OwnerTab.home)
+                
                 OwnerProfileScreen()
+                    .tabItem {
+                        Label("Tài khoản", systemImage: "person.fill")
+                    }
+                    .tag(OwnerTab.profile)
             }
-            .tabItem {
-                Label("Tài khoản", systemImage: "person.fill")
-            }
-            .tag(OwnerTab.profile)
         }
         .tint(.black)
         .navigationBarBackButtonHidden()
         .onAppear {
+            viewModel.getMyInformation()
             print(UserSession.shared.token as Any)
         }
     }

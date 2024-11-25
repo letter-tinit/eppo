@@ -16,6 +16,7 @@ class OwnerContactViewModel {
     var isLoading: Bool = false
     var isSigned: Bool = false
     var contractUrl: String?
+    var contractId: Int = 0
 
     func createOwnerContract() {
         APIManager.shared.createOwnerContract()
@@ -28,7 +29,12 @@ class OwnerContactViewModel {
                 }
             } receiveValue: { [weak self] ownerContractResponse in
                 self?.contractUrl = ownerContractResponse.pdfUrl
+//                self?.contractId = ownerContractResponse.
             }
             .store(in: &cancellables)
     }
+    
+//    func signContract() {
+//        API.
+//    }
 }
