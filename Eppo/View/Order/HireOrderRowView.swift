@@ -24,11 +24,12 @@ struct HireOrderRowView: View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 // Item Image
-                Image("sample-bonsai")
-                    .resizable()
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+//                Image("sample-bonsai")
+//                    .resizable()
+//                    .frame(width: 80, height: 80)
+//                    .clipped()
+//                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+                CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 80, height: 80)
                 
                 VStack(alignment: .leading) {
                     Text(orderDetail.plant.name)
@@ -84,6 +85,7 @@ struct HireOrderRowView: View {
             if isCancellable {
                 Button {
                     viewModel.isAlertShowing = true
+                    viewModel.activeAlert = .remind
                 } label: {
                     Text("Huỷ đơn hàng")
                         .font(.subheadline)
@@ -104,10 +106,20 @@ struct HireOrderRowView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 10)
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
-                self.viewModel.cancelOrder(id: id)
-            }))
+            switch viewModel.activeAlert {
+            case .error:
+                return Alert(title: Text(viewModel.errorMessage ?? "Lỗi không xác định"), dismissButton: .cancel())
+            case .remind:
+                return Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+                    self.viewModel.cancelOrder(id: id)
+                }))
+            }
         }
+//        .alert(isPresented: $viewModel.isAlertShowing) {
+//            Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+//                self.viewModel.cancelOrder(id: id)
+//            }))
+//        }
     }
 }
 

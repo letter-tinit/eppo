@@ -11,7 +11,7 @@ struct LoginScreen: View {
     @AppStorage("isLogged") var isLogged: Bool = false
     @AppStorage("isCustomer") var isCustomer: Bool = false
     @AppStorage("isOwner") var isOwner: Bool = false
-    @AppStorage("isSigned") var isSigned: Bool = false
+    @AppStorage("isSigned") var isSigned: Bool = true
     @State var viewModel = LoginViewModel()
     @State private var usernameTextField: String = ""
     @State private var passwordTextField: String = ""
@@ -169,12 +169,13 @@ struct LoginScreen: View {
                 )
             }
             .navigationDestination(isPresented: $viewModel.isLogged) {
-                MainTabView()
+                MainTabView(selectedTab: .explore)
             }
         }
-//        .onAppear {
+        .onAppear {
 //            viewModel.login(userName: "customer", password: "123")
-//        }
+            self.isSigned = true
+        }
         .onChange(of: viewModel.isCustomer) { oldValue, newValue in
             self.isCustomer = newValue
             if newValue { self.isOwner = false } // Đảm bảo không trùng trạng thái

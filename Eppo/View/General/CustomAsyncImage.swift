@@ -19,22 +19,22 @@ struct CustomAsyncImage: View {
                 VStack(spacing: 20) {
                     Image(systemName: "photo")
                         .font(.largeTitle)
-                    
-                    Text("Tải ảnh thất bại")
+//                    
+//                    Text("Tải ảnh thất bại")
                 }
             case .success(let image):
                 image
                     .resizable()
             default:
-                VStack(spacing: 6) {
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-                        .padding(.top, 8)
-                    
-                    Text("Đang tải ảnh...")
-                    
+//                ZStack {
+//                    Image(systemName: "photo")
+//                        .font(.largeTitle)
+//                        .padding(.top, 8)
+//                    
+//                    Text("Đang tải ảnh...")
+//                    
                     ProgressView()
-                }
+//                }
             }
         }
         .frame(width: width, height: height)

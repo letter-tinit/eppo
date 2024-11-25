@@ -171,7 +171,6 @@ struct HireItemDetailScreen: View {
                     .padding(.top, 20)
                     .overlay {
                         DatePicker(selection: $viewModel.selectedDate,
-                                   in: Date().addingTimeInterval(4 * 24 * 60 * 60)...,
                                    displayedComponents: .date) {}
                             .labelsHidden()
                             .contentShape(Rectangle())

@@ -14,7 +14,7 @@ struct HomeHeader: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: false)
+            CustomAvatarHeader(withClose: false)
             
             SearchBar(searchText: $searchText)
                 .padding(.horizontal)

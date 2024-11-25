@@ -18,6 +18,8 @@ class HireOrderViewModel {
     var cancellables: Set<AnyCancellable> = []
     var isLoading = false
     var isAlertShowing: Bool = false
+    var activeAlert: BuyOrderAlert = .remind
+    var errorMessage: String?
 
     func getHireOrderHistory() {
         isLoading = true
@@ -62,9 +64,15 @@ class HireOrderViewModel {
                 switch completion {
                 case .finished:
                     self.getHireOrderHistory()
+                    self.errorMessage = "Đơn hàng đã huỷ thành công"
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                 }
             } receiveValue: {}
             .store(in: &cancellables)

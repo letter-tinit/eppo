@@ -1,33 +1,18 @@
-//import SwiftUI
 //
-//// Mẫu ứng dụng SwiftUI với TabView
-//struct ContentView: View {
-//    @State private var selection: Int = 0  // Lưu trữ giá trị tab đã chọn
-//    @State private var browseTabPath: [String] = []  // Lưu trữ đường dẫn trong tab Browse
-//    
-//    var body: some View {
-//        TabView {
-//            Tab
-//            
-//            Tab("Received", systemImage: "tray.and.arrow.down.fill") {
-//                HomeScreen()
-//            }
-//            .badge(2)
-//            
-//            
-//            Tab("Sent", systemImage: "tray.and.arrow.up.fill") {
-//                ProfileScreen()
-//            }
-//            
-//            
-//            Tab("Account", systemImage: "person.crop.circle.fill") {
-//                NotificationScreen()
-//            }
-//            .badge("!")
-//        }
-//        
-//    }
-//}
-//#Preview {
-//    ContentView()
-//}
+//  SwiftUIView.swift
+//  Eppo
+//
+//  Created by Letter on 24/11/2024.
+//
+
+import SwiftUI
+
+struct SwiftUIView: View {
+    var body: some View {
+        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    }
+}
+
+#Preview {
+    SwiftUIView()
+}

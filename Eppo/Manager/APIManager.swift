@@ -56,7 +56,8 @@ struct APIConstants {
         static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
-        
+        static let getHistoryBid = baseURL + "api/HistoryBid/GetHistoryBidsByRoomId"
+
     }
     
     struct Category {
@@ -95,6 +96,7 @@ struct APIConstants {
     
     struct Transaction {
         static let getHistory = baseURL + "api/v1/Transaction/GetAllTransactionsInWallet"
+        static let create = baseURL + "api/v1/Transaction/CreateTransaction"
     }
     
     struct Conversation {
@@ -296,6 +298,27 @@ class APIManager {
                 } else {
                     return .failedToGetData
                 }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getHistoryBid(pageIndex: Int, pageSize: Int, roomId: Int) -> AnyPublisher<AuctionDetailHistoryResponse, Error> {
+        let url = APIConstants.Room.getHistoryBid
+        
+        let headers = setupHeaderToken()
+        
+        let parameters: [String: Any] = [
+            "pageIndex": pageIndex,
+            "pageSize": pageSize,
+            "roomId": roomId
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: AuctionDetailHistoryResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
             }
             .eraseToAnyPublisher()
     }
@@ -826,6 +849,52 @@ class APIManager {
                 return error as Error
             }
             .eraseToAnyPublisher()
+    }
+    
+    func createTransaction(walletId: Int, amount: Double) -> AnyPublisher<TransactionResponse, Error> {
+        let url = APIConstants.Transaction.create
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Parameters
+        let parameters: [String: Any] = [
+            "walletId": walletId,
+            "paymentId": 2,
+            "withdrawNumber": 0.0,
+            "rechargeNumber": amount
+        ]
+        
+        return AF.upload(
+            multipartFormData: { formData in
+                for (key, value) in parameters {
+                    if let value = value as? String {
+                        formData.append(Data(value.utf8), withName: key)
+                    } else if let value = value as? Int {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    } else if let value = value as? Double {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    }
+                }
+            },
+            to: url,
+            headers: headers
+        )
+        .validate()
+        .publishDecodable(type: TransactionResponse.self, decoder: JSONDecoder())
+        .value()
+        .mapError { error in
+            return error as Error
+        }
+        .eraseToAnyPublisher()
     }
     
     // MARK: - OWNER

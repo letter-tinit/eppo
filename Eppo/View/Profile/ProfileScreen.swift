@@ -70,6 +70,7 @@ struct ProfileScreen: View {
                         .foregroundStyle(.settingBoxBackground)
                     
                     VStack(alignment: .leading, spacing: 20) {
+
                         CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount(viewModel: MyAccountViewModel(userInput: viewModel.user)))
                         
                         Divider()
@@ -86,7 +87,7 @@ struct ProfileScreen: View {
                         
                         Divider()
                         
-                        CustomSettingNavigationLink(image: "creditcard", title: "Thông tin thanh toán", destination: Text("Destination View"))
+                        CustomSettingNavigationLink(image: "creditcard", title: "Thông tin thanh toán", destination: PaymentScreen())
                         
                         Divider()
                         

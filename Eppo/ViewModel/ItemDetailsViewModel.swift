@@ -33,6 +33,8 @@ enum ActiveAlert {
     
     // MARK: - BuyItemDetailScreen
     var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+    
+    var isFinishPayment: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
     
@@ -193,6 +195,7 @@ enum ActiveAlert {
                     print("Thực thi thành công")
                     self.message = "Tạo đơn hàng thành công"
                     self.isAlertShowing = true
+                    self.isFinishPayment = true
                     
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")

@@ -31,6 +31,7 @@ class AuctionRoomDetailViewModel: ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
     var receivedMessages: [String] = []
     var currentErrorMessage: String?
+    var bidhistories: [BidHistory] = []
     var historyBids: [HistoryBid] = []
     private var isConnected = false
     private var reconnectAttempts = 0
@@ -63,6 +64,24 @@ class AuctionRoomDetailViewModel: ObservableObject {
                 self.registedRoomResponseData = registedRoomResponse.data
                 self.starTimeRemaining = registedRoomResponse.data.openingCoolDown
                 self.endTimeRemaining = registedRoomResponse.data.closingCoolDown
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getHistoryBids() {
+        isLoading = true
+        
+        APIManager.shared.getHistoryBid(pageIndex: 1, pageSize: 999, roomId: roomId)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { auctionDetailHistoryResponse in
+                self.bidhistories = auctionDetailHistoryResponse.data
             }
             .store(in: &cancellables)
     }
@@ -227,16 +246,24 @@ extension AuctionRoomDetailViewModel {
             return
         }
         
-        // Case 3: JSON nội dung đấu giá mới
-        if message.starts(with: "{") && message.contains("\"Message\"") {
-            if let historyBid = decodeHistoryBid(from: message) {
-                print("Decoded HistoryBid: \(historyBid)")
-//                historyBids.append(historyBid)
-                historyBids.insert(historyBid, at: 0)
-            } else {
-                print("Decode thất bại")
+        if message.contains("Đặt cược thành công") {
+            DispatchQueue.main.async {
+                self.currentErrorMessage = message
+                self.isShowingAlert = true
+                self.getHistoryBids()
             }
+            print("Bid error: \(message)")
+            return
         }
+        
+//        // Case 3: JSON nội dung đấu giá mới
+//        if message.starts(with: "{") && message.contains("\"Message\"") {
+//            if let historyBid = decodeHistoryBid(from: message) {
+//                print("Decoded HistoryBid: \(historyBid)")
+//            } else {
+//                print("Decode thất bại")
+//            }
+//        }
         
         // Case 4: Số dư không đủ
         if message.contains("Số dư ví không đủ") {

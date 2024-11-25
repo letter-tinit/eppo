@@ -185,7 +185,9 @@ class ChatViewModel {
                 }
             } receiveValue: { [weak self] conversations in
                 let conversation = conversations[0]
-                self?.myId = conversation.userTwoNavigation.userId
+                if let myId = UserSession.shared.myInformation?.userId {
+                    self?.myId = myId
+                }
                 self?.messages = conversation.messages
                 self?.conversationId = conversation.conversationId
             }

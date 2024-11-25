@@ -58,19 +58,20 @@ struct MyChatBox: View {
                                         LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
                                     )
                             )
-                            .shadow(radius: 3, x: -2, y: -2)
-                        
-                        
+                            .shadow(radius: 2, x: -1, y: -1)
                     }
                 }
                 .padding(.trailing, 12)
+                .padding(.vertical, 3)
+                .animation(.easeInOut, value: isShowingInformation)
             }
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            isShowingInformation.toggle()
+            withAnimation {
+                isShowingInformation.toggle() // Thêm animation
+            }
         }
-        .animation(.easeInOut, value: isShowingInformation)
         .frame(alignment: .trailing)
     }
 }

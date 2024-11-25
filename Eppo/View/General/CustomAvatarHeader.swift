@@ -10,8 +10,6 @@ struct CustomAvatarHeader: View {
     // MARK: - PROPERTY
     var buttonWidth: CGFloat = 30
     
-    var name: String
-    var image: Image
     var withClose: Bool
     var isReturnMain: Bool = false
 
@@ -22,9 +20,10 @@ struct CustomAvatarHeader: View {
     var body: some View {
         HStack {
             HStack {
-                CircleImageView(image: image, size: 40)
+//                CircleImageView(image: Image(systemName: "photo"), size: 40)
+                CustomCircleAsyncImage(imageUrl: UserSession.shared.myInformation?.imageUrl ?? "https://static.vecteezy.com/system/resources/thumbnails/036/594/092/small_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg", size: 40)
                 
-                Text(name)
+                Text(UserSession.shared.myInformation?.fullName ?? "tên")
                     .font(.system(size: 22, weight: .medium))
                 
             }
@@ -34,7 +33,7 @@ struct CustomAvatarHeader: View {
             
             if isReturnMain {
                 NavigationLink {
-                    MainTabView()
+                    MainTabView(selectedTab: .explore)
                 } label: {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                         .resizable()
@@ -72,7 +71,7 @@ struct CustomAvatarHeader: View {
 // MARK: - PREVIEW
 #Preview {
     VStack {
-        CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
+        CustomAvatarHeader(withClose: true)
         
         Spacer()
     }

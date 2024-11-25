@@ -8,6 +8,7 @@ import SwiftUI
 
 struct BuyOrderDetailsScreen: View {
     @Bindable var viewModel: ItemDetailsViewModel
+    @State var isReturnHome: Bool = false
     
     var body: some View {
         VStack {
@@ -92,14 +93,6 @@ struct BuyOrderDetailsScreen: View {
                 }
                 
                 Button {
-//                    guard var createOrderRequest = viewModel.createOrderRequest else {
-//                        return
-//                    }
-//                    
-//                    createOrderRequest.paymentId = viewModel.selectedPaymentMethod == .cashOnDelivery ? 1 : 2
-//                    
-//                    viewModel.createOrderRequest = createOrderRequest
-//                    
                     viewModel.createOrder()
                 } label: {
                     Text("Đặt hàng")
@@ -121,7 +114,14 @@ struct BuyOrderDetailsScreen: View {
 //            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
+            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel(Text("Đóng"), action: {
+                if viewModel.isFinishPayment {
+                    self.isReturnHome = true
+                }
+            }))
+        }
+        .navigationDestination(isPresented: $isReturnHome) {
+            MainTabView(selectedTab: .explore)
         }
     }
 }

@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		2C05DE4E2CF18229008E2D75 /* zpdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C05DE4D2CF18228008E2D75 /* zpdk.framework */; };
+		2C05DE502CF18546008E2D75 /* PaymentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C05DE4F2CF18546008E2D75 /* PaymentViewModel.swift */; };
+		2C05DE522CF1885E008E2D75 /* PaymentScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C05DE512CF1885E008E2D75 /* PaymentScreen.swift */; };
 		2C0807CA2CE0706C00598AD0 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0807C92CE0706C00598AD0 /* NotificationViewModel.swift */; };
 		2C0807CD2CE0712A00598AD0 /* NotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0807CC2CE0712A00598AD0 /* NotificationResponse.swift */; };
 		2C129E5B2CF0CFFF002AC952 /* OwnerContractView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */; };
 		2C129E5D2CF0D3FA002AC952 /* OwnerContractAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */; };
 		2C129E5F2CF0D535002AC952 /* OwnerContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */; };
 		2C129E632CF0DB66002AC952 /* PDFWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E622CF0DB66002AC952 /* PDFWebView.swift */; };
+		2C137AA12CF2E8B3009C0CFC /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C137AA02CF2E8B3009C0CFC /* SwiftUIView.swift */; };
 		2C2135592C7992DA0076D82F /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2135582C7992DA0076D82F /* CustomHeaderView.swift */; };
 		2C21355D2C799E870076D82F /* CustomAvatarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */; };
 		2C21355F2C799F8E0076D82F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355E2C799F8E0076D82F /* CircleImageView.swift */; };
@@ -107,7 +110,6 @@
 		2C97D8BA2CF0489F009FE7BF /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97D8B92CF0489F009FE7BF /* Conversation.swift */; };
 		2C97D8BC2CF04C2F009FE7BF /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */; };
 		2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */; };
-		2CA147302CEB006B00E26D4E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */; };
 		2CA147322CEB660600E26D4E /* AuctionRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA147312CEB660600E26D4E /* AuctionRoomViewModel.swift */; };
 		2CA147342CEB690B00E26D4E /* AuctionWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA147332CEB690B00E26D4E /* AuctionWebSocket.swift */; };
 		2CA3568C2CE3269000FEB033 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3568B2CE3269000FEB033 /* ProfileAPI.swift */; };
@@ -141,6 +143,7 @@
 		2CDD31552C871FB500B731E0 /* GenderRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD31542C871FB500B731E0 /* GenderRadioButton.swift */; };
 		2CDD31572C87297000B731E0 /* EditAvatarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD31562C87297000B731E0 /* EditAvatarButton.swift */; };
 		2CDE59F92CB0EA8A00CA7FFB /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */; };
+		2CDEB84F2CF19260000ABF84 /* PaymentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDEB84E2CF19260000ABF84 /* PaymentAPI.swift */; };
 		2CED22E02C7C34D70065025B /* ContentBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED22DF2C7C34D70065025B /* ContentBox.swift */; };
 		2CED22E22C7C358E0065025B /* BalanceBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CED22E12C7C358E0065025B /* BalanceBox.swift */; };
 		2CEDE5262CAE295700F98469 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDE5252CAE295700F98469 /* CartItemView.swift */; };
@@ -156,12 +159,15 @@
 
 /* Begin PBXFileReference section */
 		2C05DE4D2CF18228008E2D75 /* zpdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = zpdk.framework; sourceTree = "<group>"; };
+		2C05DE4F2CF18546008E2D75 /* PaymentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModel.swift; sourceTree = "<group>"; };
+		2C05DE512CF1885E008E2D75 /* PaymentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentScreen.swift; sourceTree = "<group>"; };
 		2C0807C92CE0706C00598AD0 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		2C0807CC2CE0712A00598AD0 /* NotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationResponse.swift; sourceTree = "<group>"; };
 		2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractView.swift; sourceTree = "<group>"; };
 		2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractAPI.swift; sourceTree = "<group>"; };
 		2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContactViewModel.swift; sourceTree = "<group>"; };
 		2C129E622CF0DB66002AC952 /* PDFWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFWebView.swift; sourceTree = "<group>"; };
+		2C137AA02CF2E8B3009C0CFC /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		2C2135582C7992DA0076D82F /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarHeader.swift; sourceTree = "<group>"; };
 		2C21355E2C799F8E0076D82F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
@@ -255,7 +261,6 @@
 		2C97D8B92CF0489F009FE7BF /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		2CA147312CEB660600E26D4E /* AuctionRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionRoomViewModel.swift; sourceTree = "<group>"; };
 		2CA147332CEB690B00E26D4E /* AuctionWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuctionWebSocket.swift; sourceTree = "<group>"; };
 		2CA3568B2CE3269000FEB033 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
@@ -290,6 +295,7 @@
 		2CDD31542C871FB500B731E0 /* GenderRadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenderRadioButton.swift; sourceTree = "<group>"; };
 		2CDD31562C87297000B731E0 /* EditAvatarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAvatarButton.swift; sourceTree = "<group>"; };
 		2CDE59F82CB0EA8A00CA7FFB /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		2CDEB84E2CF19260000ABF84 /* PaymentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentAPI.swift; sourceTree = "<group>"; };
 		2CED22DF2C7C34D70065025B /* ContentBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBox.swift; sourceTree = "<group>"; };
 		2CED22E12C7C358E0065025B /* BalanceBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceBox.swift; sourceTree = "<group>"; };
 		2CEDE5252CAE295700F98469 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
@@ -608,6 +614,7 @@
 				2C8C6CB32CF00B9700FC412D /* AddressViewModel.swift */,
 				2C97D8BB2CF04C2F009FE7BF /* ChatViewModel.swift */,
 				2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */,
+				2C05DE4F2CF18546008E2D75 /* PaymentViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -632,6 +639,9 @@
 		2CBFCE682C79D50F00FB73CA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2C45B5D72CDC94C8008670F1 /* Plant.swift */,
+				2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */,
+				2CDEB84E2CF19260000ABF84 /* PaymentAPI.swift */,
 				2C97D8B82CF04891009FE7BF /* Chat */,
 				2C61AC9C2CEC85B9001E2DF5 /* Owner */,
 				2CF1BAC52CE70A0B0021D051 /* OrderHistory */,
@@ -641,11 +651,9 @@
 				2C907EE62CE20EB7005CDBD5 /* Category */,
 				2C0807CB2CE0711C00598AD0 /* Notification */,
 				2C0807C82CE05FE100598AD0 /* Cart */,
-				2C45B5D72CDC94C8008670F1 /* Plant.swift */,
 				2C45B5F82CDCB0F4008670F1 /* BuyItem */,
 				2C45B5D42CDC94C0008670F1 /* Auction */,
 				2CAA6AB02CB0226700003EC1 /* Auth */,
-				2C907EEF2CE2581B005CDBD5 /* CreateOrderRequest.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -695,7 +703,7 @@
 				2CC5A2262C5A019300D0035D /* EppoApp.swift */,
 				2CC5A22A2C5A019500D0035D /* Assets.xcassets */,
 				2CC5A22C2C5A019500D0035D /* Preview Content */,
-				2CA1472F2CEB006B00E26D4E /* SwiftUIView.swift */,
+				2C137AA02CF2E8B3009C0CFC /* SwiftUIView.swift */,
 			);
 			path = Eppo;
 			sourceTree = "<group>";
@@ -719,6 +727,7 @@
 				2CDD31562C87297000B731E0 /* EditAvatarButton.swift */,
 				2C7900552CA7A01B0015B320 /* CustomButtonImageLabel.swift */,
 				2CA3568D2CE3708A00FEB033 /* AddressScreen.swift */,
+				2C05DE512CF1885E008E2D75 /* PaymentScreen.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -843,6 +852,7 @@
 			files = (
 				2C7A2CF52CEB7FF2004C40A8 /* RegistrationRoomResponse.swift in Sources */,
 				2C8C5F8F2CE62E760057183C /* ContractAPI.swift in Sources */,
+				2C137AA12CF2E8B3009C0CFC /* SwiftUIView.swift in Sources */,
 				2C2135592C7992DA0076D82F /* CustomHeaderView.swift in Sources */,
 				2C5540612CA4032400F39C0E /* OrderHistoryScreen.swift in Sources */,
 				2C45B5D82CDC94C8008670F1 /* Plant.swift in Sources */,
@@ -883,7 +893,6 @@
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
-				2CA147302CEB006B00E26D4E /* SwiftUIView.swift in Sources */,
 				2C45B5ED2CDC95C0008670F1 /* OwnerHome.swift in Sources */,
 				2CFC7CAD2CC77F6200D277EA /* User.swift in Sources */,
 				2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */,
@@ -910,6 +919,7 @@
 				2CC1C5A72CE4B02F00B0E69F /* SupportScreen.swift in Sources */,
 				2C45B5D52CDC94C0008670F1 /* AuctionResponse.swift in Sources */,
 				2C8F5B7D2CA2DED100ACF578 /* KeyboardResponder.swift in Sources */,
+				2C05DE502CF18546008E2D75 /* PaymentViewModel.swift in Sources */,
 				2C45B5DE2CDC9575008670F1 /* ItemDetailsViewModel.swift in Sources */,
 				2CEDE5262CAE295700F98469 /* CartItemView.swift in Sources */,
 				2C129E632CF0DB66002AC952 /* PDFWebView.swift in Sources */,
@@ -923,6 +933,7 @@
 				2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */,
 				2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */,
 				2C6B24612CA3F09D0021CA98 /* NotificationRow.swift in Sources */,
+				2CDEB84F2CF19260000ABF84 /* PaymentAPI.swift in Sources */,
 				2C129E5F2CF0D535002AC952 /* OwnerContactViewModel.swift in Sources */,
 				2C61AC9E2CEC85CE001E2DF5 /* OwnerItemAdditionViewModel.swift in Sources */,
 				2C45B5D62CDC94C0008670F1 /* Room.swift in Sources */,
@@ -942,6 +953,7 @@
 				2C45B5FA2CDCB10D008670F1 /* CategoryResponse.swift in Sources */,
 				2C37F60E2C8EF94B003D7468 /* RateItem.swift in Sources */,
 				2C97D8BA2CF0489F009FE7BF /* Conversation.swift in Sources */,
+				2C05DE522CF1885E008E2D75 /* PaymentScreen.swift in Sources */,
 				2C45B5EB2CDC95C0008670F1 /* OwnerCustomButtomImageLabel.swift in Sources */,
 				2C45B5E92CDC95C0008670F1 /* OwnerBalanceBox.swift in Sources */,
 				2CA3568C2CE3269000FEB033 /* ProfileAPI.swift in Sources */,

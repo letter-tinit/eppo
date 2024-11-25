@@ -16,7 +16,7 @@ struct AuctionDetailScreen: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(name: UserSession.shared.myInformation?.fullName ?? "Đang tải", image: Image("avatar"), withClose: true)
+            CustomAvatarHeader(withClose: true)
             
             if let room = viewModel.room {
                 HStack(spacing: 20) {

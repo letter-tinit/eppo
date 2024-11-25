@@ -36,17 +36,17 @@ class SignUpViewModel {
     }
     
     func signUpAccount() {
-//        guard signUpUser.isPasswordMatch() else {
-//            isAlertShowing = true
-//            message = "Mật khẩu và xác thực không giống nhau"
-//            return
-//        }
-//        
-//        guard signUpUser.isAllFieldsInputted() else {
-//            isAlertShowing = true
-//            message = "Bạn chưa điền đủ tất cả thông tin"
-//            return
-//        }
+        guard signUpUser.isPasswordMatch() else {
+            isAlertShowing = true
+            message = "Mật khẩu và xác thực không giống nhau"
+            return
+        }
+        
+        guard signUpUser.isAllFieldsInputted() else {
+            isAlertShowing = true
+            message = "Bạn chưa điền đủ tất cả thông tin"
+            return
+        }
         
         if signUpUser.role == "Người bán" {
             createOwner()
