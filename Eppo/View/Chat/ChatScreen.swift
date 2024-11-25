@@ -5,14 +5,11 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ChatScreen: View {
     // MARK: - PROPERTY
-    @State var messageTextField: String = ""
-    
-    @State private var messageText: String = ""
-    
-    @State private var token: String? = nil
+    @State var viewModel = ChatViewModel()
     
     // MARK: - BODY
     
@@ -20,49 +17,37 @@ struct ChatScreen: View {
         VStack(spacing: 0) {
             CustomHeaderView(title: "Quản Trị Viên")
             
-            ScrollView(.vertical) {
-                ForEach(0 ..< 5) { index in
-                    Section {
-                        LazyVStack(spacing: 20) {
-                            PartnerChatBox(avatar: Image("avatar"), textMessage: "Xin chào, bạn có thắc mắc gì?", textTime: "11:00 AM")
-                            
-                            MyChatBox(textMessage: "Loại cây này trồng vào không khí ở Mỹ có thích hợp không?", textState: index == 4 ? "Sending" : "Sent" , textTime: "10:10 AM")
+                ScrollView(.vertical) {
+                    ForEach(viewModel.messages) { message in
+                        Section {
+                            if message.userId == viewModel.myId {
+                                MyChatBox(textMessage: message.message1, textState: "Sent" , textTime: message.creationDate)
+                            } else {
+                                PartnerChatBox(avatar: Image("avatar"), textMessage: message.message1, textTime: message.creationDate)
+                            }
                         }
-                    } header: {
-                        TimelineBox(timelineText: "03:22 04/09/2024")
-                            .padding(.vertical, 20)
+                        
+                        if viewModel.isSending {
+                            MyChatBox(textMessage: viewModel.messageTextField, textState: "Sending", textTime: Date.now)
+                        }
                     }
+                    .padding(.vertical)
                 }
-                .padding(.bottom)
-            }
-            .defaultScrollAnchor(.bottom)
-            .padding(.bottom, 80)
-            .overlay(alignment: .bottom) {
-                FooterToolBar(messageTextField: $messageTextField)
-            }
-            
-            // MARK: - FOOTER BUTTON
-//            FooterToolBar(messageTextField: $messageTextField)
-//                .modifier(KeyboardAdaptive())
+                .defaultScrollAnchor(.bottom)
+                .padding(.bottom, 70)
+                .overlay(alignment: .bottom) {
+                    FooterToolBar(viewModel: viewModel, messageTextField: $viewModel.messageTextField)
+                }
         }
         .background(Color(uiColor: .systemGray6))
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarBackButtonHidden()
         .onAppear {
-            connectWebSocket()
-        }
-    }
-    
-    private func connectWebSocket() {
-        DispatchQueue.main.async {
-            if let token = UserSession.shared.token {
-                self.token = token
-                WebSocketManager.shared.connectWebSocket(token: token)
-            }
+            viewModel.getMessages()
+            viewModel.connectWebSocket()
         }
     }
 }
-
 // MARK: - PREVIEW
 #Preview {
     ChatScreen()

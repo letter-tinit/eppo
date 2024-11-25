@@ -9,17 +9,20 @@ import SwiftUI
 struct PictureSlider: View {
     // MARK: - PROPERTY
     @State private var currentPage = 0
-    let images = ["sample-bonsai", "sample-bonsai-01"]
+    let imagePlants: [ImagePlantResponse]
     
     // MARK: - BODY
 
     var body: some View {
         TabView(selection: $currentPage) {
-            ForEach(0..<images.count, id: \.self) { index in
-                Image(images[index])
+            if imagePlants.isEmpty {
+                Image("no-image")
                     .resizable()
                     .scaledToFill()
-                    .tag(index)
+            } else {
+                ForEach(imagePlants) { imagePlant in
+                    CustomAsyncImage(imageUrl: imagePlant.imageUrl, width: UIScreen.main.bounds.size.width - 20, height: 200)
+                }
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
@@ -28,7 +31,7 @@ struct PictureSlider: View {
         .padding([.leading, .trailing], 10)
         .onReceive(timer) { _ in
             withAnimation {
-                currentPage = (currentPage + 1) % images.count
+                currentPage = (currentPage + 1) % (imagePlants.count + 1)
             }
         }
     }
@@ -38,5 +41,5 @@ struct PictureSlider: View {
 
 // MARK: - PREVIEW
 #Preview {
-    PictureSlider()
+    PictureSlider(imagePlants: [])
 }

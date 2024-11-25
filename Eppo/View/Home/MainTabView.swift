@@ -17,11 +17,13 @@ enum Tab: String, CaseIterable {
 
 struct MainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: Tab = .auction
+    @State var selectedTab: Tab
     @State var viewModel = LoginViewModel()
     
-    init () {
+    init (selectedTab: Tab) {
         //        UITabBar.appearance().backgroundColor = UIColor.white
+        
+        self.selectedTab = selectedTab
     }
     
     // MARK: - BODY
@@ -70,5 +72,5 @@ struct MainTabView: View {
 }
 
 #Preview {
-    MainTabView()
+    MainTabView(selectedTab: .explore)
 }

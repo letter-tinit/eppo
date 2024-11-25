@@ -18,7 +18,7 @@ struct OwnerHome: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomAvatarHeader(name: "Nguyễn Văn A", image: Image("avatar"), withClose: false)
+            CustomAvatarHeader(withClose: false)
             
             // MARK: - SEARCH BAR
             HStack(spacing: 14) {

@@ -42,14 +42,14 @@ struct TransactionHeader: View {
                 Spacer()
             }
             
-            HStack {
-                SearchBar(searchText: $searchText)
-            }
-            .padding(.vertical)
+//            HStack {
+//                SearchBar(searchText: $searchText)
+//            }
+//            .padding(.vertical)
         }
         .padding(.horizontal, 20)
         .foregroundStyle(.white)
-        .frame(width: UIScreen.main.bounds.size.width, height: 160, alignment: .bottom)
+        .frame(width: UIScreen.main.bounds.size.width, height: 90, alignment: .bottom)
         .padding(.bottom, 10)
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)

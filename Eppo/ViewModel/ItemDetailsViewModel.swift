@@ -33,6 +33,8 @@ enum ActiveAlert {
     
     // MARK: - BuyItemDetailScreen
     var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+    
+    var isFinishPayment: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
     
@@ -181,7 +183,7 @@ enum ActiveAlert {
         
         let orderDetails: [Plant] = [plant]
         
-        let createOrderRequest = CreateOrderRequest(totalPrice: plant.price, deliveryFee: deliveriteFree, deliveryAddress: "Địa chỉ FIXXXXXX", paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
+        let createOrderRequest = CreateOrderRequest(totalPrice: plant.finalPrice, deliveryFee: deliveriteFree, deliveryAddress: "Địa chỉ FIXXXXXX", paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
         
         isLoading = true
         
@@ -193,6 +195,7 @@ enum ActiveAlert {
                     print("Thực thi thành công")
                     self.message = "Tạo đơn hàng thành công"
                     self.isAlertShowing = true
+                    self.isFinishPayment = true
                     
                 case .failure(let error):
                     print("Error: \(error.localizedDescription)")
@@ -206,15 +209,15 @@ enum ActiveAlert {
     }
     
     func rentTotalAmount() -> Double {
-        return ((self.plant?.price ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
     }
     
     func rentTotalPrice() -> Double {
-        return ((self.plant?.price ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
     }
     
     func totalPrice() -> Double {
-        return (self.plant?.price ?? 0) + (self.deliveriteFree ?? 0)
+        return (self.plant?.finalPrice ?? 0) + (self.deliveriteFree ?? 0)
     }
     
     private func handleAPIError(_ error: Error) {

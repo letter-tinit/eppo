@@ -16,7 +16,7 @@ struct AuctionDetailScreen: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(name: UserSession.shared.myInformation?.fullName ?? "Đang tải", image: Image("avatar"), withClose: true)
+            CustomAvatarHeader(withClose: true)
             
             if let room = viewModel.room {
                 HStack(spacing: 20) {
@@ -48,7 +48,7 @@ struct AuctionDetailScreen: View {
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.black)
                             
-                            Text(1000, format: .number)
+                            Text(viewModel.registedNumber, format: .number)
                                 .fontWeight(.medium)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.white)
@@ -80,7 +80,7 @@ struct AuctionDetailScreen: View {
                     }
                     .padding(.horizontal)
                     
-                    PictureSlider()
+                    PictureSlider(imagePlants: viewModel.room?.plant.imagePlants ?? [])
                         .shadow(radius: 4)
                         .padding(.top)
                     
@@ -95,7 +95,7 @@ struct AuctionDetailScreen: View {
                                 LinearGradient(colors: [.red, .pink, .orange] , startPoint: .topLeading, endPoint: .bottomTrailing)
                             )
                         
-                        TimerView(timeRemaining: $timeRemaining)
+                        TimerView(timeRemaining: $viewModel.opeiningCooldown)
                             .padding(.horizontal)
                     }
                     .padding(.top)
@@ -136,7 +136,6 @@ struct AuctionDetailScreen: View {
                             Spacer()
                         }
                         
-                        
                         Text(room.plant.description)
                             .padding()
                             .background(
@@ -164,9 +163,26 @@ struct AuctionDetailScreen: View {
                 }
                 .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .top)
                 .shadow(radius: 1, x: 1, y: 1)
-            } else {
-                VStack() {
-                    ProgressView()
+            } else if viewModel.isLoading {
+                CenterView {
+                    ProgressView("Đang tải")
+                }
+            } else if viewModel.hasError {
+                CenterView {
+                    VStack {
+                        Text("Tải thất bại")
+                        
+                        Button {
+                            viewModel.getRoomById(roomId: roomId)
+                        } label: {
+                            Text("Thử lại")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .padding(4)
+                                .padding(.horizontal, 4)
+                                .background(RoundedRectangle(cornerRadius: 8).foregroundStyle(.darkBlue))
+                        }
+                    }
                 }
             }
         }

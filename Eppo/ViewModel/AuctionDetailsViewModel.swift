@@ -11,6 +11,8 @@ import Combine
 
 @Observable class AuctionDetailsViewModel {
     var room: Room?
+    var registedNumber: Int = 0
+    var opeiningCooldown: Int = 1
     var message: String? {
         didSet {
             isAlertShowing = message != nil
@@ -21,17 +23,28 @@ import Combine
 
     var cancellables: Set<AnyCancellable> = []
     
+    // MARK: - UILOADING
+    var isLoading = false
+    var hasError = false
+    
     func getRoomById(roomId: Int) {
+        isLoading = true
+        hasError = false
+        
         APIManager.shared.getRoomById(id: 10)
             .sink { result in
+                self.isLoading = false
                 switch result {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.hasError = true
                     print(error.localizedDescription)
                 }
             } receiveValue: { auctionDetailResponse in
-                self.room = auctionDetailResponse.data
+                self.room = auctionDetailResponse.data.room
+                self.registedNumber = auctionDetailResponse.data.registeredCount
+                self.opeiningCooldown = auctionDetailResponse.data.openingCoolDown
             }
             .store(in: &cancellables)
     }

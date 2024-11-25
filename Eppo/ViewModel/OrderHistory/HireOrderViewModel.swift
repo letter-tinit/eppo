@@ -16,8 +16,13 @@ class HireOrderViewModel {
     
     var orders: [HireHistoryOrder] = []
     var cancellables: Set<AnyCancellable> = []
-    
+    var isLoading = false
+    var isAlertShowing: Bool = false
+    var activeAlert: BuyOrderAlert = .remind
+    var errorMessage: String?
+
     func getHireOrderHistory() {
+        isLoading = true
         var orderState = 1
         
         switch selectedOrderState {
@@ -35,6 +40,7 @@ class HireOrderViewModel {
         
         APIManager.shared.getHireOrderHistory(pageIndex: 1, pageSize: 999, status: orderState)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break
@@ -50,14 +56,23 @@ class HireOrderViewModel {
     }
     
     func cancelOrder(id: Int) {
+        isLoading = true
+        
         APIManager.shared.cancelOrder(id: id)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     self.getHireOrderHistory()
+                    self.errorMessage = "Đơn hàng đã huỷ thành công"
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                 }
             } receiveValue: {}
             .store(in: &cancellables)

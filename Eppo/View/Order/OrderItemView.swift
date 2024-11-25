@@ -14,11 +14,13 @@ struct OrderItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             // Item Image
-            Image("sample-bonsai")
-                .resizable()
-                .frame(width: 80, height: 80)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 6))
+//            Image("sample-bonsai")
+//                .resizable()
+//                .frame(width: 80, height: 80)
+//                .clipped()
+//                .clipShape(RoundedRectangle(cornerRadius: 6))
+            
+            CustomAsyncImage(imageUrl: plant.mainImage, width: 80, height: 80)
 
             VStack(alignment: .leading) {
                 Text(plant.name)
@@ -31,7 +33,7 @@ struct OrderItemView: View {
                     .foregroundStyle(.gray)
                     .font(.caption)
                 
-                Text(plant.price, format: .currency(code: "VND"))
+                Text(plant.finalPrice, format: .currency(code: "VND"))
                     .lineLimit(1)
                     .fontWeight(.medium)
                     .foregroundStyle(.red)

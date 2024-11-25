@@ -10,7 +10,7 @@ struct MyChatBox: View {
     // MARK: - PROPERTY
     var textMessage: String
     var textState: String
-    var textTime: String
+    var textTime: Date
     
     @State var degreesRotating = 0.0
     
@@ -23,9 +23,9 @@ struct MyChatBox: View {
             Spacer(minLength: 60)
             
             HStack {
-                VStack {
+                VStack(alignment: .trailing) {
                     if isShowingInformation {
-                        Text(textTime)
+                        Text(textTime, format: .dateTime)
                             .font(.system(size: 14))
                             .foregroundStyle(.gray)
                     }
@@ -58,24 +58,25 @@ struct MyChatBox: View {
                                         LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
                                     )
                             )
-                            .shadow(radius: 3, x: -2, y: -2)
-                        
-                        
+                            .shadow(radius: 2, x: -1, y: -1)
                     }
-                    .padding(.trailing, 12)
                 }
+                .padding(.trailing, 12)
+                .padding(.vertical, 3)
+                .animation(.easeInOut, value: isShowingInformation)
             }
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            isShowingInformation.toggle()
+            withAnimation {
+                isShowingInformation.toggle() // Thêm animation
+            }
         }
-        .animation(.easeInOut, value: isShowingInformation)
         .frame(alignment: .trailing)
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    MyChatBox(textMessage: "Xin chào", textState: "Sent", textTime: "10:10 AM")
+    MyChatBox(textMessage: "A", textState: "Sent", textTime: Date())
 }

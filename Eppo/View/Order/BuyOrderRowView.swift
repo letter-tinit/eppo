@@ -24,18 +24,19 @@ struct BuyOrderRowView: View {
             ForEach(orderDetails) { orderDetail in
                 HStack(alignment: .center) {
                     // Item Image
-                    Image("sample-bonsai")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .clipped()
-                        .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+//                    Image("sample-bonsai")
+//                        .resizable()
+//                        .frame(width: 60, height: 60)
+//                        .clipped()
+//                        .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+                    CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 60, height: 60)
                     
                     VStack(alignment: .leading) {
                         Text(orderDetail.plant.name)
                             .font(.headline)
                             .lineLimit(1)
                         
-                        Text(orderDetail.plant.price, format: .currency(code: "VND"))
+                        Text(orderDetail.plant.finalPrice, format: .currency(code: "VND"))
                             .fontWeight(.semibold)
                             .foregroundStyle(.red)
                             .font(.subheadline)
@@ -74,7 +75,8 @@ struct BuyOrderRowView: View {
 
             if isCancellable {
                 Button {
-                    viewModel.cancelOrder(id: orderId)
+                    viewModel.activeAlert = .remind
+                    viewModel.isAlertShowing = true
                 } label: {
                     Text("Huỷ đơn hàng")
                         .frame(width: 140, height: 40)
@@ -93,6 +95,21 @@ struct BuyOrderRowView: View {
         .padding(.vertical)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            switch viewModel.activeAlert {
+            case .error:
+                return Alert(title: Text(viewModel.errorMessage ?? "Lỗi không xác định"), dismissButton: .cancel())
+            case .remind:
+                return Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+                    self.viewModel.cancelOrder(id: orderId)
+                }))
+            }
+        }
+//        .alert(isPresented: $viewModel.isAlertShowing) {
+//            Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+//                self.viewModel.cancelOrder(id: orderId)
+//            }))
+//        }
     }
 }
 

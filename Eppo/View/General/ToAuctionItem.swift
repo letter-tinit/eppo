@@ -8,7 +8,7 @@ import SwiftUI
 
 struct ToAuctionItem: View {
     // MARK: - PROPERTY
-    var image: Image
+    var imageURL: String
     var itemName: String
     var price: Double
     var time: Date
@@ -17,11 +17,13 @@ struct ToAuctionItem: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Image("sample-bonsai-01")
-                .resizable()
-                .frame(width: 164, height: 100, alignment: .top)
-                .scaledToFit()
-                .clipped()
+//            Image("sample-bonsai-01")
+//                .resizable()
+//                .frame(width: 164, height: 100, alignment: .top)
+//                .scaledToFit()
+//                .clipped()
+            CustomAsyncImage(imageUrl: imageURL, width: 164, height: 100)
+            
             
             VStack(alignment: .leading, spacing: 8) {
                 
@@ -73,5 +75,5 @@ struct ToAuctionItem: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ToAuctionItem(image: Image("sample-bonsai-01"), itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000, time: Date())
+    ToAuctionItem(imageURL: "https://www.hackingwithswift.com/samples/paul2.jpg", itemName: "Sen Đá Kim Cương Haworthia Cooperi", price: 50000, time: Date())
 }

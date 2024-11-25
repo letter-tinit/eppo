@@ -16,6 +16,7 @@ enum PaymentMethod: String, CaseIterable, Identifiable {
 struct OrderDetailsScreen: View {
     @Bindable var viewModel: CartViewModel
     @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack {
@@ -129,7 +130,9 @@ struct OrderDetailsScreen: View {
             viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
+            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel(Text("Đóng"), action: {
+                self.dismiss()
+            }))
         }
     }
 }

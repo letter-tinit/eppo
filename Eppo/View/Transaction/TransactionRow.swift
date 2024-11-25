@@ -9,8 +9,7 @@ import SwiftUI
 struct TransactionRow: View {
     // MARK: - PROPERTY
     var transactionName: String
-    var transactionTime: String
-    var currentBalance: Double
+    var transactionTime: Date
     var transactionAmount: Double
     var isBonus: Bool
 
@@ -30,13 +29,13 @@ struct TransactionRow: View {
                     .font(.headline)
                     .fontWeight(.semibold)
                 
-                Text(transactionTime)
+                Text(transactionTime, format: .dateTime)
                     .font(.subheadline)
                 
                 HStack(spacing: 0) {
                     Text("Số dư ví: ")
                     
-                    Text(currentBalance, format: .currency(code: "VND"))
+                    Text("***********")
                         .fontWeight(.bold)
                 }
                 .font(.subheadline)
@@ -63,5 +62,5 @@ struct TransactionRow: View {
 
 // MARK: - PREVIEW
 #Preview {
-    TransactionRow(transactionName: "Nạp tiền vào hệ thống EPPO", transactionTime: "12:35 - 25/07/2024", currentBalance: 1100000, transactionAmount: -100000, isBonus: false)
+    TransactionRow(transactionName: "Nạp tiền vào hệ thống EPPO", transactionTime: Date(), transactionAmount: -100000, isBonus: false)
 }

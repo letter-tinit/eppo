@@ -8,17 +8,22 @@ import SwiftUI
 
 struct AuctionRoomDetailScreen: View {
     // MARK: - PROPERTY
-    @State var viewModel: AuctionRoomDetailViewModel = AuctionRoomDetailViewModel()
-    let userRoomId: Int
-    let customers = Array(0..<3)
+    @State var viewModel: AuctionRoomDetailViewModel
+    @State var priceInputTextField: String = ""
+    
+    @State var isPriceInputPopup: Bool = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    init(viewModel: AuctionRoomDetailViewModel) {
+        self.viewModel = viewModel
+    }
     
     // MARK: - BODY
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: true)
+            CustomAvatarHeader(withClose: true)
             
             if viewModel.isLoading {
                 VStack {
@@ -33,7 +38,7 @@ struct AuctionRoomDetailScreen: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.red)
                     Button("Thử lại") {
-                        viewModel.getRegistedAuctionRoomById(userRoomId: self.userRoomId)
+                        viewModel.getRegistedAuctionRoomById()
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -68,11 +73,12 @@ struct AuctionRoomDetailScreen: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .frame(width: 160, height: 70)
                     
+                    Spacer()
+                    
                     ZStack(alignment: .center) {
                         LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                        
                         VStack(alignment: .leading) {
-                            Text("Số người đăng ký")
+                            Text("Số người")
                                 .fontWeight(.semibold)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.black)
@@ -84,7 +90,7 @@ struct AuctionRoomDetailScreen: View {
                         }
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: 160, height: 70)
+                    .frame(width: 120, height: 70)
                 }
                 .padding()
                 
@@ -102,11 +108,11 @@ struct AuctionRoomDetailScreen: View {
                     VStack {
                         Image(systemName: "clock")
                             .font(.title)
-                        if var timeRemaining = viewModel.starTimeRemaining {
-                            Text("\(minuteString(time: timeRemaining)) : \(secondString(time: timeRemaining))")
+                        if viewModel.starTimeRemaining == 0 {
+                            Text("\(minuteString(time: viewModel.endTimeRemaining)) : \(secondString(time: viewModel.endTimeRemaining))")
                                 .onReceive(timer) { _ in
-                                    if timeRemaining > 0 {
-                                        timeRemaining -= 1
+                                    if viewModel.endTimeRemaining > 0 {
+                                        viewModel.endTimeRemaining -= 1
                                     } else {
                                         self.timer.upstream.connect().cancel()
                                     }
@@ -124,9 +130,10 @@ struct AuctionRoomDetailScreen: View {
                     )
                     
                 }
+                .padding()
                 
                 ScrollView(.vertical, showsIndicators: false) {
-                    PictureSlider()
+                    PictureSlider(imagePlants: registedRoomResponseData.room.room.plant.imagePlants)
                         .shadow(radius: 4)
                         .padding(.top)
                     
@@ -134,7 +141,6 @@ struct AuctionRoomDetailScreen: View {
                         HStack {
                             Text("Diễn biến cuộc đấu giá")
                                 .font(.system(size: 20, weight: .medium))
-                            
                             Spacer()
                             
                             Button {
@@ -150,28 +156,27 @@ struct AuctionRoomDetailScreen: View {
                         }
                         
                         LazyVStack {
-                            ForEach(customers.indices, id: \.self) { index in
-                                VStack(alignment: .leading, spacing: 10) {
+                            ForEach(viewModel.bidhistories) { historyBid in
+                                LazyVStack(alignment: .leading, spacing: 10) {
                                     HStack {
-                                        Text("Nguyễn Văn An")
+                                        Text("Người chơi \(historyBid.userId)")
                                             .font(.system(size: 20, weight: .medium))
                                         Spacer()
                                         
-                                        Text("5.700.000")
+                                        Text(historyBid.bidAmount, format: .currency(code: "VND"))
                                             .font(.system(size: 18, weight: .semibold))
-                                            .foregroundStyle(index == 0 ? .red : .gray)
                                     }
                                     
-                                    Text("10:37:50")
+                                    Text(historyBid.bidTime, format: .dateTime)
                                         .font(.system(size: 16, weight: .medium))
                                         .foregroundStyle(.gray)
                                 }
                                 .padding(.horizontal)
                                 .padding(.vertical, 6)
                                 
-                                if index != customers.count - 1 {
-                                    Divider()
-                                }
+//                                if index != customers.count - 1 {
+//                                    Divider()
+//                                }
                             }
                         }
                         .padding(.vertical)
@@ -179,7 +184,21 @@ struct AuctionRoomDetailScreen: View {
                         .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
                     }
                     .padding()
-                    .padding(.bottom, 20)
+                    
+                    Spacer()
+                    
+                    Button {
+                        isPriceInputPopup.toggle()
+                    } label: {
+                        Text("Nhập giá")
+                            .font(.headline)
+                            .fontWeight(.medium)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.blue))
+                            .foregroundStyle(.white)
+                            .padding()
+                    }
                 }
             } else {
                 CenterView {
@@ -192,7 +211,30 @@ struct AuctionRoomDetailScreen: View {
         .ignoresSafeArea(.all, edges: .vertical)
         .navigationBarBackButtonHidden()
         .onAppear {
-            viewModel.getRegistedAuctionRoomById(userRoomId: self.userRoomId)
+            viewModel.getRegistedAuctionRoomById()
+            viewModel.getHistoryBids()
+            viewModel.connectWebSocket()
+        }
+        .sheet(isPresented: $isPriceInputPopup, content: {
+            VStack {
+                BorderTextField {
+                    TextField("Nhập giá tiền", text: $priceInputTextField)
+                        .keyboardType(.numberPad)
+                }
+                .frame(height: 50)
+                .padding(.horizontal)
+                Button {
+                    self.isPriceInputPopup = false
+                    viewModel.sendMessage(bidAmount: Int(priceInputTextField) ?? 0)
+                } label: {
+                    Text("Xác nhận")
+                        .padding(.bottom, 20)
+                }
+            }
+        })
+        .presentationDetents([.medium])
+        .alert(isPresented: $viewModel.isShowingAlert) {
+            Alert(title: Text(viewModel.currentErrorMessage ?? "Nhắc nhở"), dismissButton: .cancel())
         }
     }
     
@@ -209,5 +251,5 @@ struct AuctionRoomDetailScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    AuctionRoomDetailScreen(userRoomId: 1)
+    AuctionRoomDetailScreen(viewModel: AuctionRoomDetailViewModel(roomId: 10))
 }

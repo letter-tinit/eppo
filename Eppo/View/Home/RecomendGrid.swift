@@ -31,7 +31,7 @@ struct RecomendGrid: View {
                             NavigationLink {
                                 ItemDetailScreen(id: plant.id)
                             } label: {
-                                ToBuyItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
+                                ToBuyItem(imageUrl: plant.mainImage, itemName: plant.name, price: plant.finalPrice)
                                     .onAppear {
                                         if plant == viewModel.plants.last {
                                             loadMorePlant()
@@ -43,7 +43,7 @@ struct RecomendGrid: View {
                             NavigationLink {
                                 HireItemDetailScreen(id: plant.id)
                             } label: {
-                                ToHireItem(imageUrl: "https://hws.dev/paul2.jpg", itemName: plant.name, price: plant.price)
+                                ToHireItem(imageUrl: plant.mainImage, itemName: plant.name, price: plant.finalPrice)
                                     .onAppear {
                                         if plant == viewModel.plants.last {
                                             loadMorePlant()

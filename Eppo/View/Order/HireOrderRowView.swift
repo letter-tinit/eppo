@@ -14,34 +14,29 @@ struct HireOrderRowView: View {
 
     var totalPrice: Double
     var deliveriteFree: Double
-    var isCancellable: Bool = false
     var numberOfMonth: Int
-    
-//    let plants: [Plant] = [
-//        Plant(id: 1, name: "Rose", price: 15.99, description: "A beautiful red rose."),
-//        Plant(id: 2, name: "Tulip", price: 10.50, description: "A vibrant spring tulip."),
-//        Plant(id: 3, name: "Orchid", price: 25.75, description: "An elegant and exotic orchid.")
-//    ]
     let orderDetail: HireHistoryOrderDetail
-    
+    var isCancellable: Bool = false
+
     // MARK: - BODY
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 // Item Image
-                Image("sample-bonsai")
-                    .resizable()
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+//                Image("sample-bonsai")
+//                    .resizable()
+//                    .frame(width: 80, height: 80)
+//                    .clipped()
+//                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
+                CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 80, height: 80)
                 
                 VStack(alignment: .leading) {
                     Text(orderDetail.plant.name)
                         .font(.headline)
                         .lineLimit(1)
                     
-                    Text(orderDetail.plant.price, format: .currency(code: "VND"))
+                    Text(orderDetail.plant.finalPrice, format: .currency(code: "VND"))
                         .fontWeight(.semibold)
                         .foregroundStyle(.red)
                         .font(.subheadline)
@@ -87,27 +82,44 @@ struct HireOrderRowView: View {
             }
             .padding(.horizontal, 10)
 
-            Button {
-                viewModel.cancelOrder(id: id)
-            } label: {
-                Text("Huỷ")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .foregroundStyle(.red)
-                    )
-                    .foregroundStyle(.white)
+            if isCancellable {
+                Button {
+                    viewModel.isAlertShowing = true
+                    viewModel.activeAlert = .remind
+                } label: {
+                    Text("Huỷ đơn hàng")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 4)
+                                .foregroundStyle(.red)
+                        )
+                        .foregroundStyle(.white)
+                }
+                .padding(.horizontal, 10)
             }
-            
-            .padding(.horizontal, 10)
         }
         .scaledToFit()
         .padding(.vertical)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 10)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            switch viewModel.activeAlert {
+            case .error:
+                return Alert(title: Text(viewModel.errorMessage ?? "Lỗi không xác định"), dismissButton: .cancel())
+            case .remind:
+                return Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+                    self.viewModel.cancelOrder(id: id)
+                }))
+            }
+        }
+//        .alert(isPresented: $viewModel.isAlertShowing) {
+//            Alert(title: Text("Nhắc nhở"), message: Text("Bạn chỉ có thể huỷ 3 đơn/ngày"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+//                self.viewModel.cancelOrder(id: id)
+//            }))
+//        }
     }
 }
 

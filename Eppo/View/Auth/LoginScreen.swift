@@ -9,6 +9,9 @@ import SwiftUI
 
 struct LoginScreen: View {
     @AppStorage("isLogged") var isLogged: Bool = false
+    @AppStorage("isCustomer") var isCustomer: Bool = false
+    @AppStorage("isOwner") var isOwner: Bool = false
+    @AppStorage("isSigned") var isSigned: Bool = true
     @State var viewModel = LoginViewModel()
     @State private var usernameTextField: String = ""
     @State private var passwordTextField: String = ""
@@ -117,6 +120,21 @@ struct LoginScreen: View {
                         .padding(.top, 40)
                     }// CONTENT
                     .padding(.horizontal, 20)
+                    
+                    HStack(spacing: 6) {
+                        Text("Chưa có tài khoản?")
+                            .foregroundStyle(.gray)
+                            .font(.system(size: 16, weight: .semibold))
+                        
+                        NavigationLink {
+                            ActiveScreen()
+                        } label: {
+                            Text("Đăng Ký")
+                                .foregroundStyle(.textDarkBlue)
+                                .font(.system(size: 16, weight: .semibold))
+                        }
+                    }
+                    .padding(.top, 30)
                     Spacer()
                     
                 }
@@ -151,14 +169,26 @@ struct LoginScreen: View {
                 )
             }
             .navigationDestination(isPresented: $viewModel.isLogged) {
-                MainTabView()
+                MainTabView(selectedTab: .explore)
             }
         }
         .onAppear {
-            viewModel.login(userName: "customer", password: "123")
+//            viewModel.login(userName: "customer", password: "123")
+            self.isSigned = true
         }
-        .onChange(of: viewModel.isLogged) { oldValue, newValue in
+        .onChange(of: viewModel.isCustomer) { oldValue, newValue in
+            self.isCustomer = newValue
+            if newValue { self.isOwner = false } // Đảm bảo không trùng trạng thái
+        }
+        .onChange(of: viewModel.isOwner) { oldValue, newValue in
+            self.isOwner = newValue
+            if newValue { self.isCustomer = false } // Đảm bảo không trùng trạng thái
+        }
+        .onChange(of: viewModel.isLogged) { _, newValue in
             self.isLogged = newValue
+        }
+        .onChange(of: viewModel.isSigned) { oldValue, newValue in
+            self.isSigned = newValue
         }
     }
 }

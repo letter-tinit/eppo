@@ -10,7 +10,7 @@ struct PartnerChatBox: View {
     // MARK: - PROPERTY
     var avatar: Image
     var textMessage: String
-    var textTime: String
+    var textTime: Date
     
     @State var isShowingInformation: Bool = false
     
@@ -19,11 +19,10 @@ struct PartnerChatBox: View {
     var body: some View {
         HStack(alignment: .top) {
             CircleImageView(image: avatar, size: 39)
-                .padding(.leading, 12)
             
-            VStack {
+            VStack(alignment: .leading) {
                 if isShowingInformation {
-                    Text(textTime)
+                    Text(textTime, format: .dateTime)
                         .font(.system(size: 14))
                         .foregroundStyle(.gray)
                 }
@@ -36,15 +35,20 @@ struct PartnerChatBox: View {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(.white)
                     )
-                    .shadow(radius: 3, x: 2, y: 2)
+                    .shadow(radius: 2, x: 1, y: 1)
             }
-            
+            .padding(.leading, 12)
+            .padding(.vertical, 3)
+            .animation(.easeInOut, value: isShowingInformation)
+
             Spacer(minLength: 60)
             
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            isShowingInformation.toggle()
+            withAnimation {
+                isShowingInformation.toggle() // Thêm animation
+            }
         }
         .animation(.easeInOut, value: isShowingInformation)
     }
@@ -52,5 +56,5 @@ struct PartnerChatBox: View {
 
 // MARK: - PREVIEW
 #Preview {
-    PartnerChatBox(avatar: Image("avatar"), textMessage: "Xin chào! Mình muốn hỏi bạn một chút vấn đề về cây cảnh.", textTime: "11:00 AM")
+    PartnerChatBox(avatar: Image("avatar"), textMessage: "Xin chào! Mình muốn hỏi bạn một chút vấn đề về cây cảnh.", textTime: Date())
 }

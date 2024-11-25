@@ -59,24 +59,25 @@ struct OrderHistoryScreen: View {
                 }
             }
             
-            if viewModel.orders.isEmpty {
-                Spacer()
-                
-                Text("Không tìm thấy đơn hàng")
-                    .font(.headline)
-                    .foregroundStyle(.gray)
-                
-                Spacer()
-                
-            } else {
+            if viewModel.isLoading {
+                CenterView {
+                    ProgressView("Đang tải")
+                }
+            } else if !viewModel.orders.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach (viewModel.orders) { order in
-                        BuyOrderRowView(viewModel: viewModel, orderId: order.id, totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: true)
+                        BuyOrderRowView(viewModel: viewModel, orderId: order.id, totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: viewModel.selectedOrderState == .waitingForConfirm)
                             .padding(10)
                     }
                     .background(Color(uiColor: UIColor.systemGray5))
                 }
                 .padding(.bottom, 30)
+            } else {
+                CenterView {
+                    Text("Không tìm thấy dữ liệu")
+                        .font(.headline)
+                        .foregroundStyle(.gray)
+                }
             }
         }
         .background(.white)

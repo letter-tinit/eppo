@@ -23,7 +23,7 @@ struct AuctionScreen: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                CustomAvatarHeader(name: "Nguyễn Văn An", image: Image("avatar"), withClose: false)
+                CustomAvatarHeader(withClose: false)
                 
                 HStack(spacing: 15) {
                     SearchBar(searchText: $searchText)
@@ -77,7 +77,7 @@ struct AuctionScreen: View {
                             NavigationLink {
                                 AuctionDetailScreen(roomId: room.roomId)
                             } label: {
-                                ToAuctionItem(image: Image("sample-bonsai-01"), itemName: room.plant.name, price: room.plant.price, time: room.activeDate)
+                                ToAuctionItem(imageURL: room.plant.mainImage, itemName: room.plant.name, price: room.plant.finalPrice, time: room.activeDate)
                             }
                         }
                     }

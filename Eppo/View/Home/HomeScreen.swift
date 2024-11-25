@@ -12,20 +12,18 @@ struct HomeScreen: View {
     @State private var searchText = ""
 
     // MARK: - BODY
-
+    
     var body: some View {
-        NavigationView {
-            VStack(spacing: 2) {
-                HomeHeader()
-
-                RecomendGrid(viewModel: viewModel)
-                
-                Spacer()
-                
-            }
-            .background(Color.init(uiColor: UIColor.systemGray5))
-            .ignoresSafeArea(.all)
+        VStack(spacing: 2) {
+            HomeHeader()
+            
+            RecomendGrid(viewModel: viewModel)
+            
+            Spacer()
+            
         }
+        .background(Color.init(uiColor: UIColor.systemGray5))
+        .ignoresSafeArea(.all)
     }
 }
 

@@ -18,22 +18,18 @@ struct ProfileScreen: View {
             VStack {
                 // MARK: - HEADER STACK
                 VStack(alignment: .center, spacing: 10) {
-                    CircleImageView(image: Image("avatar"), size: 140)
+                    CustomCircleAsyncImage(imageUrl: viewModel.user.imageUrl, size: 140)
                     
-                    Text(viewModel.userResponse?.data.fullName ?? "Đang tải")
+                    Text(viewModel.user.fullName)
                         .font(.system(size: 22, weight: .medium))
                     
-                    Text(viewModel.userResponse?.data.email ?? "Đang tải")
+                    Text(viewModel.user.email)
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.gray)
                     
                 } //: HEADER STACK
                 
-                if let wallet = viewModel.userResponse?.data.wallet {
-                    BalanceBox(balance: wallet.numberBalance)
-                } else {
-                    BalanceBox(balance: 0)
-                }
+                BalanceBox(balance: viewModel.user.wallet?.numberBalance ?? 0)
                 
                 
                 // MARK: - DELIVER TOOLS BAR
@@ -74,7 +70,8 @@ struct ProfileScreen: View {
                         .foregroundStyle(.settingBoxBackground)
                     
                     VStack(alignment: .leading, spacing: 20) {
-                        CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount(viewModel: viewModel))
+
+                        CustomSettingNavigationLink(image: "person", title: "Tài khoản của tôi", destination: MyAccount(viewModel: MyAccountViewModel(userInput: viewModel.user)))
                         
                         Divider()
                         
@@ -90,7 +87,7 @@ struct ProfileScreen: View {
                         
                         Divider()
                         
-                        CustomSettingNavigationLink(image: "creditcard", title: "Thông tin thanh toán", destination: Text("Destination View"))
+                        CustomSettingNavigationLink(image: "creditcard", title: "Thông tin thanh toán", destination: PaymentScreen())
                         
                         Divider()
                         
@@ -133,6 +130,8 @@ struct ProfileScreen: View {
         .onAppear {
             viewModel.getMyInformation()
         }
+        .redacted(reason: self.viewModel.isLoading ? .placeholder : .privacy)
+        .disabled(self.viewModel.isLoading)
     }
 }
 

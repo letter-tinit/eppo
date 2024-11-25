@@ -23,12 +23,37 @@ import Combine
     }
     var isLogged: Bool = false
     var isLoading: Bool = false
-    var isCustomer: Bool = true
     
+    var isCustomer: Bool = false {
+        didSet {
+            if isCustomer { isOwner = false }
+        }
+    }
+    var isOwner: Bool = false {
+        didSet {
+            if isOwner { isCustomer = false }
+        }
+    }
+    var isSigned: Bool = true
+
     private var cancellables = Set<AnyCancellable>()
+    
+    enum Role: String {
+        case customer
+        case owner
+        case unknown
+        
+        static func from(roleName: String) -> Role {
+            return Role(rawValue: roleName) ?? .unknown
+        }
+    }
     
     func login(userName: String, password: String) {
         isLoading = true
+        isCustomer = false
+        isOwner = false
+        isLogged = false
+        errorMessage = nil
         
         APIManager.shared.login(username: userName, password: password)
             .sink(receiveCompletion: { completion in
@@ -44,16 +69,11 @@ import Combine
                 }
             }, receiveValue: { loginResponse in
                 // Cập nhật dữ liệu vào ViewModel
-                if self.checkIsCustomer(roleName: loginResponse.roleName) {
-                    UserSession.shared.saveToken(loginResponse.token)
-                    self.isCustomer = true
-                    self.errorMessage = nil
-                    self.isLoading = false
-                    self.isLogged = true
-                } else {
-                    self.isLoading = false
-                    self.isPopupMessage = true
-                    self.errorMessage = "Tài khoản hoặc mật khẩu không chính xác"
+                let role = Role.from(roleName: loginResponse.roleName)
+                self.handleRole(role: role, token: loginResponse.token)
+                if let isSigned = loginResponse.isSigned,
+                   !isSigned {
+                    self.isSigned = isSigned
                 }
             })
             .store(in: &cancellables)
@@ -72,6 +92,25 @@ import Combine
                 UserSession.shared.myInformation = userResponse.data
             }
             .store(in: &cancellables)
+    }
+    
+    private func handleRole(role: Role, token: String) {
+        switch role {
+        case .customer:
+            UserSession.shared.saveToken(token)
+            isCustomer = true
+            isLogged = true
+            errorMessage = nil
+        case .owner:
+            UserSession.shared.saveToken(token)
+            isOwner = true
+            isLogged = true
+            errorMessage = nil
+        case .unknown:
+            errorMessage = "Vai trò không hợp lệ hoặc không được hỗ trợ."
+            isPopupMessage = true
+        }
+        isLoading = false
     }
     
     private func handleAPIError(_ error: Error) {
@@ -107,6 +146,14 @@ import Combine
     
     func checkIsCustomer(roleName: String) -> Bool {
         if roleName == "customer" {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func checkIsOwner(roleName: String) -> Bool {
+        if roleName == "owner" {
             return true
         } else {
             return false

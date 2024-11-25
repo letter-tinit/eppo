@@ -10,14 +10,23 @@ import Alamofire
 import Combine
 import Observation
 
+enum BuyOrderAlert {
+    case error, remind
+}
+
 @Observable
 class BuyOrderViewModel {
     var selectedOrderState: OrderState = .waitingForConfirm
     
     var orders: [BuyHistoryOrder] = []
     var cancellables: Set<AnyCancellable> = []
-    
+    var isLoading = false
+    var isAlertShowing: Bool = false
+    var activeAlert: BuyOrderAlert = .remind
+    var errorMessage: String?
+
     func getBuyOrderHistory() {
+        self.isLoading = true
         var orderState = 1
         
         switch selectedOrderState {
@@ -35,6 +44,7 @@ class BuyOrderViewModel {
         
         APIManager.shared.getBuyOrderHistory(pageIndex: 1, pageSize: 999, status: orderState)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break
@@ -50,14 +60,23 @@ class BuyOrderViewModel {
     }
     
     func cancelOrder(id: Int) {
+        isLoading = true
+        
         APIManager.shared.cancelOrder(id: id)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     self.getBuyOrderHistory()
+                    self.errorMessage = "Đơn hàng đã huỷ thành công"
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
                 }
             } receiveValue: {}
             .store(in: &cancellables)

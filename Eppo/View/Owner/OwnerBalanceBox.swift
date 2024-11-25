@@ -8,7 +8,7 @@ import SwiftUI
 
 struct OwnerBalanceBox: View {
     // MARK: - PROPERTY
-    var balance: String
+    var balance: Double
     
     @State var isShowing: Bool = false
     
@@ -33,7 +33,7 @@ struct OwnerBalanceBox: View {
                 
                 if isShowing {
                     HStack {
-                        Text(balance)
+                        Text(balance, format: .currency(code: "VND"))
                             .font(.system(size: 20, weight: .medium))
                             .foregroundStyle(.white)
                         
@@ -60,5 +60,5 @@ struct OwnerBalanceBox: View {
 
 // MARK: - PREVIEW
 #Preview {
-    OwnerBalanceBox(balance: "10.000.000")
+    OwnerBalanceBox(balance: 10000000)
 }

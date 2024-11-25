@@ -9,9 +9,6 @@ import SwiftUI
 struct TransactionHistoryScreen: View {
     // MARK: - PROPERTY
     @Bindable var viewModel: ProfileViewModel
-    @State var selectedTransactionType: TransactionHistoryType = .all
-    
-    @State var typeState: String = "all"
     
     // MARK: - BODY
     
@@ -20,45 +17,49 @@ struct TransactionHistoryScreen: View {
             // MARK: - HEADER
             TransactionHeader(title: "Lịch sử giao dịch", searchText: .constant("Cây cảnh"))
             
-            TransactionTypeStack(selectedTransactionType: $selectedTransactionType)
-                .padding(.vertical, 4)
-
-            ScrollView(.vertical) {
-                LazyVStack(spacing: 2, pinnedViews: .sectionHeaders) {
-                    ForEach(1 ..< 13) { index in
-                    Section {
-                        LazyVStack(spacing: 2) {
-                            ForEach(0 ..< 3) { _ in
-                                TransactionRow(transactionName: "Nạp tiền vào hệ thống EPPO", transactionTime: "12:35 - 25/07/2024", currentBalance: 1100000, transactionAmount: -100000, isBonus: false)
-                                TransactionRow(transactionName: "Nạp tiền vào hệ thống EPPO", transactionTime: "12:35 - 25/07/2024", currentBalance: 1100000, transactionAmount: +100000, isBonus: true)
+            if viewModel.isLoading {
+                CenterView {
+                    ProgressView("Đang tải dữ liệu...")
+                        .padding()
+                }
+            } else if viewModel.hasError {
+                VStack(spacing: 16) {
+                    Text(viewModel.errorMessage ?? "Lỗi không xác định")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.red)
+                    Button("Thử lại") {
+                        viewModel.getTransactionHistory()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if !viewModel.transactions.isEmpty {
+                // Hiển thị nội dung khi có dữ liệu
+                ScrollView(.vertical) {
+                    LazyVStack(spacing: 2) {
+                        ForEach(viewModel.transactions) { transaction in
+                            if let withdrawDate = transaction.withdrawDate,
+                               let withdrawNumber = transaction.withdrawNumber {
+                                TransactionRow(transactionName: transaction.description, transactionTime: withdrawDate, transactionAmount: -withdrawNumber, isBonus: false)
+                            } else if let rechargeDate = transaction.rechargeDate,
+                                      let rechargeNumber = transaction.rechargeNumber {
+                                TransactionRow(transactionName: transaction.description, transactionTime: rechargeDate, transactionAmount: rechargeNumber, isBonus: true)
                             }
                         }
                         .background(Color(uiColor: UIColor.systemGray4))
-                    } header: {
-                        HStack {
-                            Text("Tháng \(index)")
-                                .foregroundStyle(Color(uiColor: UIColor.darkGray))
-                            Spacer()
-                            Text("2024")
-                                .foregroundStyle(Color(uiColor: UIColor.systemGray5))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title3)
-                        .padding(8)
-                        .background(
-                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
-                        )
-                        .fontWeight(.bold)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .background(.white)
                 }
+            } else {
+                CenterView {
+                    Text("Không có dữ liệu")
+                }
             }
-            }
-            
         }
         .navigationBarBackButtonHidden()
-        .ignoresSafeArea(.container, edges: .top)
+        .ignoresSafeArea(.container, edges: .vertical)
         .onAppear {
             viewModel.getTransactionHistory()
         }
