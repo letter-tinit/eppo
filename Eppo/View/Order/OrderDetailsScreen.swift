@@ -23,12 +23,30 @@ struct OrderDetailsScreen: View {
             CustomHeaderView(title: "Thanh Toán")
             ScrollView(.vertical) {
                 VStack {
-                    AddressOrderView()
-                        .padding(.horizontal)
+//                    AddressOrderView()
+//                        .padding(.horizontal)
+                    
+                    List {
+                        Picker("Chọn địa chỉ", selection: $viewModel.selectedAddress) {
+                            ForEach(viewModel.addresses, id: \.self) { address in
+                                Text(address.description)
+                                    .tag(address as Address?)
+                            }
+                        }
+                        .pickerStyle(.navigationLink)
+                        .listRowSeparator(.hidden, edges: .bottom)
+                    }
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .listStyle(.inset)
+                    .scrollDisabled(true)
                     
                     VStack {
                         ForEach(viewModel.selectedOrder) { plant in
-                            OrderItemView(plant: plant)
+                            CartOrderItemView(viewModel: viewModel, plant: plant)
                                 .background(Color.clear)
                         }
                         
@@ -41,7 +59,7 @@ struct OrderDetailsScreen: View {
                                 .font(.subheadline)
                                 .fontWeight(.regular)
                             Spacer()
-                            Text(viewModel.totalPrice(), format: .currency(code: "VND"))
+                            Text(viewModel.totalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                         }
@@ -94,7 +112,7 @@ struct OrderDetailsScreen: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text(viewModel.totalPrice(), format: .currency(code: "VND"))
+                    Text(viewModel.totalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(.red)
@@ -127,7 +145,9 @@ struct OrderDetailsScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
+            viewModel.getAddress()
             viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+            viewModel.totalShippingFee = 0.0
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel(Text("Đóng"), action: {

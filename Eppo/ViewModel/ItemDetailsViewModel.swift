@@ -18,6 +18,8 @@ enum ActiveAlert {
     var isAlertShowing: Bool = false
     var message: String = ""
     var isLoading: Bool = false
+    var addresses: [Address] = []
+    var selectedAddress: Address?
     
     // MARK: - HireItemDetailScreen
     var selectedDate = Date()
@@ -52,6 +54,44 @@ enum ActiveAlert {
                 }
             } receiveValue: { plantResponse in
                 self.plant = plantResponse.data
+                self.getShippingFeeByPlantId()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getShippingFeeByPlantId() {
+        guard let plantId = plant?.id else {
+            return
+        }
+        
+        APIManager.shared.getShippingFee(plantId: plantId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { shippingFeeResponse in
+                self.deliveriteFree = shippingFeeResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getAddress() {
+        isLoading = true
+        
+        APIManager.shared.getAddress()
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self?.handleAPIError(error)
+                }
+            } receiveValue: { addressResponse in
+                self.addresses = addressResponse.data
             }
             .store(in: &cancellables)
     }
@@ -61,14 +101,15 @@ enum ActiveAlert {
     func createOrderRental() {
         self.deliveriteFree = 0
         guard let plant = self.plant,
-        let deliveriteFree = self.deliveriteFree else {
+              let deliveriteFree = self.deliveriteFree,
+              let addressDescription = self.selectedAddress?.description else {
             return
         }
         
         let order = Order(
             totalPrice: rentTotalPrice(),
             deliveryFee: deliveriteFree,
-            deliveryAddress: "Thành Phố Hồ Chí Minh",
+            deliveryAddress: addressDescription,
             orderDetails: [
                 OrderDetail(plantId: plant.id,
                             rentalStartDate: selectedDate,
@@ -177,13 +218,14 @@ enum ActiveAlert {
     func createOrder() {
         self.deliveriteFree = 0
         guard let plant = self.plant,
-        let deliveriteFree = self.deliveriteFree else {
+              let deliveriteFree = self.deliveriteFree,
+              let addressDescription = self.selectedAddress?.description else {
             return
         }
         
         let orderDetails: [Plant] = [plant]
         
-        let createOrderRequest = CreateOrderRequest(totalPrice: plant.finalPrice, deliveryFee: deliveriteFree, deliveryAddress: "Địa chỉ FIXXXXXX", paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
+        let createOrderRequest = CreateOrderRequest(totalPrice: plant.finalPrice, deliveryFee: deliveriteFree, deliveryAddress: addressDescription, paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
         
         isLoading = true
         

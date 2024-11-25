@@ -11,12 +11,15 @@ import Observation
 
 @Observable class CartViewModel {
     var createOrderRequest: CreateOrderRequest?
-    
+    var addresses: [Address] = []
+    var selectedAddress: Address?
     var cancellables: Set<AnyCancellable> = []
     var isCreateSucces: Bool = false
     var isLoading: Bool = false
     var message: String = ""
     var isAlertShowing: Bool = false
+    var totalShippingFee = 0.0
+    
     
     var orderDetails: [Plant]
     var selectedOrder: [Plant] = []
@@ -29,11 +32,14 @@ import Observation
     }
     
     func createOrder() {
-        guard let createOrderRequest = self.createOrderRequest else {
+        isLoading = true
+        
+        guard var createOrderRequest = self.createOrderRequest,
+              let addressDescription = self.selectedAddress?.description else {
             return
         }
         
-        isLoading = true
+        createOrderRequest.deliveryAddress = addressDescription
         
         APIManager.shared.createOrder(createOrderRequest: createOrderRequest)
             .sink(receiveCompletion: { completion in
@@ -59,6 +65,54 @@ import Observation
             })
             .store(in: &cancellables)
     }
+    
+//    func getShippingFeeByPlantId(plantId: Int) -> Double {
+//        APIManager.shared.getShippingFee(plantId: plantId)
+//            .sink { completion in
+//                switch completion {
+//                case .finished:
+//                    break
+//                case .failure(let error):
+//                    print(error.localizedDescription)
+//                }
+//            } receiveValue: { shippingFeeResponse in
+//                return shippingFeeResponse.data
+//            }
+//            .store(in: &cancellables)
+//    }
+    
+    func getShippingFeeByPlantId(plantId: Int, completion: @escaping (Result<Double, Error>) -> Void) {
+        APIManager.shared.getShippingFee(plantId: plantId)
+            .sink { completionEvent in
+                switch completionEvent {
+                case .finished:
+                    break
+                case .failure(let error):
+                    completion(.failure(error)) // Pass the error to the completion handler
+                }
+            } receiveValue: { shippingFeeResponse in
+                completion(.success(shippingFeeResponse.data))            }
+            .store(in: &cancellables)
+    }
+
+    func getAddress() {
+        isLoading = true
+        
+        APIManager.shared.getAddress()
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { addressResponse in
+                self.addresses = addressResponse.data
+            }
+            .store(in: &cancellables)
+    }
+
     
     // MARK: - FUNCTIONS
     

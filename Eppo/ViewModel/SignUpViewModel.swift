@@ -12,15 +12,15 @@ import Combine
 @Observable
 class SignUpViewModel {
     let fakeSignUpUser = SignUpUser(
-        userName: "john_doe2",
-        fullName: "John Doe2",
+        userName: "john_doe3",
+        fullName: "John Doe3",
         password: "123",
         confirmPassword: "123",
         gender: "Nam",
         dateOfBirth: Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date(),
         phoneNumber: "0987654321",
         addressDescription: "123 Nguyễn Huệ, Quận 1, TP.HCM",
-        email: "johndoe2@example.com",
+        email: "johndoe3@example.com",
         identificationCard: "123456789",
         role: "Người bán"
     )

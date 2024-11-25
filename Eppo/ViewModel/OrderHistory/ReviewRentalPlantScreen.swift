@@ -1,48 +1,25 @@
 //
-//  HireOrderScreen.swift
-//  Eppo
+// Created by Letter ♥
 //
-//  Created by Letter on 14/11/2024.
+// https://github.com/tinit4ever
 //
 
 import SwiftUI
-import WebKit
 
-struct HireOrderScreen: View {
-    @Bindable var viewModel: ItemDetailsViewModel
-    @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+struct ReviewRentalPlantScreen: View {
+    @State var viewModel: ReviewRentalPlantViewModel
     
     var body: some View {
         VStack {
             CustomHeaderView(title: "Thanh Toán")
             ScrollView(.vertical) {
                 VStack {
-//                    AddressOrderView()
-//                        .padding(.horizontal)
-                    
-                    List {
-                        Picker("Chọn địa chỉ", selection: $viewModel.selectedAddress) {
-                            ForEach(viewModel.addresses, id: \.self) { address in
-                                Text(address.description)
-                                    .tag(address as Address?)
-                            }
-                        }
-                        .pickerStyle(.navigationLink)
-                        .listRowSeparator(.hidden, edges: .bottom)
-                    }
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .listStyle(.inset)
-                    .scrollDisabled(true)
+                    AddressOrderView()
+                        .padding(.horizontal)
                     
                     VStack {
-                        if let plant = viewModel.plant {
-                            OrderItemView(plant: plant)
-                                .background(Color.clear)
-                        }
+                        OrderItemView(plant: viewModel.plant)
+                            .background(Color.clear)
                         
                         Divider()
                             .padding(.horizontal, -14)
@@ -54,7 +31,7 @@ struct HireOrderScreen: View {
                                 .fontWeight(.regular)
                             Spacer()
                             HStack(spacing: 0) {
-                                Text(viewModel.plant?.finalPrice ?? 0, format: .currency(code: "VND"))
+                                Text(viewModel.plant.finalPrice, format: .currency(code: "VND"))
                                 
                                 Text("/tháng")
                             }
@@ -82,7 +59,7 @@ struct HireOrderScreen: View {
                             
                             Spacer()
                             
-                            Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
+                            Text(viewModel.deliveriteFree, format: .currency(code: "VND"))
                         }
                         .listRowSeparator(.hidden, edges: .bottom)
                     }
@@ -95,7 +72,8 @@ struct HireOrderScreen: View {
                     .scrollDisabled(true)
                     VStack(alignment: .leading, spacing: 10) {
                         NavigationLink {
-                            ContractScreen(viewModel: viewModel)
+                            //                            ContractScreen(viewModel: viewModel)
+                            ReviewContractScreen(contractUrl: viewModel.contractUrl, isSigned: $viewModel.isSigned)
                         } label: {
                             Text("Xem hợp đồng")
                                 .font(.headline)
@@ -137,7 +115,7 @@ struct HireOrderScreen: View {
                     Text("Tổng thanh toán")
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    Text(viewModel.rentTotalPrice(), format: .currency(code: "VND"))
+                    Text(viewModel.rentTotalPrice, format: .currency(code: "VND"))
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(.red)
@@ -145,7 +123,6 @@ struct HireOrderScreen: View {
                 
                 Button {
                     viewModel.updatePaymentStatus(paymentId: 2)
-                    
                 } label: {
                     Text("Thanh toán")
                         .fontWeight(.medium)
@@ -164,15 +141,15 @@ struct HireOrderScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            viewModel.getAddress()
+            viewModel.createContract()
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text(viewModel.message), dismissButton: .cancel())
         }
     }
-    
 }
 
-#Preview {
-    HireOrderScreen(viewModel: ItemDetailsViewModel())
-}
+// MARK: - PREVIEW
+//#Preview {
+//    ReviewRentalPlantScreen()
+//}

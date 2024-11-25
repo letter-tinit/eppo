@@ -15,9 +15,27 @@ struct BuyOrderDetailsScreen: View {
             CustomHeaderView(title: "Thanh Toán")
             ScrollView(.vertical) {
                 VStack {
-                    AddressOrderView()
-                        .padding(.horizontal)
+//                    AddressOrderView()
+//                        .padding(.horizontal)
                     
+                    List {
+                        Picker("Chọn địa chỉ", selection: $viewModel.selectedAddress) {
+                            ForEach(viewModel.addresses, id: \.self) { address in
+                                Text(address.description)
+                                    .tag(address as Address?)
+                            }
+                        }
+                        .pickerStyle(.navigationLink)
+                        .listRowSeparator(.hidden, edges: .bottom)
+                    }
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .listStyle(.inset)
+                    .scrollDisabled(true)
+
                     VStack {
                         if let plant = viewModel.plant {
                             OrderItemView(plant: plant)
@@ -73,6 +91,18 @@ struct BuyOrderDetailsScreen: View {
                     .listStyle(.inset)
                     .scrollDisabled(true)
                     
+                    HStack {
+                        Text("Phí vận chuyển")
+                        
+                        Spacer()
+                        
+                        Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
+                    }
+                    .padding(14)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal)
+                    
                     //                        Spacer()
                 }
             }
@@ -111,7 +141,7 @@ struct BuyOrderDetailsScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-//            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+            viewModel.getAddress()
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel(Text("Đóng"), action: {

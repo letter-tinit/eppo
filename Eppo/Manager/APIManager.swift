@@ -75,6 +75,7 @@ struct APIConstants {
         static let getHireOrderHistory = baseURL + "api/v1/Order/GetOrdersRentalByUser"
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
         static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
+        static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
     }
     
     struct User {
@@ -501,6 +502,25 @@ class APIManager {
             .eraseToAnyPublisher() // Return the publisher as AnyPublisher
     }
     
+    func getShippingFee(plantId: Int) -> AnyPublisher<ShippingFeeResponse, Error> {
+        let url = APIConstants.Order.getShippingFee
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: ShippingFeeResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+ 
     func getMyInformation() -> AnyPublisher<UserResponse, Error> {
         let apiUrl = APIConstants.User.getMyInfor
         
@@ -944,7 +964,7 @@ class APIManager {
                     throw APIError.unexpectedError
                 }
                 print("Response Status Code: \(statusCode)") // Log statusCode
-
+                
                 guard (200...299).contains(statusCode) else {
                     throw APIError.custom(message: "Tạo cây thất bại")
                 }
@@ -1079,8 +1099,40 @@ class APIManager {
         
         return AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
-            .publishDecodable(type: OwnerContractResponse.self)
-            .value()
+            .publishData()
+            .tryMap { response in
+                // Handle HTTP status codes
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 200...299:
+                        // If successful, return raw data
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData
+                        }
+                    case 400:
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData
+                        }
+                    case 401:
+                        throw APIError.custom(message: "Unauthorized.")
+                    case 403:
+                        throw APIError.custom(message: "Forbidden.")
+                    case 404:
+                        throw APIError.custom(message: "Not found.")
+                    case 500...599:
+                        throw APIError.serverError(statusCode: statusCode)
+                    default:
+                        throw APIError.unexpectedError
+                    }
+                } else {
+                    throw APIError.networkError
+                }
+            }
+            .decode(type: OwnerContractResponse.self, decoder: JSONDecoder()) // Decode into OwnerContractResponse
             .mapError { error in
                 return error as Error
             }

@@ -46,6 +46,14 @@ struct PaymentScreen: View {
             }
         }
         .ignoresSafeArea(.container, edges: .top)
+        .navigationBarBackButtonHidden()
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message), dismissButton: .default(Text("Xác nhận"), action: {
+                if viewModel.isSucessCreation {
+                    viewModel.openZaloPay()
+                }
+            }))
+        }
     }
 }
 
