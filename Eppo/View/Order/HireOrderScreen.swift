@@ -57,7 +57,7 @@ struct HireOrderScreen: View {
                             
                             Spacer()
                             
-                            Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
+                            Text(viewModel.deliveriteFree, format: .currency(code: "VND"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                         }
