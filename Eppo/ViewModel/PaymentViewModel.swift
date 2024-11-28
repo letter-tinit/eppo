@@ -48,6 +48,7 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
     
     func createTransaction() {
         isLoading = true
+        isSucessCreation = false
         
         guard let walletId = UserSession.shared.myInformation?.wallet?.walletId,
               let amount = Double(amountInput) else {
@@ -72,6 +73,9 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
                 print(result)
                 if let zpTransToken = result.zp_trans_token {
                     self.zpTransToken = zpTransToken
+                } else {
+                    self.message = "Lỗi khi tạo transaction"
+                    self.isAlertShowing = true
                 }
             }
             .store(in: &cancellables)

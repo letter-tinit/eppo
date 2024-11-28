@@ -15,23 +15,31 @@ class ReviewRentalPlantViewModel {
     var rentTotalPrice: Double
     var rentTotalAmount: Double
     var deliveriteFree: Double
+    var deliveryAddress: String
     var contractId: Int?
     var contractUrl: String?
     var isAlertShowing: Bool = false
     var message: String = ""
     var isSigned: Bool = false
+    
+    
+    var loadingMessage: String = ""
+    var isContactLoading: Bool = false
 
     var cancellables: Set<AnyCancellable> = []
     
-    init(plant: Plant, orderId: Int, rentTotalPrice: Double, rentTotalAmount: Double, deliveriteFree: Double) {
+    init(plant: Plant, orderId: Int, rentTotalPrice: Double, rentTotalAmount: Double, deliveriteFree: Double, deliveryAddress: String) {
         self.plant = plant
         self.orderId = orderId
         self.rentTotalPrice = rentTotalPrice
         self.rentTotalAmount = rentTotalAmount
         self.deliveriteFree = deliveriteFree
+        self.deliveryAddress = deliveryAddress
     }
     
     func createContract() {
+        loadingMessage = "Đang tạo hợp đồng"
+        isContactLoading = true
         let contractDetails = [
             ContractDetail(plantId: plant.id, totalPrice: rentTotalPrice)
         ]
@@ -52,17 +60,31 @@ class ReviewRentalPlantViewModel {
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.loadingMessage = "Tạo hợp đồng thất bại"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isContactLoading = false
+                    }
                 }
             } receiveValue: { contractResponse in
                 print(contractResponse)
                 self.contractId = contractResponse.contractId
+                self.loadingMessage = "Đã tạo hợp đồng thành công"
                 self.getContractById()
             }
             .store(in: &cancellables)
     }
     
     func getContractById() {
+        self.loadingMessage = "Đang tải hợp đồng"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.isContactLoading = false
+        }
+        
         guard let contractId = self.contractId else {
+            self.loadingMessage = "Tải hợp đồng thất bại"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isContactLoading = false
+            }
             return
         }
         
@@ -73,13 +95,36 @@ class ReviewRentalPlantViewModel {
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.loadingMessage = "Tải hợp đồng thất bại"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isContactLoading = false
+                    }
                 }
             } receiveValue: { contractResponse in
                 print(contractResponse)
                 self.contractUrl = contractResponse.data.contractUrl
+                self.loadingMessage = "Tải hợp đồng thành công"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.isContactLoading = false
+                }
             }
             .store(in: &cancellables)
 
+    }
+    
+    func getShippingFeeByPlantId() {
+        APIManager.shared.getShippingFee(plantId: plant.id)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { shippingFeeResponse in
+                self.deliveriteFree = shippingFeeResponse.data
+            }
+            .store(in: &cancellables)
     }
     
     func updatePaymentStatus(paymentId: Int) {
@@ -92,13 +137,21 @@ class ReviewRentalPlantViewModel {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    self.message = "Đơn hàng đã thanh toán thành công"
-                    self.isAlertShowing = true
+                    break
                 case .failure(let error):
                     self.handleAPIError(error)
                     self.isAlertShowing = true
                 }
-            } receiveValue: {}
+            } receiveValue: { response in
+                if (200...300).contains(response.statusCode) {
+                    print(response)
+                    self.message = "Đơn hàng đã thanh toán thành công"
+                    self.isAlertShowing = true
+                } else {
+                    self.message = response.message
+                    self.isAlertShowing = true
+                }
+            }
             .store(in: &cancellables)
 
     }

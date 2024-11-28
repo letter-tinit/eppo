@@ -96,7 +96,7 @@ struct BuyOrderDetailsScreen: View {
                         
                         Spacer()
                         
-                        Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
+                        Text(viewModel.deliveriteFree, format: .currency(code: "VND"))
                     }
                     .padding(14)
                     .background(.white)

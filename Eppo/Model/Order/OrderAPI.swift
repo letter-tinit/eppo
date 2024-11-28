@@ -47,3 +47,7 @@ struct ShippingFeeResponse: Codable {
     let data: Double
 }
 
+struct UpdatePaymentResponse: Codable {
+    let statusCode: Int
+    let message: String
+}

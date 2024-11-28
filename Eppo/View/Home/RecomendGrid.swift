@@ -14,7 +14,7 @@ struct RecomendGrid: View {
     
     @State var recomendOption: RecomendOption = .forBuy
     
-     let adaptiveColumn = [
+    let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
     
@@ -56,7 +56,7 @@ struct RecomendGrid: View {
                 }
             }
             .padding()
-
+            
             Text("Hết")
                 .font(.caption)
                 .foregroundStyle(.secondary)

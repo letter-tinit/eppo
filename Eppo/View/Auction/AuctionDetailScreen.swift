@@ -16,7 +16,7 @@ struct AuctionDetailScreen: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(withClose: true)
+            CustomHeaderView(title: "Phòng đấu giá")
             
             if let room = viewModel.room {
                 HStack(spacing: 20) {

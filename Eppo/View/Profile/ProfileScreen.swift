@@ -37,7 +37,7 @@ struct ProfileScreen: View {
                     RoundedRectangle(cornerRadius: 10)
                         .foregroundStyle(.settingBoxBackground)
                     
-                    HStack(spacing: 14) {
+                    HStack(spacing: 20) {
                         NavigationLink {
                             OrderHistoryScreen()
                         } label: {
@@ -50,14 +50,15 @@ struct ProfileScreen: View {
                             CustomButtonImageLabel(imageName: "doc.plaintext", title: " Đơn thuê")
                         }
                         
-                        Button {
+                        NavigationLink {
+                            ChatScreen()
                         } label: {
-                            CustomButtonImageLabel(imageName: "truck.box.badge.clock.fill", title: "Chờ giao hàng")
+                            CustomButtonImageLabel(imageName: "message", title: "Nhắn tin")
                         }
                         
                         Button {
                         } label: {
-                            CustomButtonImageLabel(imageName: "star.bubble.fill", title: "Đánh giá")
+                            CustomButtonImageLabel(imageName: "star.bubble", title: "Đánh giá")
                         }
                     }
                 }
@@ -75,9 +76,9 @@ struct ProfileScreen: View {
                         
                         Divider()
                         
-                        CustomSettingNavigationLink(image: "message", title: "Nhắn tin với quản trị", destination: ChatScreen())
+//                        CustomSettingNavigationLink(image: "message", title: "Nhắn tin với quản trị", destination: ChatScreen())
                         
-                        Divider()
+//                        Divider()
                         
                         CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: Text("Destination View"))
                         

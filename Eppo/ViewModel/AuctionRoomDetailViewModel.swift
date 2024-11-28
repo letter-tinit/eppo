@@ -33,7 +33,7 @@ class AuctionRoomDetailViewModel: ObservableObject {
     var currentErrorMessage: String?
     var bidhistories: [BidHistory] = []
     var historyBids: [HistoryBid] = []
-    private var isConnected = false
+    var isConnected = false
     private var reconnectAttempts = 0
     private let maxReconnectAttempts = 5
     
@@ -241,6 +241,14 @@ extension AuctionRoomDetailViewModel {
             DispatchQueue.main.async {
                 self.currentErrorMessage = message
                 self.isShowingAlert = true
+            }
+            print("Bid error: \(message)")
+            return
+        }
+        
+        if message.contains(("Có lượt đặt cược mới")){
+            DispatchQueue.main.async {
+                self.getHistoryBids()
             }
             print("Bid error: \(message)")
             return

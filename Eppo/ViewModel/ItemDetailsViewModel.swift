@@ -26,7 +26,7 @@ enum ActiveAlert {
     var numberOfMonth = 1
     let step = 1
     let range = 1...99
-    var deliveriteFree: Double?
+    var deliveriteFree: Double = 0.0
     var contractNumber: Int?
     var contractId: Int?
     var contractUrl: String?
@@ -37,6 +37,10 @@ enum ActiveAlert {
     var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
     
     var isFinishPayment: Bool = false
+    
+    // MARK: - CONTRACTSCREEN
+    var loadingMessage: String = ""
+    var isContactLoading: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
     
@@ -92,6 +96,7 @@ enum ActiveAlert {
                 }
             } receiveValue: { addressResponse in
                 self.addresses = addressResponse.data
+                self.selectedAddress = self.addresses.first
             }
             .store(in: &cancellables)
     }
@@ -99,15 +104,20 @@ enum ActiveAlert {
     // MARK: - HireItemDetailScreen
     
     func createOrderRental() {
-        self.deliveriteFree = 0
+        isContactLoading = true
+        loadingMessage = "Đang tạo đơn hàng"
         guard let plant = self.plant,
-              let deliveriteFree = self.deliveriteFree,
+//              let deliveriteFree = self.deliveriteFree,
               let addressDescription = self.selectedAddress?.description else {
+            self.loadingMessage = "Tạo đơn hàng thất bại"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isContactLoading = false
+            }
             return
         }
         
         let order = Order(
-            totalPrice: rentTotalPrice(),
+            totalPrice: rentTotalPriceWithoutDeliveriteFree(),
             deliveryFee: deliveriteFree,
             deliveryAddress: addressDescription,
             orderDetails: [
@@ -126,19 +136,29 @@ enum ActiveAlert {
                     print(error.localizedDescription)
                     self.handleAPIError(error)
                     self.isAlertShowing = true
+                    self.loadingMessage = "Tạo đơn hàng thất bại"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isContactLoading = false
+                    }
                 }
             } receiveValue: { orderResponse in
                 self.contractNumber = orderResponse.data.orderId
                 self.isLinkActive = true
+                self.loadingMessage = "Tạo đơn hàng thành công"
                 self.createContract()
             }
             .store(in: &cancellables)
     }
     
     func createContract() {
+        loadingMessage = "Đang tạo hợp đồng"
         guard let plant = self.plant,
               let contractNumber = self.contractNumber
         else {
+            self.loadingMessage = "Tạo hợp đồng thất bại"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isContactLoading = false
+            }
             return
         }
         
@@ -161,18 +181,31 @@ enum ActiveAlert {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.loadingMessage = "Tạo hợp đồng thất bại"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isContactLoading = false
+                    }
                     print(error.localizedDescription)
                 }
             } receiveValue: { contractResponse in
                 print(contractResponse)
                 self.contractId = contractResponse.contractId
+                self.loadingMessage = "Đã tạo hợp đồng thành công"
                 self.getContractById()
             }
             .store(in: &cancellables)
     }
     
     func getContractById() {
+        self.loadingMessage = "Đang tải hợp đồng"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.isContactLoading = false
+        }
         guard let contractId = self.contractId else {
+            self.loadingMessage = "Tải hợp đồng thất bại"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.isContactLoading = false
+            }
             return
         }
         
@@ -183,10 +216,18 @@ enum ActiveAlert {
                     break
                 case .failure(let error):
                     print(error.localizedDescription)
+                    self.loadingMessage = "Tải hợp đồng thất bại"
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self.isContactLoading = false
+                    }
                 }
             } receiveValue: { contractResponse in
                 print(contractResponse)
                 self.contractUrl = contractResponse.data.contractUrl
+                self.loadingMessage = "Tải hợp đồng thành công"
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.isContactLoading = false
+                }
             }
             .store(in: &cancellables)
 
@@ -203,22 +244,29 @@ enum ActiveAlert {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    self.message = "Đơn hàng đã thanh toán thành công"
-                    self.isAlertShowing = true
+                    break
                 case .failure(let error):
                     self.handleAPIError(error)
                     self.isAlertShowing = true
                 }
-            } receiveValue: {}
+            } receiveValue: { response in
+                if (200...300).contains(response.statusCode) {
+                    print(response)
+                    self.message = "Đơn hàng đã thanh toán thành công"
+                    self.isAlertShowing = true
+                } else {
+                    self.message = response.message
+                    self.isAlertShowing = true
+                }
+            }
             .store(in: &cancellables)
 
     }
     
     // MARK: - BuyItemDetailScreen
     func createOrder() {
-        self.deliveriteFree = 0
         guard let plant = self.plant,
-              let deliveriteFree = self.deliveriteFree,
+//              let deliveriteFree = self.deliveriteFree,
               let addressDescription = self.selectedAddress?.description else {
             return
         }
@@ -251,15 +299,19 @@ enum ActiveAlert {
     }
     
     func rentTotalAmount() -> Double {
-        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + self.deliveriteFree
     }
     
     func rentTotalPrice() -> Double {
-        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + (self.deliveriteFree ?? 0)
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + self.deliveriteFree
+    }
+    
+    func rentTotalPriceWithoutDeliveriteFree() -> Double {
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth))
     }
     
     func totalPrice() -> Double {
-        return (self.plant?.finalPrice ?? 0) + (self.deliveriteFree ?? 0)
+        return (self.plant?.finalPrice ?? 0) + self.deliveriteFree
     }
     
     private func handleAPIError(_ error: Error) {

@@ -82,29 +82,29 @@ class OwnerItemAdditionViewModel: ObservableObject {
         }
         
         // Dữ liệu hardcode cho các trường ngoài hình ảnh
-        let plantData: [String: String] = [
-            "typeEcommerceId": "\(typeEcommerceId)", // Ví dụ Ecommerce type
-            "width": "100", // Ví dụ giá trị
-            "length": "100", // Ví dụ giá trị
-            "height": "100", // Ví dụ giá trị
-            "finalPrice": "200", // Ví dụ giá trị
-            "plantName": "Sample Plant", // Ví dụ tên cây
-            "title": "Sample Plant Title", // Ví dụ tiêu đề
-            "categoryId": "1", // Ví dụ category ID
-            "description": "This is a sample description" // Ví dụ mô tả
-        ]
-        
 //        let plantData: [String: String] = [
 //            "typeEcommerceId": "\(typeEcommerceId)", // Ví dụ Ecommerce type
-//            "width": width, // Ví dụ giá trị
-//            "length": length, // Ví dụ giá trị
-//            "height": height, // Ví dụ giá trị
-//            "finalPrice": price, // Ví dụ giá trị
-//            "plantName": itemName, // Ví dụ tên cây
-//            "title": itemTitle, // Ví dụ tiêu đề
-//            "categoryId": categoryId, // Ví dụ category ID
-//            "description": itemDescription // Ví dụ mô tả
+//            "width": "100", // Ví dụ giá trị
+//            "length": "100", // Ví dụ giá trị
+//            "height": "100", // Ví dụ giá trị
+//            "finalPrice": "200", // Ví dụ giá trị
+//            "plantName": "Sample Plant", // Ví dụ tên cây
+//            "title": "Sample Plant Title", // Ví dụ tiêu đề
+//            "categoryId": "1", // Ví dụ category ID
+//            "description": "This is a sample description" // Ví dụ mô tả
 //        ]
+        
+        let plantData: [String: String] = [
+            "typeEcommerceId": "\(typeEcommerceId)", // Ví dụ Ecommerce type
+            "width": width, // Ví dụ giá trị
+            "length": length, // Ví dụ giá trị
+            "height": height, // Ví dụ giá trị
+            "finalPrice": price, // Ví dụ giá trị
+            "plantName": itemName, // Ví dụ tên cây
+            "title": itemTitle, // Ví dụ tiêu đề
+            "categoryId": categoryId, // Ví dụ category ID
+            "description": itemDescription // Ví dụ mô tả
+        ]
         
         // Gọi API để tạo OwnerItem
         APIManager.shared.createPlant(

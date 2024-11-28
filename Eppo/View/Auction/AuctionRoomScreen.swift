@@ -20,7 +20,7 @@ struct AuctionRoomScreen: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            CustomAvatarHeader(withClose: true)
+            CustomHeaderView(title: "Các phòng đấu giá")
             
             HStack(spacing: 15) {
                 SearchBar(searchText: $searchText)

@@ -64,7 +64,9 @@ class HomeViewModel: ObservableObject {
     }
     
     func resetPagination() {
-        plants.removeAll()
+        DispatchQueue.main.async { [weak self] in
+            self?.plants.removeAll()
+        }
         currentPage = 1
         isLastPage = false
     }

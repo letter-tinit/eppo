@@ -18,7 +18,7 @@ struct OwnerHome: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomAvatarHeader(withClose: false)
+            SingleHeaderView(title: "Cây của tôi")
             
             // MARK: - SEARCH BAR
             HStack(spacing: 14) {

@@ -11,8 +11,8 @@ import SwiftUI
 
 enum OrderState: String, CaseIterable {
     case waitingForConfirm = "Chờ xác nhận"
-    case waitingForPackage = "Chờ đóng gói"
-    case waitingForDeliver = "Chờ giao hàng"
+    case waitingForPackage = "Đang chuẩn bị hàng"
+    case waitingForDeliver = "Đang giao"
     case delivered = "Đã giao"
     case canceled = "Đã hủy"
     

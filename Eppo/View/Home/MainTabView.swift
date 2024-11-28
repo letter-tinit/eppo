@@ -32,7 +32,7 @@ struct MainTabView: View {
             TabView(selection: $selectedTab) {
                 HomeScreen()
                     .tabItem {
-                        Label("Khám phá", systemImage: "house")
+                        Label("Tìm cây", systemImage: "house")
                     }
                     .tag(Tab.explore)
                 

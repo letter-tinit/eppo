@@ -11,14 +11,15 @@ import WebKit
 struct HireOrderScreen: View {
     @Bindable var viewModel: ItemDetailsViewModel
     @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack {
             CustomHeaderView(title: "Thanh Toán")
             ScrollView(.vertical) {
                 VStack {
-//                    AddressOrderView()
-//                        .padding(.horizontal)
+                    //                    AddressOrderView()
+                    //                        .padding(.horizontal)
                     
                     List {
                         Picker("Chọn địa chỉ", selection: $viewModel.selectedAddress) {
@@ -42,6 +43,23 @@ struct HireOrderScreen: View {
                         if let plant = viewModel.plant {
                             OrderItemView(plant: plant)
                                 .background(Color.clear)
+                        }
+                        
+                        Divider()
+                            .padding(.horizontal, -14)
+                            .padding(.vertical, 10)
+                        
+                        
+                        HStack {
+                            Text("Phí vận chuyển:")
+                                .font(.subheadline)
+                                .fontWeight(.regular)
+                            
+                            Spacer()
+                            
+                            Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
                         }
                         
                         Divider()
@@ -76,56 +94,15 @@ struct HireOrderScreen: View {
                             Image(systemName: "creditcard.fill")
                                 .foregroundStyle(.red)
                         }
-                        
-                        HStack {
-                            Text("Phí vận chuyển:")
-                            
-                            Spacer()
-                            
-                            Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
-                        }
                         .listRowSeparator(.hidden, edges: .bottom)
                     }
                     .background(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 100)
+                    .frame(height: 50)
                     .listStyle(.inset)
                     .scrollDisabled(true)
-                    VStack(alignment: .leading, spacing: 10) {
-                        NavigationLink {
-                            ContractScreen(viewModel: viewModel)
-                        } label: {
-                            Text("Xem hợp đồng")
-                                .font(.headline)
-                                .underline()
-                                .foregroundStyle(viewModel.contractUrl == nil ? .gray : .blue)
-                        }
-                        .disabled(viewModel.contractUrl == nil)
-                        
-                        Divider()
-                        
-                        HStack {
-                            Text("Trạng thái hợp đồng:")
-                                .font(.headline)
-                                .fontWeight(.regular)
-                                .foregroundStyle(.gray)
-                            
-                            Spacer()
-                            
-                            Text(viewModel.isSigned ? "Đã ký" : "Chưa ký")
-                                .font(.headline)
-                                .fontWeight(.medium)
-                                .foregroundStyle(viewModel.isSigned ? .green : .red)
-                        }
-                    }
-                    .padding()
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                    
-                    //                        Spacer()
                 }
             }
             .scrollIndicators(.hidden)
@@ -143,19 +120,35 @@ struct HireOrderScreen: View {
                         .foregroundStyle(.red)
                 }
                 
-                Button {
-                    viewModel.updatePaymentStatus(paymentId: 2)
-                    
-                } label: {
-                    Text("Thanh toán")
-                        .fontWeight(.medium)
-                        .padding()
-                        .frame(width: 140, height: 40)
-                        .background(viewModel.isSigned ? .blue : .gray)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .foregroundStyle(.white)
+                if viewModel.isSigned {
+                    Button {
+                        viewModel.updatePaymentStatus(paymentId: 2)
+                    } label: {
+                        Text("Thanh toán")
+                            .fontWeight(.medium)
+                            .padding()
+                            .frame(width: 140, height: 40)
+                            .background(
+                                LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .foregroundStyle(.white)
+                    }
+                } else {
+                    NavigationLink {
+                        ContractScreen(viewModel: viewModel)
+                    } label: {
+                        Text("Đặt hàng")
+                            .fontWeight(.medium)
+                            .padding()
+                            .frame(width: 140, height: 40)
+                            .background(
+                                LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .foregroundStyle(.white)
+                    }
                 }
-                .disabled(!viewModel.isSigned)
             }
             .padding()
             .background(.white)
@@ -167,7 +160,9 @@ struct HireOrderScreen: View {
             viewModel.getAddress()
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text(viewModel.message), dismissButton: .cancel())
+            Alert(title: Text(viewModel.message), dismissButton: .cancel({
+                self.dismiss()
+            }))
         }
     }
     

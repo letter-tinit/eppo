@@ -32,17 +32,26 @@ struct PaymentScreen: View {
             Button {
                 viewModel.createTransaction()                
             } label: {
-                Text("Nạp")
-                    .font(.headline)
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.green)
-                    )
-                    .padding()
-                    .foregroundStyle(.white)
+                HStack {
+                    Image("zalopay")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                    
+                    Text("Nạp")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.green)
+                )
+                .padding()
+                .foregroundStyle(.white)
             }
         }
         .ignoresSafeArea(.container, edges: .top)

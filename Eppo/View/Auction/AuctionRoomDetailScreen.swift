@@ -23,7 +23,7 @@ struct AuctionRoomDetailScreen: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(withClose: true)
+            AuctionDetailsHeader(isPriceInputPopup: $isPriceInputPopup)
             
             if viewModel.isLoading {
                 VStack {
@@ -184,21 +184,6 @@ struct AuctionRoomDetailScreen: View {
                         .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
                     }
                     .padding()
-                    
-                    Spacer()
-                    
-                    Button {
-                        isPriceInputPopup.toggle()
-                    } label: {
-                        Text("Nhập giá")
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.blue))
-                            .foregroundStyle(.white)
-                            .padding()
-                    }
                 }
             } else {
                 CenterView {
@@ -208,7 +193,7 @@ struct AuctionRoomDetailScreen: View {
                 }
             }
         }
-        .ignoresSafeArea(.all, edges: .vertical)
+        .ignoresSafeArea(.all, edges: .top)
         .navigationBarBackButtonHidden()
         .onAppear {
             viewModel.getRegistedAuctionRoomById()
@@ -216,23 +201,32 @@ struct AuctionRoomDetailScreen: View {
             viewModel.connectWebSocket()
         }
         .sheet(isPresented: $isPriceInputPopup, content: {
-            VStack {
+            VStack(alignment: .trailing, spacing: 20) {
                 BorderTextField {
                     TextField("Nhập giá tiền", text: $priceInputTextField)
                         .keyboardType(.numberPad)
                 }
                 .frame(height: 50)
                 .padding(.horizontal)
+                
                 Button {
                     self.isPriceInputPopup = false
                     viewModel.sendMessage(bidAmount: Int(priceInputTextField) ?? 0)
                 } label: {
                     Text("Xác nhận")
-                        .padding(.bottom, 20)
+                        .font(.headline)
+                        .padding(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundStyle(.blue)
+                        )
+                        .foregroundStyle(.white)
+                        .padding(10)
                 }
             }
+            .shadow(radius: 2, x: 1, y: 1)
+            .presentationDetents([.height(300)])
         })
-        .presentationDetents([.medium])
         .alert(isPresented: $viewModel.isShowingAlert) {
             Alert(title: Text(viewModel.currentErrorMessage ?? "Nhắc nhở"), dismissButton: .cancel())
         }

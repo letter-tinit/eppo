@@ -11,13 +11,13 @@ enum OwnerTab: String, CaseIterable {
     case addition
     case notification
     case home
-    case message
+    case order
     case profile
 }
 
 struct OwnerMainTabView: View {
     // MARK: - PROPERTY
-    @State private var selectedTab: OwnerTab = .addition
+    @State private var selectedTab: OwnerTab = .order
     @State var viewModel = LoginViewModel()
     
     init () {
@@ -31,7 +31,7 @@ struct OwnerMainTabView: View {
             TabView(selection: $selectedTab) {
                 OwnerItemAdditionScreen()
                     .tabItem {
-                        Label("Thêm", systemImage: "plus.circle")
+                        Label("Tạo cây", systemImage: "plus.circle")
                     }
                     .tag(OwnerTab.addition)
                 
@@ -41,9 +41,15 @@ struct OwnerMainTabView: View {
                     }
                     .tag(OwnerTab.notification)
                 
+                OwnerOrderScreen()
+                    .tabItem {
+                        Label("Đơn hàng", systemImage: "list.clipboard.fill")
+                    }
+                    .tag(OwnerTab.order)
+                
                 OwnerHome()
                     .tabItem {
-                        Label("Trang Chủ", systemImage: "house")
+                        Label("Cây", systemImage: "tree.circle.fill")
                     }
                     .tag(OwnerTab.home)
                 
