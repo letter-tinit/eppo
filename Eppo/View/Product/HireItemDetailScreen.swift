@@ -160,20 +160,20 @@ struct HireItemDetailScreen: View {
                         .foregroundStyle(.black)
                 }
             }
-            .overlay(alignment: .topTrailing) {
-                Button {
-                    addToCart()
-                    viewModel.isAlertShowing = true
-                } label: {
-                    Image(systemName: "cart")
-                        .resizable()
-                        .fixedSize()
-                        .font(.system(size: 30, weight: .medium))
-                        .padding(.trailing, 30)
-                        .padding(.top, 20)
-                        .foregroundStyle(.red)
-                }
-            }
+//            .overlay(alignment: .topTrailing) {
+//                Button {
+//                    addToCart()
+//                    viewModel.isAlertShowing = true
+//                } label: {
+//                    Image(systemName: "cart")
+//                        .resizable()
+//                        .fixedSize()
+//                        .font(.system(size: 30, weight: .medium))
+//                        .padding(.trailing, 30)
+//                        .padding(.top, 20)
+//                        .foregroundStyle(.red)
+//                }
+//            }
             
             Divider()
             

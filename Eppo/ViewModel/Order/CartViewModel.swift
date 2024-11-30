@@ -19,7 +19,7 @@ import Observation
     var message: String = ""
     var isAlertShowing: Bool = false
     var totalShippingFee = 0.0
-    var selectedCart: CartState = .hire
+    var selectedCart: CartState = .buy
     
     
     var orderDetails: [Plant]

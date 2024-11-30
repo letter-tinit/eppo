@@ -18,23 +18,26 @@ struct HireOrderDetailsScreen: View {
             ScrollView(.vertical) {
                 VStack {
                     
-                    List {
-                        Picker("Chọn địa chỉ", selection: $viewModel.selectedAddress) {
-                            ForEach(viewModel.addresses, id: \.self) { address in
-                                Text(address.description)
-                                    .tag(address as Address?)
+                    Section {
+                        HStack(alignment: .top) {
+                            Text("Chọn địa chỉ")
+                            
+                            Picker("", selection: $viewModel.selectedAddress) {
+                                ForEach(viewModel.addresses, id: \.self) { address in
+                                    Text(address.description)
+                                        .tag(address as Address?)
+                                        .multilineTextAlignment(.leading)
+                                }
                             }
+                            .pickerStyle(.navigationLink)
+                            .labelsHidden()
                         }
-                        .pickerStyle(.navigationLink)
-                        .listRowSeparator(.hidden, edges: .bottom)
                     }
+                    .padding()
                     .background(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .listStyle(.inset)
-                    .scrollDisabled(true)
                     
                     VStack {
                         ForEach(viewModel.selectedHireOrder) { plant in
@@ -137,7 +140,9 @@ struct HireOrderDetailsScreen: View {
         .background(Color(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            viewModel.getAddress()
+            if viewModel.addresses.isEmpty {
+                viewModel.getAddress()
+            }
 //            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
             viewModel.totalShippingFee = 0.0
         }

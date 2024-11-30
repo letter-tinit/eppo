@@ -89,7 +89,9 @@ struct AddressScreen: View {
         .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            viewModel.getAddress()
+            if viewModel.addresses.isEmpty {
+                viewModel.getAddress()
+            }
         }
     }
 }

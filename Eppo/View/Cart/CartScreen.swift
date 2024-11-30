@@ -9,7 +9,6 @@ import SwiftUI
 enum CartState: String, CaseIterable {
     case buy = "Giỏ mua"
     case hire = "Giỏ thuê"
-    
 }
 
 struct CartScreen: View {
@@ -27,8 +26,8 @@ struct CartScreen: View {
         VStack(alignment: .center, spacing: 0) {
             SingleHeaderView(title: "Giỏ hàng")
             
-            CartStateHeader(selectedCart: $viewModel.selectedCart)
-                .padding()
+//            CartStateHeader(selectedCart: $viewModel.selectedCart)
+//                .padding()
             switch viewModel.selectedCart {
             case .buy:
                 if !viewModel.orderDetails.isEmpty {
@@ -67,15 +66,15 @@ struct CartScreen: View {
                         .frame(maxWidth: .infinity)
                         .padding(10)
                         .background(.black)
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: 8,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 0,
-                                topTrailingRadius: 8
-                            )
-                        )
-                        .clipped()
+//                        .clipShape(
+//                            .rect(
+//                                topLeadingRadius: 8,
+//                                bottomLeadingRadius: 0,
+//                                bottomTrailingRadius: 0,
+//                                topTrailingRadius: 8
+//                            )
+//                        )
+//                        .clipped()
                         
                         List {
                             // MARK: - SECTION
@@ -94,12 +93,12 @@ struct CartScreen: View {
                         .scrollIndicators(ScrollIndicatorVisibility.hidden)
                         .listStyle(PlainListStyle())
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(Color(uiColor: UIColor.systemGray4))
-                    )
-                    .clipped()
-                    .padding(16)
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 8)
+//                            .foregroundStyle(Color(uiColor: UIColor.systemGray4))
+//                    )
+//                    .clipped()
+//                    .padding(16)
                     
                     // MARK: - FOOTER
                     HStack(alignment: .top, spacing: 30) {

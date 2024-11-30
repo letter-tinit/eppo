@@ -54,7 +54,7 @@ struct MainTabView: View {
                         Label("Giỏ hàng", systemImage: "cart")
                     }
                     .tag(Tab.cart)
-                    .badge(UserSession.shared.cart.count + UserSession.shared.hireCart.count)
+                    .badge(UserSession.shared.cart.count)
 
                 ProfileScreen()
                     .tabItem {
