@@ -157,8 +157,21 @@ struct HireItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 10)
+                        .foregroundStyle(.black)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    addToCart()
+                    viewModel.isAlertShowing = true
+                } label: {
+                    Image(systemName: "cart")
+                        .resizable()
+                        .fixedSize()
+                        .font(.system(size: 30, weight: .medium))
+                        .padding(.trailing, 30)
+                        .padding(.top, 20)
+                        .foregroundStyle(.red)
                 }
             }
             
@@ -171,6 +184,7 @@ struct HireItemDetailScreen: View {
                     .padding(.top, 20)
                     .overlay {
                         DatePicker(selection: $viewModel.selectedDate,
+                                   in: Date()...,
                                    displayedComponents: .date) {}
                             .labelsHidden()
                             .contentShape(Rectangle())
@@ -221,8 +235,28 @@ struct HireItemDetailScreen: View {
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message))
+        }
     }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
+    func addToCart() {
+        guard let plant = viewModel.plant else {
+            return
+        }
+        
+        if plantExists(withId: plant.id, in: UserSession.shared.hireCart) {
+            viewModel.message = "Đơn hàng đã có trong giỏ hàng của bạn rồi"
+        } else {
+            UserSession.shared.hireCart.append(plant)
+            viewModel.message = "Đã thêm đơn hàng vào giỏ"
+        }
+    }
+    
+    func plantExists(withId id: Int, in plants: [Plant]) -> Bool {
+        return plants.contains { $0.id == id }
+    }
 }
 
 

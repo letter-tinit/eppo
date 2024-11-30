@@ -56,7 +56,8 @@ struct ProfileScreen: View {
                             CustomButtonImageLabel(imageName: "message", title: "Nhắn tin")
                         }
                         
-                        Button {
+                        NavigationLink {
+                            FeedBackScreen()
                         } label: {
                             CustomButtonImageLabel(imageName: "star.bubble", title: "Đánh giá")
                         }
@@ -95,7 +96,7 @@ struct ProfileScreen: View {
                         CustomSettingNavigationLink(image: "questionmark.bubble", title: "Hỗ trợ", destination: Text("Destination View"))
                     }
                 }
-                .frame(height: 360)
+                .frame(height: 330)
                 
                 Spacer(minLength: 80)
                 

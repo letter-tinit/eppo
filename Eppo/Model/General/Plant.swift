@@ -15,7 +15,8 @@ struct Plant: Codable, Identifiable, Hashable {
     let description: String
     let mainImage: String
     let imagePlants: [ImagePlantResponse]
-    
+    let status: Int
+
     // computed value
     var isSelected: Bool = false
     
@@ -27,6 +28,7 @@ struct Plant: Codable, Identifiable, Hashable {
         case description = "description"
         case mainImage
         case imagePlants = "imagePlants"
+        case status = "status"
     }
 }
 

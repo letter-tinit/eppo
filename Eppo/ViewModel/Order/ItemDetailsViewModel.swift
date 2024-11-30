@@ -283,8 +283,6 @@ enum ActiveAlert {
                 switch completion {
                 case .finished:
                     print("Thực thi thành công")
-                    self.message = "Tạo đơn hàng thành công"
-                    self.isAlertShowing = true
                     self.isFinishPayment = true
                     
                 case .failure(let error):
@@ -292,8 +290,10 @@ enum ActiveAlert {
                     self.message = error.localizedDescription
                     self.isAlertShowing = true
                 }
-            }, receiveValue: { statusCode, message in
-                print(message)
+            }, receiveValue: { response in
+                print(response)
+                self.message = response.message
+                self.isAlertShowing = true
             })
             .store(in: &cancellables)
     }

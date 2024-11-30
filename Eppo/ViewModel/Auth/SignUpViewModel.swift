@@ -74,7 +74,7 @@ class SignUpViewModel {
     }
     
     private func createCustomer() {
-        APIManager.shared.createCustomer(signUpUser: fakeSignUpUser)
+        APIManager.shared.createCustomer(signUpUser: signUpUser)
             .sink { [weak self] completion in
                 switch completion {
                 case .finished:

@@ -141,7 +141,6 @@ struct ActiveScreen: View {
                         
                         BorderTextField {
                             TextField("abc123@gmail.com".lowercased(), text: $viewModel.signUpUser.email)
-                                .keyboardType(.numberPad)
                         }
                         .frame(height: 50)
                     } //: EMAIL STACK
@@ -154,7 +153,6 @@ struct ActiveScreen: View {
                         
                         BorderTextField {
                             TextField("84/2, Truong Tho, Ho Chi Minh", text: $viewModel.signUpUser.addressDescription)
-                                .keyboardType(.numberPad)
                         }
                         .frame(height: 50)
                     } //: CCCD STACK

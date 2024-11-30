@@ -26,17 +26,13 @@ struct HireOrderHistoryScreen: View {
                             }
                         } label: {
                             Text(orderState.flag)
-                                .padding(8)
+                                .padding(10)
+                                .foregroundColor(viewModel.selectedOrderState == orderState ? .white : .primary)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(viewModel.selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
+                                )
                         }
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 10)
-                        )
-                        .foregroundColor(viewModel.selectedOrderState == orderState ? .white : .primary)
-                        .frame(width: 140)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(viewModel.selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
-                        )
                         .padding(.vertical, 10)
                         .padding(orderState == .waitingForConfirm ? .leading : [])
                         .padding(orderState == .canceled ? .trailing : [])

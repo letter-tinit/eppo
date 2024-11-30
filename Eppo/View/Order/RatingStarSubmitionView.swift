@@ -19,7 +19,7 @@ struct RatingStarSubmitionView: View {
     // MARK: - BODY
     
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(alignment: .center, spacing: 10) {
             ForEach(1...5, id: \.self) { index in
                 Button {
                     withAnimation(.easeInOut) {
@@ -28,17 +28,24 @@ struct RatingStarSubmitionView: View {
                 } label: {
                     if rating >= index {
                         onImage
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40)
                             .foregroundStyle(onColor)
-                            .scaleEffect(1.2) // Add scale effect when selected
+                            .scaleEffect(1.1) // Add scale effect when selected
                             .transition(.scale) // Smooth transition effect
                     } else {
                         offImage
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40)
                             .foregroundStyle(offColor)
                     }
                 }
                 .animation(.spring(), value: rating) // Add spring animation
             }
         }
+        .frame(width: .infinity)
     }
 }
 

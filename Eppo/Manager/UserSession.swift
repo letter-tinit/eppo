@@ -27,6 +27,8 @@ import Observation
     }
     
     var cart: [Plant] = []
+    var hireCart: [Plant] = []
+    
     var myInformation: User?
     // Save token to UserDefaults
     func saveToken(_ token: String) {
@@ -43,5 +45,6 @@ import Observation
         token = nil
         self.myInformation = nil
         self.cart = []
+        self.hireCart = []
     }
 }

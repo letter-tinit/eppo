@@ -30,7 +30,7 @@ struct LoginScreen: View {
                         
                         VStack {
                             Text("Đăng Nhập EPPO")
-                                .padding(.top)
+                                .padding(.top, 44)
                                 .font(.system(size: 20, weight: .bold))
                                 .foregroundStyle(.white)
                         }
@@ -42,7 +42,7 @@ struct LoginScreen: View {
                                 .foregroundStyle(.textDarkBlue)
                                 .font(.system(size: 16, weight: .semibold))
                             BorderTextField {
-                                TextField("abc123@gmail.com".lowercased(), text: $usernameTextField)
+                                TextField("Tên đăng nhập", text: $usernameTextField)
                             }
                             .frame(height: 50)
                             
@@ -158,7 +158,7 @@ struct LoginScreen: View {
                 .shadow(radius: 2, x: 1, y: 1)
                 .opacity(viewModel.isLoading ? 1 : 0)
             }
-            .ignoresSafeArea(.all)
+            .ignoresSafeArea(.container, edges: .top)
             .alert(isPresented: $viewModel.isPopupMessage) {
                 Alert(
                     title: Text("Lỗi"),

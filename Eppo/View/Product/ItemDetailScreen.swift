@@ -110,83 +110,64 @@ struct ItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 10)
+                        .foregroundStyle(.black)
+                }
+            }
+            .overlay(alignment: .topTrailing) {
+                Button {
+                    addToCart()
+                    viewModel.isAlertShowing = true
+                } label: {
+                    Image(systemName: "cart")
+                        .resizable()
+                        .fixedSize()
+                        .font(.system(size: 30, weight: .medium))
+                        .padding(.trailing, 30)
+                        .padding(.top, 20)
+                        .foregroundStyle(.red)
+                        .overlay(alignment: .topTrailing) {
+                            Text(UserSession.shared.cart.count + UserSession.shared.hireCart.count, format: .number.grouping(.never))
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                                .fontWeight(.semibold)
+                                .padding(5)
+                                .background(Circle().foregroundStyle(.red))
+                                .padding(.trailing)
+                                .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
+                        }
                 }
             }
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
                 viewModel.getPlantById(id: id)
             }
-                        
-            Divider()
             
-            HStack(alignment: .top, spacing: 0) {
-                Button {
-                } label: {
-                    Image(systemName: "message")
-                        .font(.title)
-                        .frame(width: UIScreen.main.bounds.size.width / 4)
-                        .padding(.top, 10)
-                }
-                
-                Divider()
+            NavigationLink {
+                BuyOrderDetailsScreen(viewModel: viewModel)
+            } label: {
                 VStack {
-                    Button {
-                        viewModel.isAlertShowing = true
-                        addToCart()
-                    } label: {
-                        Image(systemName: "cart")
-                            .font(.title)
-                            .frame(width: UIScreen.main.bounds.size.width / 4)
-                            .padding(.top, 10)
-                            .foregroundStyle(.black)
-                            .overlay(alignment: .topTrailing) {
-                                Text(UserSession.shared.cart.count, format: .number.grouping(.never))
-                                    .font(.caption)
-                                    .foregroundStyle(.white)
-                                    .fontWeight(.semibold)
-                                    .padding(5)
-                                    .background(Circle().foregroundStyle(.red))
-                                    .padding(.trailing)
-                                    .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
-                            }
-                    }
-                    .alert(isPresented: $viewModel.isAlertShowing) {
-                        Alert(title: Text(viewModel.message))
-                    }
-                    
-                    Button {
-                        
-                    } label: {
-//                        EmptyView()
+                    Text("Mua")
+                    if let price = viewModel.plant?.finalPrice {
+                        Text(price, format: .currency(code: "VND"))
+                    } else {
+                        Text("Đang tải")
                     }
                 }
-                
-                NavigationLink {
-                    BuyOrderDetailsScreen(viewModel: viewModel)
-                } label: {
-                    VStack {
-                        Text("Mua")
-                        if let price = viewModel.plant?.finalPrice {
-                            Text(price, format: .currency(code: "VND"))
-                        } else {
-                            Text("Đang tải")
-                        }
-                    }
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(width: UIScreen.main.bounds.size.width / 2)
-                    .padding(.top, 10)
-                    .padding(.bottom, 20)
-                    .background(.red)
-                }
+                .font(.system(size: 20, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(width: UIScreen.main.bounds.size.width)
+                .padding(.top, 10)
+                .padding(.bottom, 50)
+                .background(.red)
             }
             .frame(width: UIScreen.main.bounds.size.width, height: 80)
-            .shadow(radius: 2, y: 2)
+//            .shadow(radius: 1, x: 1, y: 1)
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message))
+        }
     }
     
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -202,7 +183,6 @@ struct ItemDetailScreen: View {
             UserSession.shared.cart.append(plant)
             viewModel.message = "Đã thêm đơn hàng vào giỏ"
         }
-        
     }
     
     func plantExists(withId id: Int, in plants: [Plant]) -> Bool {

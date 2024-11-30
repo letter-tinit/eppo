@@ -1,53 +1,13 @@
 //
-// Created by Letter ♥
+//  CartHireOrderItemView.swift
+//  Eppo
 //
-// https://github.com/tinit4ever
+//  Created by Letter on 30/11/2024.
 //
 
 import SwiftUI
 
-struct OrderItemView: View {
-    // MARK: - PROPERTIES
-    var plant: Plant
-
-    // MARK: - BODY
-    var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            // Item Image
-//            Image("sample-bonsai")
-//                .resizable()
-//                .frame(width: 80, height: 80)
-//                .clipped()
-//                .clipShape(RoundedRectangle(cornerRadius: 6))
-            
-            CustomAsyncImage(imageUrl: plant.mainImage, width: 80, height: 80)
-
-            VStack(alignment: .leading) {
-                Text(plant.name)
-                    .font(.headline)
-                    .lineLimit(1)
-                
-                Text(plant.description)
-                    .lineLimit(2)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.gray)
-                    .font(.caption)
-                
-                Text(plant.finalPrice, format: .currency(code: "VND"))
-                    .lineLimit(1)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.red)
-                    .font(.caption)
-            }
-            Spacer()
-        }
-        .padding(8)
-        .background(.gray.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-struct CartOrderItemView: View {
+struct CartHireOrderItemView: View {
     // MARK: - PROPERTIES
     @Bindable var viewModel: CartViewModel
     var plant: Plant
@@ -108,9 +68,4 @@ struct CartOrderItemView: View {
         .background(.gray.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
-}
-
-// MARK: - PREVIEW
-#Preview {
-    CartScreen()
 }

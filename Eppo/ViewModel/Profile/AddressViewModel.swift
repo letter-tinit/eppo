@@ -33,6 +33,7 @@ class AddressViewModel {
                 case .failure(let error):
                     self?.handleAPIError(error)
                     self?.hasError = true
+                    self?.addresses.removeAll()
                 }
             } receiveValue: { addressResponse in
                 self.addresses = addressResponse.data
@@ -73,6 +74,9 @@ class AddressViewModel {
                     break
                 case .failure(let error):
                     self.handleAPIError(error)
+                    self.message = "Xoá thất bại"
+                    self.isShowingAlert = true
+                    self.getAddress()
                 }
             } receiveValue: {}
             .store(in: &cancellables)

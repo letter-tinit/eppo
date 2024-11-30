@@ -1,6 +1,6 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
@@ -9,61 +9,32 @@ import PhotosUI
 
 struct RatingSubmitView: View {
     // MARK: - PROPERTY
-    @State var rating: Int = 0
-    @State var textRating = ""
+    @State var viewModel: RatingSubmitViewModel
     
-    var itemName: String
-    var itemType: String
+    @State private var additionalImagePickerItems: [PhotosPickerItem] = []
     
-    var textLimit: Int = 300
     
-    @State private var attachImage: UIImage?
-    @State private var photoPickerItem: PhotosPickerItem?
-
+    init(viewModel: RatingSubmitViewModel) {
+        self.viewModel = viewModel
+    }
+  
     // MARK: - BODY
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             CustomHeaderView(title: "Viết đánh giá")
-            
-            HStack(alignment: .bottom) {
-                // Item Image
-                Image("sample-bonsai")
-                    .resizable()
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
-                
-                VStack(alignment: .leading) {
-                    Text(itemName)
-                        .font(.headline)
-                        .lineLimit(1)
-
-                    Text(itemType)
-                        .font(.subheadline)
-                        .foregroundStyle(.gray)
-                        .lineLimit(1)
-                    
-                    RatingStarSubmitionView(rating: $rating)
-                }
-                
-                Spacer()
-            }
-            .padding(10)
-            
-            Divider()
             
             Text("Đánh giá bài viết")
                 .font(.headline)
                 .padding(10)
                 .foregroundStyle(.blue)
-
-            TextEditor(text: $textRating)
-                .onChange(of: textRating) { newValue, oldValue in
-                    if newValue.count > textLimit {
-                        textRating = String(newValue.prefix(textLimit))
+            
+            TextEditor(text: $viewModel.textRating)
+                .onChange(of: viewModel.textRating) { newValue, oldValue in
+                    if newValue.count > viewModel.textLimit {
+                        viewModel.textRating = String(newValue.prefix(viewModel.textLimit))
                     }
-                    print(textRating)
+                    print(viewModel.textRating)
                 }
                 .scrollContentBackground(.hidden)
                 .padding(10)
@@ -78,41 +49,55 @@ struct RatingSubmitView: View {
                 .tint(.black)
                 .padding(10)
                 .overlay(alignment: .bottomTrailing) {
-                    Text("\(textRating.count)/ \(textLimit)")
+                    Text("\(viewModel.textRating.count)/\(viewModel.textLimit)")
                         .padding([.bottom, .trailing])
                         .foregroundStyle(.darkBlue)
                 }
-            
-            HStack(alignment: .top) {
-                PhotosPicker(selection: $photoPickerItem, matching: .images) {
-                    VStack(alignment: .center) {
-                        Text("Thêm ảnh")
-                            .fontWeight(.semibold)
-                        
-                        Image(systemName: "photo.badge.plus")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 60, height: 60)
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Hoàn tất") {
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        }
+                        .fontWeight(.medium)
                     }
-                    .font(.headline)
-                    .foregroundStyle(.green)
+                }
+            
+            RatingStarSubmitionView(rating: $viewModel.rating)
+                .padding(10)
+            
+            // Additional Images Picker
+            VStack(alignment: .leading) {
+                Text("Hình ảnh bổ sung").font(.headline)
+                PhotosPicker(selection: $additionalImagePickerItems, matching: .images) {
+                    Image(systemName: "photo.on.rectangle.angled")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .foregroundColor(.blue)
+                }
+                .onChange(of: additionalImagePickerItems) { _, newValue in
+                    Task {
+                        await viewModel.handleAdditionalImagesPicker(newValue)
+                    }
                 }
                 
-                Spacer()
-                
-                Image(
-                    uiImage: attachImage ?? UIImage(resource: .photoAddition)
-                )
-                .resizable()
-                .frame(width: 200, height: 140)
-                .scaledToFit()
-                .border(.gray)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                // Display Selected Additional Images
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(viewModel.additionalImages, id: \.self) { image in
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                }
             }
-            .padding()
+            .padding(.horizontal)
             
             Button {
-
+                viewModel.submitRating()
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
@@ -127,27 +112,21 @@ struct RatingSubmitView: View {
                         .fontDesign(.rounded)
                 }
                 .padding()
+                .padding(.top, 30)
                 
             } // SUBMIT RATING BUTTON
+            
+            Spacer()
         }
         .ignoresSafeArea(.container, edges: .vertical)
         .navigationBarBackButtonHidden()
-        .onChange(of: photoPickerItem) { _, _ in
-            Task {
-                if let photoPickerItem,
-                   let data = try? await photoPickerItem.loadTransferable(type: Data.self) {
-                    if let image = UIImage(data: data) {
-                        attachImage = image
-                    }
-                }
-                
-                photoPickerItem = nil
-            }
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.errorMessage), dismissButton: .cancel())
         }
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    RatingSubmitView(itemName: "Cây cảnh phong thuỷ đã tạo kiểu", itemType: "Đã tạo kiểu")
+    RatingSubmitView(viewModel: RatingSubmitViewModel(plantId: 1))
 }

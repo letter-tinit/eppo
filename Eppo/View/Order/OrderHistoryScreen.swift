@@ -31,6 +31,7 @@ struct OrderHistoryScreen: View {
     var body: some View {
         VStack {
             CustomHeaderView(title: "Đơn hàng của bạn")
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(OrderState.allCases, id: \.self) { orderState in
@@ -40,17 +41,13 @@ struct OrderHistoryScreen: View {
                             }
                         } label: {
                             Text(orderState.flag)
-                                .padding(8)
-                        }
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 10)
-                        )
-                        .foregroundColor(viewModel.selectedOrderState == orderState ? .white : .primary)
-                        .frame(width: 140)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(viewModel.selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
-                        )
+                                .padding(10)
+                                .foregroundColor(viewModel.selectedOrderState == orderState ? .white : .primary)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(viewModel.selectedOrderState == orderState ? Color.blue : Color.gray.opacity(0.2))
+                                )
+                        }                        
                         .padding(.vertical, 10)
                         .padding(orderState == .waitingForConfirm ? .leading : [])
                         .padding(orderState == .canceled ? .trailing : [])

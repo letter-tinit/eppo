@@ -60,9 +60,6 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    self.message = "Đã tạo thành công transaction"
-                    self.isAlertShowing = true
-                    self.isSucessCreation = true
                     break
                 case .failure(let error):
                     print(error)
@@ -73,6 +70,9 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
                 print(result)
                 if let zpTransToken = result.zp_trans_token {
                     self.zpTransToken = zpTransToken
+                    self.message = "Đã tạo thành công transaction"
+                    self.isAlertShowing = true
+                    self.isSucessCreation = true
                 } else {
                     self.message = "Lỗi khi tạo transaction"
                     self.isAlertShowing = true

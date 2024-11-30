@@ -1,19 +1,13 @@
 //
-//  OrderDetailsScreen.swift
+//  HireOrderDetailsScreen.swift
 //  Eppo
 //
-//  Created by Letter on 11/11/2024.
+//  Created by Letter on 30/11/2024.
 //
 
 import SwiftUI
 
-enum PaymentMethod: String, CaseIterable, Identifiable {
-    case cashOnDelivery = "Thanh toán khi nhận hàng"
-    case myWallet = "Ví điện tử"
-    var id: Self { self }
-}
-
-struct OrderDetailsScreen: View {
+struct HireOrderDetailsScreen: View {
     @Bindable var viewModel: CartViewModel
     @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
     @Environment(\.dismiss) private var dismiss
@@ -43,8 +37,9 @@ struct OrderDetailsScreen: View {
                     .scrollDisabled(true)
                     
                     VStack {
-                        ForEach(viewModel.selectedOrder) { plant in
-                            CartOrderItemView(viewModel: viewModel, plant: plant)
+                        ForEach(viewModel.selectedHireOrder) { plant in
+                            // MARK: - NEED CHANGE
+                            CartHireOrderItemView(viewModel: viewModel, plant: plant)
                                 .background(Color.clear)
                         }
                         
@@ -57,7 +52,7 @@ struct OrderDetailsScreen: View {
                                 .font(.subheadline)
                                 .fontWeight(.regular)
                             Spacer()
-                            Text(viewModel.totalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
+                            Text(viewModel.totalRentalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                         }
@@ -109,7 +104,7 @@ struct OrderDetailsScreen: View {
                         .font(.subheadline)
                         .fontWeight(.medium)
                     
-                    Text(viewModel.totalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
+                    Text(viewModel.totalRentalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundStyle(.red)
@@ -143,7 +138,7 @@ struct OrderDetailsScreen: View {
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
             viewModel.getAddress()
-            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+//            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
             viewModel.totalShippingFee = 0.0
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
@@ -155,5 +150,5 @@ struct OrderDetailsScreen: View {
 }
 
 #Preview {
-    OrderDetailsScreen(viewModel: CartViewModel())
+    HireOrderDetailsScreen(viewModel: CartViewModel())
 }

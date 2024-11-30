@@ -27,6 +27,20 @@ struct OwnerOrderScreen: View {
                                         Text("Xác nhận giao")
                                     }
                                     .tint(.orange)
+                                } else if ownerOrder.status == 2 {
+                                    Button {
+                                        viewModel.finishPrepare(orderId: ownerOrder.id)
+                                    } label: {
+                                        Text("Chuẩn bị xong")
+                                    }
+                                    .tint(.green)
+                                } else if ownerOrder.status == 4 && ownerOrder.typeEcommerceId == 2 {
+                                    NavigationLink {
+                                        DeliveriteConfirmedScreen(orderId: ownerOrder.id, isRefund: true)
+                                    } label: {
+                                        Text("Thu hồi")
+                                    }
+                                    .tint(.green)
                                 }
                             }
                     }
@@ -46,6 +60,9 @@ struct OwnerOrderScreen: View {
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
             viewModel.getOwnerOrders()
+        }
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.errorMessage), dismissButton: .cancel())
         }
     }
 }

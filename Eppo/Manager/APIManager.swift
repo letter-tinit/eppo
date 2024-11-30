@@ -47,6 +47,7 @@ struct APIConstants {
         static let getByTypeAndCate = baseURL + "api/v1/GetList/Plants/Filter/TypeEcommerceIdAndCategoryId"
         static let getById = baseURL + "api/v1/Plant/"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
+        static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
     }
     
     struct Room {
@@ -79,6 +80,10 @@ struct APIConstants {
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
+        static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
+        static let finishRefund = baseURL + "api/v1/Order/UpdateReturnOrderSuccess/"
+        static let feedbacks = baseURL + "api/v1/GetList/Feedback/Order/Delivered/Plant"
+        static let createFeedback = baseURL + "api/v1/GetList/Feedback/Create/Feedback"
     }
     
     struct User {
@@ -462,7 +467,7 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func createOrder(createOrderRequest: CreateOrderRequest) -> AnyPublisher<(Int, String), Error> {
+    func createOrder(createOrderRequest: CreateOrderRequest) -> AnyPublisher<SimpleResponse, Error> {
         let apiUrl = APIConstants.Order.createOrder
         
         // Ensure there's a token available
@@ -474,31 +479,13 @@ class APIManager {
         // Set up headers with the authorization token
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
+            "accept": "*/*",
             "Content-Type": "application/json"
         ]
         
         return AF.request(apiUrl, method: .post, parameters: createOrderRequest, encoder: JSONParameterEncoder.default, headers: headers)
-            .validate(statusCode: 200..<300) // Validate status code is between 200 and 299
-            .publishData() // Use Alamofire's Combine publisher to get the response
-            .tryMap { response in
-                guard let statusCode = response.response?.statusCode else {
-                    throw NSError(domain: "API Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response received"])
-                }
-                
-                // Check if status code is 200 (Success)
-                if (200...299).contains(statusCode) {
-                    return (statusCode, "Đơn hàng đã đặt thành công")
-                }
-                
-                
-                // Check for 500 (Server Error) and get the response message
-                if statusCode == 500 {
-                    return (500, "Số dư ví hiện không khả dụng")
-                }
-                
-                // For other status codes, throw an error
-                throw NSError(domain: "API Error", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "Unexpected error occurred"])
-            }
+            .publishDecodable(type: SimpleResponse.self)
+            .value()
             .mapError { error in
                 error // Handle and map error to the Combine error
             }
@@ -523,7 +510,7 @@ class APIManager {
             }
             .eraseToAnyPublisher()
     }
- 
+    
     func getMyInformation() -> AnyPublisher<UserResponse, Error> {
         let apiUrl = APIConstants.User.getMyInfor
         
@@ -787,6 +774,28 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
+    func getFeedBackOrder(pageIndex: Int, pageSize: Int) -> AnyPublisher<FeedBackResponse, Error> {
+        let url = APIConstants.Order.feedbacks
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: FeedBackResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                debugPrint(error)
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
     func cancelOrder(id: Int) -> AnyPublisher<Void, Error> {
         let url = APIConstants.Order.cancelOrder + String(id)
         
@@ -1029,6 +1038,18 @@ class APIManager {
         if let avatarImage = avatar, let avatarData = avatarImage.jpegData(compressionQuality: 0.5) {
             multipartFormData.append(avatarData, withName: "imageFile", fileName: "avatar.jpg", mimeType: "image/jpeg")
         }
+//        
+//        let tempFileURL = FileManager.default.temporaryDirectory.appendingPathComponent("multipart_form_data")
+//        do {
+//            try multipartFormData.writeEncodedData(to: tempFileURL)
+//            print("MultipartFormData written to: \(tempFileURL)")
+//            if let data = try? Data(contentsOf: tempFileURL),
+//               let rawString = String(data: data, encoding: .utf8) {
+//                print("Raw Multipart Form Data: \n\(rawString)")
+//            }
+//        } catch {
+//            print("Failed to write MultipartFormData to file: \(error)")
+//        }
         
         // Gửi request PUT
         return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
@@ -1243,42 +1264,42 @@ class APIManager {
         }
         
         return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
-                    .validate(statusCode: 200..<300)
-                    .publishData()
-                    .tryMap { response in
-                        guard let statusCode = response.response?.statusCode else {
-                            throw APIError.networkError
-                        }
-                        guard let responseData = response.data else {
-                            throw APIError.noData
-                        }
-                        
-                        print("Response Status Code: \(statusCode)")
-                        
-                        if statusCode >= 200 && statusCode <= 300 {
-                            return responseData
-                        } else {
-                            if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
-                               let jsonDict = jsonObject as? [String: Any],
-                               let errorMessage = jsonDict["error"] as? String {
-                                print("Error Message: \(errorMessage)")
-                                throw APIError.custom(message: errorMessage)
-                            } else {
-                                print("Unable to parse error message.")
-                                throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
-                            }
-                        }
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
                     }
-                    .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
-                    .mapError { error in
-                        print("Error occurred: \(error)")
-                        if let apiError = error as? APIError {
-                            return apiError
-                        } else {
-                            return APIError.networkError
-                        }
-                    }
-                    .eraseToAnyPublisher()
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     func failDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
@@ -1312,42 +1333,205 @@ class APIManager {
         }
         
         return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
-                    .validate(statusCode: 200..<300)
-                    .publishData()
-                    .tryMap { response in
-                        guard let statusCode = response.response?.statusCode else {
-                            throw APIError.networkError
-                        }
-                        guard let responseData = response.data else {
-                            throw APIError.noData
-                        }
-                        
-                        print("Response Status Code: \(statusCode)")
-                        
-                        if statusCode >= 200 && statusCode <= 300 {
-                            return responseData
-                        } else {
-                            if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
-                               let jsonDict = jsonObject as? [String: Any],
-                               let errorMessage = jsonDict["error"] as? String {
-                                print("Error Message: \(errorMessage)")
-                                throw APIError.custom(message: errorMessage)
-                            } else {
-                                print("Unable to parse error message.")
-                                throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
-                            }
-                        }
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
                     }
-                    .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
-                    .mapError { error in
-                        print("Error occurred: \(error)")
-                        if let apiError = error as? APIError {
-                            return apiError
-                        } else {
-                            return APIError.networkError
-                        }
-                    }
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func preparedOrder(orderId: Int) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.preparedOrder + String(describing: orderId)
+        
+        let headers = setupHeaderToken()
+        
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                return responseData
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func finishRefund(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.finishRefund + String(describing: orderId)
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                return responseData
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createFeedback(description: String, plantId: Int, rating: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.createFeedback
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Tạo multipart form data
+        let multipartFormData = MultipartFormData()
+        
+        multipartFormData.append(description.data(using: .utf8)!, withName: "description")
+        multipartFormData.append("\(plantId)".data(using: .utf8)!, withName: "plantId")
+        multipartFormData.append("\(rating)".data(using: .utf8)!, withName: "rating")
+        
+        
+        for (index, image) in images.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
                     .eraseToAnyPublisher()
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .post, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+                    }
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getOwnerPlant(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getByType) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
     }
     
     func setupHeaderToken() -> HTTPHeaders? {
