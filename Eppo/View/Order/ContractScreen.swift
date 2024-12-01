@@ -34,10 +34,18 @@ struct ContractScreen: View {
                 
                 Spacer()
                 
-                Toggle("Tôi đồng ý với các điều khoản trong hợp đồng", isOn: $viewModel.isSigned)
-                    .padding(.horizontal, 10)
-                    .font(.caption)
-                    .padding(.vertical, 10)
+                HStack {
+                    Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản trong hợp đồng ở trên")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        .multilineTextAlignment(.leading)
+                    
+                    Spacer()
+                    
+                    Toggle("", isOn: $viewModel.isSigned)
+                        .labelsHidden()
+                }
+                .padding()
                 
                 Button {
                     dismiss()
@@ -47,7 +55,7 @@ struct ContractScreen: View {
                             .frame(height: 60)
                             .foregroundStyle(viewModel.isSigned ? .red : .gray)
                         
-                        Text("Chấp nhận hợp đồng")
+                        Text("Chấp nhận điều khoản")
                             .foregroundStyle(.black)
                             .font(.system(size: 16, weight: .bold))
                     }

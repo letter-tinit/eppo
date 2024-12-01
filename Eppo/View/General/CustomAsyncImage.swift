@@ -25,6 +25,8 @@ struct CustomAsyncImage: View {
             case .success(let image):
                 image
                     .resizable()
+                    .scaledToFill()
+                    .clipped()
             default:
 //                ZStack {
 //                    Image(systemName: "photo")

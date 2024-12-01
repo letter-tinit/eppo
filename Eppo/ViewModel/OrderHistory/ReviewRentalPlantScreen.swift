@@ -18,17 +18,12 @@ struct ReviewRentalPlantScreen: View {
                     VStack {
                         //                    AddressOrderView()
                         //                        .padding(.horizontal)
-                        List {
-                            Text("Địa chỉ: \(viewModel.deliveryAddress)")
-                                .listRowSeparator(.hidden, edges: .bottom)
-                        }
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .listStyle(.inset)
-                        .scrollDisabled(true)
+                        Text("Địa chỉ: \(viewModel.deliveryAddress)")
+                            .padding(14)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .padding(.horizontal)
+                            .frame(maxWidth: .infinity)
                         
                         VStack {
                             OrderItemView(plant: viewModel.plant)
