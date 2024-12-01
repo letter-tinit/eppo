@@ -25,6 +25,7 @@ class ReviewRentalPlantViewModel {
     
     var loadingMessage: String = ""
     var isContactLoading: Bool = false
+    var isLoading: Bool = false
 
     var cancellables: Set<AnyCancellable> = []
     
@@ -128,6 +129,7 @@ class ReviewRentalPlantViewModel {
     }
     
     func updatePaymentStatus(paymentId: Int) {
+        isLoading = true
         guard let contractId = self.contractId else {
             return
         }
@@ -135,6 +137,7 @@ class ReviewRentalPlantViewModel {
         // MARK: - CONTRACT NUMBER = ORDER ID
         APIManager.shared.updatePaymentOrderRental(orderId: orderId, contractId: contractId, paymentId: paymentId)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break

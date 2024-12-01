@@ -55,7 +55,7 @@ import Combine
         isLogged = false
         errorMessage = nil
         
-        APIManager.shared.login(username: userName, password: password)
+        APIManager.shared.login(username: userName.trimmingCharacters(in: .whitespacesAndNewlines), password: password.trimmingCharacters(in: .whitespacesAndNewlines))
             .sink(receiveCompletion: { completion in
                 self.isLoading = false
                 switch completion {

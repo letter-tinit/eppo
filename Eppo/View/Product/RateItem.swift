@@ -8,59 +8,36 @@ import SwiftUI
 
 struct RateItem: View {
     // MARK: - PROPERTY
+    @State var feedback: FeedBack
+    
+    init(feedback: FeedBack) {
+        self.feedback = feedback
+    }
 
     // MARK: - BODY
 
     var body: some View {
         HStack(alignment: .top) {
-            CircleImageView(image: Image("avatar"), size: 40)
+            CustomCircleAsyncImage(imageUrl: feedback.user.imageUrl, size: 40)
             
             VStack(alignment: .leading, spacing: 6) {
-                Text("Nguyễn Văn An")
+                Text(feedback.user.fullName)
                     .font(.system(size: 20, weight: .regular))
                     .foregroundStyle(.black)
                 
-                RatingView(rating: 4, font: .subheadline)
+                RatingView(rating: feedback.rating, font: .subheadline)
                 
-                Text("Cây rất thơm nha, chuẩn gen z, giao hành nhanh và cây phát triển tốt")
+                Text(feedback.description)
                     .font(.subheadline)
                 
                 HStack {
-                    Image("sample-bonsai-01")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .clipped()
-                    
-                    Image("sample-bonsai-01")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .clipped()
-                    
-                    Image("sample-bonsai-01")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .clipped()
-                    
-                    Image("sample-bonsai-01")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .clipped()
+                    ForEach(feedback.imageFeedbacks) { image in
+                        CustomRoundedAsyncImage(imageUrl: image.imageUrl, width: 60, height: 80)
+                        
+                    }
                 }
             }
             .padding(.top, 6)
         }
     }
-}
-
-// MARK: - PREVIEW
-#Preview {
-    RateItem()
 }

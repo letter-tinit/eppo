@@ -17,15 +17,15 @@ struct LoadingCenterView: View {
                 ProgressView("Đang tải")
                     .padding(30)
                     .background(
-                        Color(uiColor: UIColor.systemGray5)
-                            .opacity(0.4)
+                        LinearGradient(colors: [.white, Color(uiColor: .systemGray5), .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+                            .opacity(0.7)
                     )
                     .font(.headline)
             }
             .background(Color(uiColor: UIColor.systemGray5))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(width: 140, height: 120)
-            .shadow(radius: 3, x: 2, y: 2)
+            .shadow(color: .gray.opacity(0.6), radius: 1, x: 1, y: 1)
         }
     }
 }
@@ -48,16 +48,16 @@ struct CustomLoadingCenterView: View {
                 ProgressView(title)
                     .padding(30)
                     .background(
-                        Color(uiColor: UIColor.systemGray5)
-                            .opacity(0.4)
+                        LinearGradient(colors: [.white, Color(uiColor: .systemGray5), .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+                            .opacity(0.7)
                     )
                     .font(.headline)
                     .multilineTextAlignment(.center)
             }
-            .background(Color(uiColor: UIColor.systemGray5))
+            .background(Color(uiColor: UIColor.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(width: 180, height: 160)
-            .shadow(radius: 3, x: 2, y: 2)
+            .shadow(color: .gray.opacity(0.6), radius: 1, x: 1, y: 1)
         }
     }
 }

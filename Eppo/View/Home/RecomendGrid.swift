@@ -22,6 +22,7 @@ struct RecomendGrid: View {
     
     var body: some View {
         RecommendSectionHeader(selectedOption: $recomendOption)
+            .disabled(viewModel.isLoading)
         
         ScrollView {
             LazyVGrid(columns: adaptiveColumn, spacing: 20) {
@@ -75,7 +76,7 @@ struct RecomendGrid: View {
         }
         .onChange(of: recomendOption, initial: true) { oldValue, newValue in
             viewModel.resetPagination() // Reset for new recommendation type
-            viewModel.loadMorePlants(typeEcommerceId: newValue == .forBuy ? 1 : 2)
+            loadMorePlant()
         }
     }
     

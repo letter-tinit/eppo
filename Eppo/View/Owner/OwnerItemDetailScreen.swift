@@ -123,9 +123,9 @@ struct OwnerItemDetailScreen: View {
                         .padding(.horizontal)
                     
                     VStack(spacing: 20) {
-                        RateItem()
-                        RateItem()
-                        RateItem()
+//                        RateItem()
+//                        RateItem()
+//                        RateItem()
                     }
                     .padding(.horizontal)
                     

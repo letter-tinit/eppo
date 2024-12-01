@@ -21,6 +21,10 @@ enum ActiveAlert {
     var addresses: [Address] = []
     var selectedAddress: Address?
     
+    var feedBacks: [FeedBack] = []
+    var averageRating: Double = 0
+    var numberOfFeedbacks = 0
+    
     // MARK: - HireItemDetailScreen
     var selectedDate = Date()
     var numberOfMonth = 1
@@ -61,6 +65,26 @@ enum ActiveAlert {
                 self.getShippingFeeByPlantId()
             }
             .store(in: &cancellables)
+    }
+    
+    func getFeedbacks(plantId: Int) {
+        APIManager.shared.plantFeedBack(pageIndex: 1, pageSize: 999, plantId: plantId)
+            .sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self?.feedBacks.removeAll()
+                }
+            } receiveValue: { [weak self] feedBackAPIResponse in
+                self?.averageRating = feedBackAPIResponse.data.totalRating / Double(feedBackAPIResponse.data.numberOfFeedbacks)
+                self?.numberOfFeedbacks = feedBackAPIResponse.data.numberOfFeedbacks
+                self?.feedBacks = feedBackAPIResponse.data.feedbacks
+                print(self?.feedBacks)
+            }
+            .store(in: &cancellables)
+
     }
     
     func getShippingFeeByPlantId() {
@@ -234,6 +258,7 @@ enum ActiveAlert {
     }
     
     func updatePaymentStatus(paymentId: Int) {
+        isLoading = true
         guard let orderId = self.contractNumber,
               let contractId = self.contractId else {
             return
@@ -242,6 +267,7 @@ enum ActiveAlert {
         // MARK: - CONTRACT NUMBER = ORDER ID
         APIManager.shared.updatePaymentOrderRental(orderId: orderId, contractId: contractId, paymentId: paymentId)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break
@@ -265,6 +291,8 @@ enum ActiveAlert {
     
     // MARK: - BuyItemDetailScreen
     func createOrder() {
+        isLoading = true
+        
         guard let plant = self.plant,
 //              let deliveriteFree = self.deliveriteFree,
               let addressDescription = self.selectedAddress?.description else {
@@ -274,8 +302,6 @@ enum ActiveAlert {
         let orderDetails: [Plant] = [plant]
         
         let createOrderRequest = CreateOrderRequest(totalPrice: plant.finalPrice, deliveryFee: deliveriteFree, deliveryAddress: addressDescription, paymentId: self.selectedPaymentMethod == .cashOnDelivery ? 1 : 2, orderDetails: orderDetails)
-        
-        isLoading = true
         
         APIManager.shared.createOrder(createOrderRequest: createOrderRequest)
             .sink(receiveCompletion: { completion in

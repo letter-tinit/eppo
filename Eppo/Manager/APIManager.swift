@@ -48,6 +48,7 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/Plant/"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
         static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
+        static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
     }
     
     struct Room {
@@ -137,14 +138,12 @@ class APIManager {
                         } else {
                             throw APIError.noData // Nếu không có dữ liệu, ném lỗi thích hợp
                         }
-                    case 400...499:
-                        throw APIError.serverError(statusCode: statusCode)
                     case 401:
-                        throw APIError.custom(message: "Chưa được xác thực.")
+                        throw APIError.custom(message: "Tài khoản và mật khẩu không chính xác")
                     case 403:
-                        throw APIError.custom(message: "Không có quyền truy cập.")
+                        throw APIError.custom(message: "Không có quyền truy cập")
                     case 404:
-                        throw APIError.custom(message: "Không tìm thấy dữ liệu.")
+                        throw APIError.custom(message: "Tài khoản và mật khẩu không chính xác")
                     case 500...599:
                         throw APIError.serverError(statusCode: statusCode)
                     default:
@@ -923,6 +922,38 @@ class APIManager {
             return error as Error
         }
         .eraseToAnyPublisher()
+    }
+    
+    func plantFeedBack(pageIndex: Int, pageSize: Int, plantId: Int) -> AnyPublisher<FeedBacksResponse, Error> {
+        let url = APIConstants.Plant.feedBacks
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize,
+            "plantId": plantId
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default)
+            .validate()
+            .publishData()
+            .tryMap({ response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.unexpectedError
+                }
+                
+                print(statusCode)
+                
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                return responseData
+            })
+            .decode(type: FeedBacksResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
     }
     
     // MARK: - OWNER

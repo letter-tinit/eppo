@@ -29,14 +29,14 @@ struct PictureSlider: View {
         .frame(height: 200)
         .cornerRadius(10)
         .padding([.leading, .trailing], 10)
-        .onReceive(timer) { _ in
-            withAnimation {
-                currentPage = (currentPage + 1) % (imagePlants.count + 1)
-            }
-        }
+//        .onReceive(timer) { _ in
+//            withAnimation {
+//                currentPage = (currentPage + 1) % (imagePlants.count + 1)
+//            }
+//        }
     }
     
-    let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+//    let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 }
 
 // MARK: - PREVIEW

@@ -56,7 +56,9 @@ class HomeViewModel: ObservableObject {
                 if plants.isEmpty {
                     self.isLastPage = true // No more data to load
                 } else {
-                    self.plants.append(contentsOf: plants) // Append new data
+                    DispatchQueue.main.async { [weak self] in
+                        self?.plants.append(contentsOf: plants) // Append new data
+                    }
                     self.currentPage += 1 // Increment page for next load
                 }
             })
