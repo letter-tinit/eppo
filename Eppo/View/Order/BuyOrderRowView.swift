@@ -23,12 +23,6 @@ struct BuyOrderRowView: View {
         LazyVStack(alignment: .leading) {
             ForEach(orderDetails) { orderDetail in
                 HStack(alignment: .center) {
-                    // Item Image
-//                    Image("sample-bonsai")
-//                        .resizable()
-//                        .frame(width: 60, height: 60)
-//                        .clipped()
-//                        .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
                     CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 60, height: 60)
                     
                     VStack(alignment: .leading) {

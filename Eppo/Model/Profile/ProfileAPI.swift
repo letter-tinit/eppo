@@ -28,3 +28,32 @@ struct UpdateErrorResponse: Codable {
         error = (try? container.decode(String.self, forKey: .error)) ?? "No error provided"
     }
 }
+
+struct UserResponseTest: Codable {
+    let statusCode: Int
+    let message: String
+    let data: UserTest?
+}
+
+struct UserTest: Codable {
+    var userId: Int?
+    var userName: String?
+    var fullName: String?
+    var gender: String?
+    var dateOfBirth: String?
+    var phoneNumber: String?
+    var email: String?
+    var imageUrl: String?
+    var identificationCard: String?
+    var walletId: Int?
+    var wallet: WalletTest?
+}
+
+struct WalletTest: Codable {
+    let walletId: Int
+    let numberBalance: Double
+//    let creationDate: Date
+//    let modificationDate: Date
+//    let status: Int
+//    let transactions: [TransactionAPI]
+}

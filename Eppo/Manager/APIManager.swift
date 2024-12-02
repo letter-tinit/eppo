@@ -47,6 +47,8 @@ struct APIConstants {
         static let getByTypeAndCate = baseURL + "api/v1/GetList/Plants/Filter/TypeEcommerceIdAndCategoryId"
         static let getById = baseURL + "api/v1/Plant/"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
+        static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
+        static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
     }
     
     struct Room {
@@ -57,6 +59,7 @@ struct APIConstants {
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
         static let getHistoryBid = baseURL + "api/HistoryBid/GetHistoryBidsByRoomId"
+        static let getHistoryAuction = baseURL + "api/v1/GetList/History/AllRoom"
 
     }
     
@@ -75,6 +78,14 @@ struct APIConstants {
         static let getHireOrderHistory = baseURL + "api/v1/Order/GetOrdersRentalByUser"
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
         static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
+        static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
+        static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
+        static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
+        static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
+        static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
+        static let finishRefund = baseURL + "api/v1/Order/UpdateReturnOrderSuccess/"
+        static let feedbacks = baseURL + "api/v1/GetList/Feedback/Order/Delivered/Plant"
+        static let createFeedback = baseURL + "api/v1/GetList/Feedback/Create/Feedback"
     }
     
     struct User {
@@ -92,6 +103,7 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
         static let createOwner = baseURL + "api/v1/GetList/Contracts/Create/Contract/Ownership"
+        static let updateContact = baseURL + "api/v1/GetList/Contracts/IsSigned/Contract/Id?contractId="
     }
     
     struct Transaction {
@@ -127,14 +139,12 @@ class APIManager {
                         } else {
                             throw APIError.noData // Nếu không có dữ liệu, ném lỗi thích hợp
                         }
-                    case 400...499:
-                        throw APIError.serverError(statusCode: statusCode)
                     case 401:
-                        throw APIError.custom(message: "Chưa được xác thực.")
+                        throw APIError.custom(message: "Tài khoản và mật khẩu không chính xác")
                     case 403:
-                        throw APIError.custom(message: "Không có quyền truy cập.")
+                        throw APIError.custom(message: "Không có quyền truy cập")
                     case 404:
-                        throw APIError.custom(message: "Không tìm thấy dữ liệu.")
+                        throw APIError.custom(message: "Tài khoản và mật khẩu không chính xác")
                     case 500...599:
                         throw APIError.serverError(statusCode: statusCode)
                     default:
@@ -323,6 +333,26 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
+    func getHistoryAuction(pageIndex: Int, pageSize: Int) -> AnyPublisher<HistoryRoomResponse, Error> {
+        let url = APIConstants.Room.getHistoryAuction
+        
+        let headers = setupHeaderToken()
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: HistoryRoomResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
     func getRoomById(id: Int) -> AnyPublisher<AuctionDetailResponse, Error> {
         guard var urlComponents = URLComponents(string: APIConstants.Room.getById) else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
@@ -440,16 +470,26 @@ class APIManager {
         ]
         
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-            .validate() // Validates the response
-            .response { response in
+            .validate(statusCode: 200..<300) // You can also specify a valid range explicitly
+            .responseDecodable(of: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder) { response in
+                switch response.result {
+                case .success(let data):
+                    print("Data: \(data)")
+                    // Handle successful response, e.g., update UI or state
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                    // Handle failure case
+                }
+            }
+            .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
+                    print("Response JSON: \(value)") // Inspect full response
                 case .failure(let error):
                     print("Request failed with error: \(error.localizedDescription)")
                 }
             }
-            .publishDecodable(type: NotificationResponse.self)
+            .publishDecodable(type: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error
@@ -457,7 +497,7 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func createOrder(createOrderRequest: CreateOrderRequest) -> AnyPublisher<(Int, String), Error> {
+    func createOrder(createOrderRequest: CreateOrderRequest) -> AnyPublisher<SimpleResponse, Error> {
         let apiUrl = APIConstants.Order.createOrder
         
         // Ensure there's a token available
@@ -469,35 +509,36 @@ class APIManager {
         // Set up headers with the authorization token
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
+            "accept": "*/*",
             "Content-Type": "application/json"
         ]
         
         return AF.request(apiUrl, method: .post, parameters: createOrderRequest, encoder: JSONParameterEncoder.default, headers: headers)
-            .validate(statusCode: 200..<300) // Validate status code is between 200 and 299
-            .publishData() // Use Alamofire's Combine publisher to get the response
-            .tryMap { response in
-                guard let statusCode = response.response?.statusCode else {
-                    throw NSError(domain: "API Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "No response received"])
-                }
-                
-                // Check if status code is 200 (Success)
-                if (200...299).contains(statusCode) {
-                    return (statusCode, "Đơn hàng đã đặt thành công")
-                }
-                
-                
-                // Check for 500 (Server Error) and get the response message
-                if statusCode == 500 {
-                    return (500, "Số dư ví hiện không khả dụng")
-                }
-                
-                // For other status codes, throw an error
-                throw NSError(domain: "API Error", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "Unexpected error occurred"])
-            }
+            .publishDecodable(type: SimpleResponse.self)
+            .value()
             .mapError { error in
                 error // Handle and map error to the Combine error
             }
             .eraseToAnyPublisher() // Return the publisher as AnyPublisher
+    }
+    
+    func getShippingFee(plantId: Int) -> AnyPublisher<ShippingFeeResponse, Error> {
+        let url = APIConstants.Order.getShippingFee
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: ShippingFeeResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
     }
     
     func getMyInformation() -> AnyPublisher<UserResponse, Error> {
@@ -509,25 +550,42 @@ class APIManager {
                 .eraseToAnyPublisher()
         }
         
-        //        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzIiwicm9sZUlkIjoiNSIsInJvbGVOYW1lIjoiY3VzdG9tZXIiLCJmdWxsTmFtZSI6IlVzZXIgVGhyZWUiLCJlbWFpbCI6ImN1c3RvbWVyQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwMTEyMjMzNDQ1IiwiZ2VuZGVyIjoiTWFsZSIsIndhbGxldElkIjoiMiIsImlkZW50aWZpY2F0aW9uQ2FyZCI6IjEyMzQ1NiIsImRhdGVPZkJpcnRoIjoiMy8zLzE5OTQgMTI6MDA6MDAgQU0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjdXN0b21lciIsImV4cCI6MTczMTQwMDY0MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDAifQ.TFZ_kqsJ27dltRVfud-IJXbhy94SnQIbwMxeDvSKJFE"
-        
         // Set up headers with the authorization token
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
+            "accept": "*/*",
             "Content-Type": "application/json"
         ]
         
         return AF.request(apiUrl, method: .get, headers: headers)
             .validate()
-            .response { response in
-                switch response.result {
-                case .success(let value):
-                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                }
-            }
             .publishDecodable(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getMyInformationTest() -> AnyPublisher<UserResponseTest, Error> {
+        let apiUrl = APIConstants.User.getMyInfor
+        
+        // Ensure there's a token available
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "application/json"
+        ]
+        
+        return AF.request(apiUrl, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: UserResponseTest.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error
@@ -683,7 +741,7 @@ class APIManager {
             .tryMap { response in
                 if let statusCode = response.response?.statusCode, statusCode == 400 {
                     // Return a custom error message for status code 400
-                    throw APIError.custom(message: "Đơn hàng của bạn đã tạo rồi")
+                    throw APIError.custom(message: "Đơn hàng của bạn đã tạo rồi, hãy kiểm tra lại lịch sử đặt hàng")
                 }
                 return response.data ?? Data()
             }
@@ -695,27 +753,22 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func updatePaymentOrderRental(orderId: Int, contractId: Int, paymentId: Int) -> AnyPublisher<Void, Error> {
+    func updatePaymentOrderRental(orderId: Int, contractId: Int, paymentId: Int) -> AnyPublisher<UpdatePaymentResponse, Error> {
         let url = APIConstants.Order.updatePaymentOrderRental
         
-        let parameters: [String: Any] = [
-            "orderId": orderId,
-            "contractId": contractId,
-            "paymentId": paymentId
+        var components = URLComponents(string: url)!
+        components.queryItems = [
+            URLQueryItem(name: "orderId", value: "\(orderId)"),
+            URLQueryItem(name: "contractId", value: "\(contractId)"),
+            URLQueryItem(name: "paymentId", value: "\(paymentId)")
         ]
+        let finalURL = components.url!
         
         let headers = setupHeaderToken()
         
-        return AF.request(url, method: .put, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-            .validate(statusCode: 200..<300) // Chỉ thành công với status code 200-299
-            .publishData() // Dùng publishData để kiểm tra dữ liệu trả về
-            .tryMap { response in
-                // Kiểm tra xem response có dữ liệu không, nếu không thì trả về lỗi
-                guard response.data != nil else {
-                    throw APIError.unexpectedError // Lỗi nếu không có dữ liệu
-                }
-                return () // Thành công thì trả về Void
-            }
+        return AF.request(finalURL, method: .put, headers: headers)
+            .publishDecodable(type: UpdatePaymentResponse.self)
+            .value()
             .mapError { error in
                 // Xử lý lỗi hoặc trả về lỗi mặc định
                 return error as Error
@@ -762,6 +815,28 @@ class APIManager {
             .publishDecodable(type: BuyHistoryResponse.self)
             .value()
             .mapError { error in
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getFeedBackOrder(pageIndex: Int, pageSize: Int) -> AnyPublisher<FeedBackResponse, Error> {
+        let url = APIConstants.Order.feedbacks
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: FeedBackResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                debugPrint(error)
                 // Xử lý lỗi hoặc trả về lỗi mặc định
                 return error as Error
             }
@@ -897,8 +972,40 @@ class APIManager {
         .eraseToAnyPublisher()
     }
     
+    func plantFeedBack(pageIndex: Int, pageSize: Int, plantId: Int) -> AnyPublisher<FeedBacksResponse, Error> {
+        let url = APIConstants.Plant.feedBacks
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize,
+            "plantId": plantId
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default)
+            .validate()
+            .publishData()
+            .tryMap({ response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.unexpectedError
+                }
+                
+                print(statusCode)
+                
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                return responseData
+            })
+            .decode(type: FeedBacksResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
     // MARK: - OWNER
-    func createPlant(plantData: [String: String], mainImage: UIImage?, additionalImages: [UIImage]) -> AnyPublisher<PlantResponse, APIError> {
+    func createPlant(plantData: [String: String], mainImage: UIImage?, additionalImages: [UIImage]) -> AnyPublisher<PlantCreationResponse, APIError> {
         let url = APIConstants.Plant.createPlant
         let headers = setupHeaderToken()
         
@@ -917,6 +1024,8 @@ class APIManager {
         } else {
             print("Invalid main image format.")
             // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                .eraseToAnyPublisher()
         }
         
         // Kiểm tra và thêm các ảnh phụ vào request
@@ -926,6 +1035,8 @@ class APIManager {
                 multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
             } else {
                 print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
                 // Xử lý lỗi nếu định dạng ảnh không hợp lệ
             }
         }
@@ -935,8 +1046,13 @@ class APIManager {
             .publishData()
             .tryMap { response in
                 // Log thông tin phản hồi để xem chi tiết
-                if let statusCode = response.response?.statusCode {
-                    print("Response Status Code: \(statusCode)") // Log statusCode
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.unexpectedError
+                }
+                print("Response Status Code: \(statusCode)") // Log statusCode
+                
+                guard (200...299).contains(statusCode) else {
+                    throw APIError.custom(message: "Tạo cây thất bại")
                 }
                 
                 if let responseData = response.data {
@@ -949,7 +1065,7 @@ class APIManager {
                 }
                 return response.data ?? Data()
             }
-            .decode(type: PlantResponse.self, decoder: JSONDecoder())
+            .decode(type: PlantCreationResponse.self, decoder: JSONDecoder())
             .mapError { error in
                 // Xử lý lỗi chi tiết
                 print("Error occurred: \(error)") // Log lỗi để xem chi tiết
@@ -1001,6 +1117,18 @@ class APIManager {
         if let avatarImage = avatar, let avatarData = avatarImage.jpegData(compressionQuality: 0.5) {
             multipartFormData.append(avatarData, withName: "imageFile", fileName: "avatar.jpg", mimeType: "image/jpeg")
         }
+//        
+//        let tempFileURL = FileManager.default.temporaryDirectory.appendingPathComponent("multipart_form_data")
+//        do {
+//            try multipartFormData.writeEncodedData(to: tempFileURL)
+//            print("MultipartFormData written to: \(tempFileURL)")
+//            if let data = try? Data(contentsOf: tempFileURL),
+//               let rawString = String(data: data, encoding: .utf8) {
+//                print("Raw Multipart Form Data: \n\(rawString)")
+//            }
+//        } catch {
+//            print("Failed to write MultipartFormData to file: \(error)")
+//        }
         
         // Gửi request PUT
         return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
@@ -1069,7 +1197,415 @@ class APIManager {
         
         return AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
-            .publishDecodable(type: OwnerContractResponse.self)
+            .publishData()
+            .tryMap { response in
+                // Handle HTTP status codes
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 200...299:
+                        // If successful, return raw data
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData
+                        }
+                    case 400:
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData
+                        }
+                    case 401:
+                        throw APIError.custom(message: "Unauthorized.")
+                    case 403:
+                        throw APIError.custom(message: "Forbidden.")
+                    case 404:
+                        throw APIError.custom(message: "Not found.")
+                    case 500...599:
+                        throw APIError.serverError(statusCode: statusCode)
+                    default:
+                        throw APIError.unexpectedError
+                    }
+                } else {
+                    throw APIError.networkError
+                }
+            }
+            .decode(type: OwnerContractResponse.self, decoder: JSONDecoder()) // Decode into OwnerContractResponse
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func updateContract(contractId: Int, status: Int) -> AnyPublisher<UpdateContractResponse, APIError>  {
+        let url = APIConstants.Contract.updateContact + String(describing: contractId)
+        
+        let param: [String: Any] = [
+            "status": status
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, parameters: param, encoding: JSONEncoding.default, headers: headers)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                // Kiểm tra mã trạng thái HTTP
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 200...299:
+                        // Nếu mã thành công, trả về dữ liệu thô
+                        if let data = response.data {
+                            return data
+                        } else {
+                            throw APIError.noData // Nếu không có dữ liệu, ném lỗi thích hợp
+                        }
+                    case 400...499:
+                        throw APIError.serverError(statusCode: statusCode)
+                    case 401:
+                        throw APIError.custom(message: "Chưa được xác thực.")
+                    case 403:
+                        throw APIError.custom(message: "Không có quyền truy cập.")
+                    case 404:
+                        throw APIError.custom(message: "Không tìm thấy dữ liệu.")
+                    case 500...599:
+                        throw APIError.serverError(statusCode: statusCode)
+                    default:
+                        // Lỗi khác
+                        throw APIError.unexpectedError
+                    }
+                } else {
+                    throw APIError.networkError
+                }
+            }
+            .decode(type: UpdateContractResponse.self, decoder: JSONDecoder()) // Giải mã dữ liệu
+            .mapError { error in
+                // Chuyển đổi lỗi thành APIError
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.decodingError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getOwnerOrders(pageIndex: Int, pageSize: Int) -> AnyPublisher<OwnerOrderResponse, Error> {
+        let url = APIConstants.Order.ownerOrders
+        
+        let parameters: [String: Any] = [
+            "pageIndex": pageIndex,
+            "pageSize": pageSize
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: OwnerOrderResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                debugPrint(error)
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func confirmDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.confirmDeliverite + String(describing: orderId)
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Tạo multipart form data
+        let multipartFormData = MultipartFormData()
+        
+        
+        for (index, image) in images.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+                    }
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func failDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.failDeliverite + String(describing: orderId)
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Tạo multipart form data
+        let multipartFormData = MultipartFormData()
+        
+        
+        for (index, image) in images.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+                    }
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func preparedOrder(orderId: Int) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.preparedOrder + String(describing: orderId)
+        
+        let headers = setupHeaderToken()
+        
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                return responseData
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func finishRefund(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.finishRefund + String(describing: orderId)
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                return responseData
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func createFeedback(description: String, plantId: Int, rating: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        let url = APIConstants.Order.createFeedback
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Tạo multipart form data
+        let multipartFormData = MultipartFormData()
+        
+        multipartFormData.append(description.data(using: .utf8)!, withName: "description")
+        multipartFormData.append("\(plantId)".data(using: .utf8)!, withName: "plantId")
+        multipartFormData.append("\(rating)".data(using: .utf8)!, withName: "rating")
+        
+        
+        for (index, image) in images.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .post, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                if statusCode >= 200 && statusCode <= 300 {
+                    return responseData
+                } else {
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+                       let jsonDict = jsonObject as? [String: Any],
+                       let errorMessage = jsonDict["error"] as? String {
+                        print("Error Message: \(errorMessage)")
+                        throw APIError.custom(message: errorMessage)
+                    } else {
+                        print("Unable to parse error message.")
+                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+                    }
+                }
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getOwnerPlant(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getByType) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
             .value()
             .mapError { error in
                 return error as Error

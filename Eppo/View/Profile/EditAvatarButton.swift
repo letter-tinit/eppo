@@ -16,7 +16,7 @@ struct EditAvatarButton: View {
         Button {
             action()
         } label: {
-            Image(systemName: "camera")
+            Image(systemName: "photo")
                 .font(.subheadline)
                 .fontWeight(.bold)
                 .padding(4)

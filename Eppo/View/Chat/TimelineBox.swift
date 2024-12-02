@@ -8,13 +8,13 @@ import SwiftUI
 
 struct TimelineBox: View {
     // MARK: - PROPERTY
-    var timelineText: String
+    var timeline: Date
 
     // MARK: - BODY
 
     var body: some View {
         
-        Text(timelineText)
+        Text(timeline, format: .dateTime.day().month().year())
             .font(.system(size: 12))
             .foregroundStyle(.white)
             .padding(6)
@@ -28,5 +28,5 @@ struct TimelineBox: View {
 
 // MARK: - PREVIEW
 #Preview {
-    TimelineBox(timelineText: "03:22 04/09/2024")
+    TimelineBox(timeline: Date())
 }

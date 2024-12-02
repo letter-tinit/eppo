@@ -16,7 +16,7 @@ struct AuctionDetailScreen: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CustomAvatarHeader(withClose: true)
+            CustomHeaderView(title: "Phòng đấu giá")
             
             if let room = viewModel.room {
                 HStack(spacing: 20) {
@@ -73,10 +73,11 @@ struct AuctionDetailScreen: View {
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(
+                            .background(RoundedRectangle(cornerRadius: 6).foregroundStyle(
                                 LinearGradient(colors: [.blue, .darkBlue, .lightBlue], startPoint: .bottomLeading, endPoint: .topTrailing)
                             ))
                             .foregroundStyle(.white)
+                            .shadow(radius: 1)
                     }
                     .padding(.horizontal)
                     
@@ -129,19 +130,22 @@ struct AuctionDetailScreen: View {
                     .background(Color(uiColor: UIColor.systemGray6))
                     .padding(.vertical)
                     
-                    VStack {
-                        HStack {
+                    HStack {
+                        VStack(alignment: .leading) {
                             Text("Mô Tả")
                                 .font(.system(size: 24, weight: .medium))
-                            Spacer()
+                            
+                            Text(room.plant.description)
+                                .font(.subheadline)
+                                .padding()
+                                .multilineTextAlignment(.leading)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .foregroundStyle(Color(uiColor: UIColor.darkBlue).opacity(0.1))
+                                )
                         }
                         
-                        Text(room.plant.description)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(uiColor: UIColor.darkBlue).opacity(0.1))
-                            )
+                        Spacer()
                     }
                     .padding(.horizontal)
                     .padding(.bottom)

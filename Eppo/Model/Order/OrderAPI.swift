@@ -40,3 +40,14 @@ struct GetContractByIdResponse: Codable {
 struct ContractURLResponse: Codable {
     let contractUrl: String
 }
+
+struct ShippingFeeResponse: Codable {
+    let statusCode: Int
+    let message: String
+    let data: Double
+}
+
+struct UpdatePaymentResponse: Codable {
+    let statusCode: Int
+    let message: String
+}

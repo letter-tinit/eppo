@@ -33,6 +33,7 @@ struct OwnerContractView: View {
                 .padding(.vertical, 10)
             
             Button {
+                viewModel.signContract()
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
@@ -49,10 +50,14 @@ struct OwnerContractView: View {
             .disabled(!viewModel.isSigned)
             .padding(.bottom, 80)
         }
-        .disabled(loadingState == .loading)
         .ignoresSafeArea(.container, edges: .vertical)
         .onAppear {
             viewModel.createOwnerContract()
+        }
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message), dismissButton: .default(Text("Xác nhận"), action: {
+                self.isSigned = viewModel.isSucessSigned
+            }))
         }
     }
 }

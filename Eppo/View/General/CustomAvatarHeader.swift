@@ -12,18 +12,17 @@ struct CustomAvatarHeader: View {
     
     var withClose: Bool
     var isReturnMain: Bool = false
-
     @Environment(\.dismiss) var dismiss
-    
+    @Bindable var userSession = UserSession.shared
+
     // MARK: - BODY
     
     var body: some View {
         HStack {
             HStack {
-//                CircleImageView(image: Image(systemName: "photo"), size: 40)
-                CustomCircleAsyncImage(imageUrl: UserSession.shared.myInformation?.imageUrl ?? "https://static.vecteezy.com/system/resources/thumbnails/036/594/092/small_2x/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg", size: 40)
+                CustomCircleAsyncImage(imageUrl: userSession.myInformation?.imageUrl ?? placeholderImage, size: 40)
                 
-                Text(UserSession.shared.myInformation?.fullName ?? "tên")
+                Text(userSession.myInformation?.fullName ?? "Tên")
                     .font(.system(size: 22, weight: .medium))
                 
             }
@@ -65,6 +64,10 @@ struct CustomAvatarHeader: View {
         .background(
             LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
         )
+    }
+    
+    private var placeholderImage: String {
+        "https://static.vecteezy.com/system/resources/thumbnails/036/594/092/small_2x/man-empty-avatar-photo-placeholder.jpg"
     }
 }
 

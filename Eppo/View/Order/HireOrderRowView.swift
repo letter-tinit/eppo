@@ -13,6 +13,7 @@ struct HireOrderRowView: View {
     var id: Int
 
     var totalPrice: Double
+    var paymentStatus: String
     var deliveriteFree: Double
     var numberOfMonth: Int
     let orderDetail: HireHistoryOrderDetail
@@ -29,7 +30,7 @@ struct HireOrderRowView: View {
 //                    .frame(width: 80, height: 80)
 //                    .clipped()
 //                    .border(Color(uiColor: UIColor.systemGray4), width: 1.2)
-                CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 80, height: 80)
+                CustomAsyncImage(imageUrl: orderDetail.plant.mainImage, width: 84, height: 84)
                 
                 VStack(alignment: .leading) {
                     Text(orderDetail.plant.name)
@@ -61,11 +62,15 @@ struct HireOrderRowView: View {
             HStack(alignment: .bottom) {
                 // Quantity
                 VStack(alignment: .leading) {
+                    Text(paymentStatus)
+                        .foregroundStyle(.red)
+                        .fontWeight(.semibold)
                     Text("Số tháng: \(numberOfMonth)")
+                        .foregroundStyle(.gray)
                     Text("Phí ship: \(deliveriteFree.formatted(.currency(code: "VND")))")
+                        .foregroundStyle(.gray)
                 }
                 .font(.subheadline)
-                .foregroundStyle(.gray)
                 
                 Spacer()
                 

@@ -32,20 +32,37 @@ struct PaymentScreen: View {
             Button {
                 viewModel.createTransaction()                
             } label: {
-                Text("Nạp")
-                    .font(.headline)
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.green)
-                    )
-                    .padding()
-                    .foregroundStyle(.white)
+                HStack {
+                    Image("zalopay")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                    
+                    Text("Nạp")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.green)
+                )
+                .padding()
+                .foregroundStyle(.white)
             }
         }
         .ignoresSafeArea(.container, edges: .top)
+        .navigationBarBackButtonHidden()
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message), dismissButton: .default(Text("Xác nhận"), action: {
+                if viewModel.isSucessCreation {
+                    viewModel.openZaloPay()
+                }
+            }))
+        }
     }
 }
 

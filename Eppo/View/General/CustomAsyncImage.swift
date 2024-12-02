@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CustomAsyncImage: View {
     let imageUrl: String
@@ -13,33 +14,38 @@ struct CustomAsyncImage: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: URL(string: imageUrl), transaction: .init(animation: .bouncy(duration: 1))) { phase in
-            switch phase {
-            case .failure:
-                VStack(spacing: 20) {
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-//                    
-//                    Text("Tải ảnh thất bại")
-                }
-            case .success(let image):
-                image
+        KFImage(URL(string: imageUrl))
+            .placeholder {
+                Image("no-image")
                     .resizable()
-            default:
-//                ZStack {
-//                    Image(systemName: "photo")
-//                        .font(.largeTitle)
-//                        .padding(.top, 8)
-//                    
-//                    Text("Đang tải ảnh...")
-//                    
-                    ProgressView()
-//                }
+                    .scaledToFill()
+                    .clipped()
+                    .frame(width: width, height: height)
             }
-        }
-        .frame(width: width, height: height)
-        .scaledToFill()
-        .clipped()
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: width, height: height)
+            .clipped()
+    }
+}
+
+struct CustomRoundedAsyncImage: View {
+    let imageUrl: String
+    let width: CGFloat
+    let height: CGFloat
+    
+    var body: some View {
+        KFImage(URL(string: imageUrl))
+            .placeholder {
+                Image("no-image")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: width, height: height)
+            }
+            .resizable()
+            .frame(width: width, height: height)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipped()
     }
 }
 

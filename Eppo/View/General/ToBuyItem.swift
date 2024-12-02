@@ -16,33 +16,7 @@ struct ToBuyItem: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            AsyncImage(url: URL(string: imageUrl), transaction: .init(animation: .bouncy(duration: 1))) { phase in
-                switch phase {
-                case .failure:
-                    VStack(spacing: 20) {
-                        Image(systemName: "photo")
-                            .font(.largeTitle)
-                        
-                        Text("Tải ảnh thất bại")
-                    }
-                case .success(let image):
-                    image
-                        .resizable()
-                default:
-                    VStack(spacing: 6) {
-                        Image(systemName: "photo")
-                            .font(.largeTitle)
-                            .padding(.top, 8)
-                        
-                        Text("Đang tải ảnh...")
-                        
-                        ProgressView()
-                    }
-                }
-            }
-            .frame(width: 160, height: 150)
-            .scaledToFill()
-            .clipped()
+            CustomAsyncImage(imageUrl: imageUrl, width: 160, height: 150)
             
             VStack(alignment: .leading, spacing: 4){
                 Text(itemName)

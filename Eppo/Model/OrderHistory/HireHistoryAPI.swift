@@ -20,14 +20,18 @@ struct HireHistoryOrderDetail: Codable {
 struct HireHistoryOrder: Codable, Identifiable {
     let id: Int
     let deliveryFee: Double
+    let deliveryAddress: String
     let finalPrice: Double
     let orderDetails: [HireHistoryOrderDetail]
+    let paymentStatus: String
 
     enum CodingKeys: String, CodingKey {
         case id = "orderId"
         case deliveryFee = "deliveryFee"
+        case deliveryAddress = "deliveryAddress"
         case finalPrice = "finalPrice"
         case orderDetails = "orderDetails"
+        case paymentStatus = "paymentStatus"
     }
 }
 

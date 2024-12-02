@@ -110,16 +110,37 @@ struct ItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 10)
+                        .foregroundStyle(.black)
                 }
             }
+//            .overlay(alignment: .topTrailing) {
+//                Button {
+//                    addToCart()
+//                    viewModel.isAlertShowing = true
+//                } label: {
+//                    Image(systemName: "cart")
+//                        .resizable()
+//                        .fixedSize()
+//                        .font(.system(size: 30, weight: .medium))
+//                        .padding(.trailing, 30)
+//                        .padding(.top, 20)
+//                        .foregroundStyle(.red)
+//                        .overlay(alignment: .topTrailing) {
+//                            Text(UserSession.shared.cart.count, format: .number.grouping(.never))
+//                                .font(.caption)
+//                                .foregroundStyle(.white)
+//                                .fontWeight(.semibold)
+//                                .padding(5)
+//                                .background(Circle().foregroundStyle(.red))
+//                                .padding(.trailing)
+//                                .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
+//                        }
+//                }
+//            }
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
                 viewModel.getPlantById(id: id)
             }
-                        
-            Divider()
             
             HStack(alignment: .top, spacing: 0) {
                 Button {
@@ -131,6 +152,7 @@ struct ItemDetailScreen: View {
                 }
                 
                 Divider()
+                
                 VStack {
                     Button {
                         viewModel.isAlertShowing = true
@@ -159,7 +181,7 @@ struct ItemDetailScreen: View {
                     Button {
                         
                     } label: {
-//                        EmptyView()
+                        //                        EmptyView()
                     }
                 }
                 
@@ -187,6 +209,9 @@ struct ItemDetailScreen: View {
         }
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message))
+        }
     }
     
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
@@ -202,7 +227,6 @@ struct ItemDetailScreen: View {
             UserSession.shared.cart.append(plant)
             viewModel.message = "Đã thêm đơn hàng vào giỏ"
         }
-        
     }
     
     func plantExists(withId id: Int, in plants: [Plant]) -> Bool {

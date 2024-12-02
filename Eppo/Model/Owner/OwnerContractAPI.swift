@@ -11,7 +11,9 @@ import Foundation
 struct OwnerContractResponse: Codable {
     let statusCode: Int
     let message: String
-    let pdfUrl: String
+    let contractId: Int?
+    let pdfUrl: String?
+    let existingContract: ExistingContract?
 }
 
 struct OwnerContractRequest: Codable {
@@ -21,5 +23,10 @@ struct OwnerContractRequest: Codable {
 
 struct OwnerContractDetail: Codable {
     // Add properties as needed for each contract detail.
+}
+
+struct ExistingContract: Codable {
+    let contractId: Int
+    let contractUrl: String
 }
 

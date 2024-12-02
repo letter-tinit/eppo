@@ -105,38 +105,44 @@ struct HireItemDetailScreen: View {
                     
                     // MARK: - RATING
                     
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Đánh Giá sản phẩm")
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundStyle(.black)
-                        
-                        HStack {
-                            RatingView(rating: 4.5, font: .title2)
+                    if !viewModel.feedBacks.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Đánh giá sản phẩm")
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundStyle(.black)
                             
-                            Text("4.5/5")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundStyle(.red)
-                            
-                            Text("(2.1k đánh giá)")
-                                .font(.system(size: 16, weight: .regular))
-                                .foregroundStyle(.secondary)
-                            
+                            HStack {
+                                RatingView(rating: viewModel.averageRating, font: .title2)
+                                
+                                Text("\(viewModel.averageRating.formatted(.number.precision(.fractionLength(1))))/5")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundStyle(.red)
+                                
+                                Text("(\(viewModel.numberOfFeedbacks.formatted(.number.notation(.compactName))) đánh giá)")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(.secondary)
+                                
+                            }
                         }
-                    }
-                    .padding(.horizontal)
-                    
-                    Text("Đánh giá")
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundStyle(.black)
                         .padding(.horizontal)
-                    
-                    VStack(spacing: 20) {
-                        RateItem()
-                        RateItem()
-                        RateItem()
+                        
+                        Text("Đánh giá")
+                            .font(.system(size: 24, weight: .medium))
+                            .foregroundStyle(.black)
+                            .padding(.horizontal)
+                        
+                        VStack(spacing: 20) {
+                            ForEach(viewModel.feedBacks) { feedBack in
+                                RateItem(feedback: feedBack)
+                            }
+                        }
+                        .padding(.horizontal)
+                    } else {
+                        Text("Cây này chưa có đánh giá nào")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.gray)
+                            .padding(.horizontal)
                     }
-                    .padding(.horizontal)
-                    
                     
                     Spacer()
                 }
@@ -146,6 +152,7 @@ struct HireItemDetailScreen: View {
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
                 viewModel.getPlantById(id: id)
+                viewModel.getFeedbacks(plantId: id)
             }
             .overlay(alignment: .topLeading) {
                 Button {
@@ -157,10 +164,23 @@ struct HireItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.white)
-                        .shadow(color: .black, radius: 10)
+                        .foregroundStyle(.black)
                 }
             }
+            //            .overlay(alignment: .topTrailing) {
+            //                Button {
+            //                    addToCart()
+            //                    viewModel.isAlertShowing = true
+            //                } label: {
+            //                    Image(systemName: "cart")
+            //                        .resizable()
+            //                        .fixedSize()
+            //                        .font(.system(size: 30, weight: .medium))
+            //                        .padding(.trailing, 30)
+            //                        .padding(.top, 20)
+            //                        .foregroundStyle(.red)
+            //                }
+            //            }
             
             Divider()
             
@@ -171,6 +191,7 @@ struct HireItemDetailScreen: View {
                     .padding(.top, 20)
                     .overlay {
                         DatePicker(selection: $viewModel.selectedDate,
+                                   in: Date()...,
                                    displayedComponents: .date) {}
                             .labelsHidden()
                             .contentShape(Rectangle())
@@ -194,8 +215,8 @@ struct HireItemDetailScreen: View {
                 }
                 .padding(20)
                 
-                Button {
-                    viewModel.createOrderRental()
+                NavigationLink {
+                    HireOrderScreen(viewModel: viewModel)
                 } label: {
                     VStack(alignment: .leading) {
                         Text("Thuê cây")
@@ -215,9 +236,6 @@ struct HireItemDetailScreen: View {
                     .padding(.bottom, 20)
                     .background(.red)
                 }
-                .navigationDestination(isPresented: $viewModel.isLinkActive) {
-                    HireOrderScreen(viewModel: viewModel)
-                }
             }
             .frame(width: UIScreen.main.bounds.size.width, height: 100)
             .shadow(radius: 2, y: 2)
@@ -225,10 +243,27 @@ struct HireItemDetailScreen: View {
         .labelsHidden()
         .ignoresSafeArea(.all, edges: .bottom)
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel())
+            Alert(title: Text(viewModel.message))
         }
     }
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
+    func addToCart() {
+        guard let plant = viewModel.plant else {
+            return
+        }
+        
+        if plantExists(withId: plant.id, in: UserSession.shared.hireCart) {
+            viewModel.message = "Đơn hàng đã có trong giỏ hàng của bạn rồi"
+        } else {
+            UserSession.shared.hireCart.append(plant)
+            viewModel.message = "Đã thêm đơn hàng vào giỏ"
+        }
+    }
+    
+    func plantExists(withId id: Int, in plants: [Plant]) -> Bool {
+        return plants.contains { $0.id == id }
+    }
 }
 
 

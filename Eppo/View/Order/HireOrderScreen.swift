@@ -11,162 +11,169 @@ import WebKit
 struct HireOrderScreen: View {
     @Bindable var viewModel: ItemDetailsViewModel
     @State var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack {
-            CustomHeaderView(title: "Thanh Toán")
-            ScrollView(.vertical) {
-                VStack {
-                    AddressOrderView()
-                        .padding(.horizontal)
-                    
+        ZStack {
+            VStack {
+                CustomHeaderView(title: "Thanh Toán")
+                ScrollView(.vertical) {
                     VStack {
-                        if let plant = viewModel.plant {
-                            OrderItemView(plant: plant)
-                                .background(Color.clear)
-                        }
+                        //                    AddressOrderView()
+                        //                        .padding(.horizontal)
                         
-                        Divider()
-                            .padding(.horizontal, -14)
-                            .padding(.vertical, 10)
-                        
-                        HStack {
-                            Text("Giá Thuê")
-                                .font(.subheadline)
-                                .fontWeight(.regular)
-                            Spacer()
-                            HStack(spacing: 0) {
-                                Text(viewModel.plant?.finalPrice ?? 0, format: .currency(code: "VND"))
+                        Section {
+                            HStack(alignment: .top) {
+                                Text("Chọn địa chỉ")
                                 
-                                Text("/tháng")
+                                Picker("", selection: $viewModel.selectedAddress) {
+                                    ForEach(viewModel.addresses, id: \.self) { address in
+                                        Text(address.description)
+                                            .tag(address as Address?)
+                                            .multilineTextAlignment(.leading)
+                                    }
+                                }
+                                .pickerStyle(.navigationLink)
+                                .labelsHidden()
                             }
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
                         }
-                    }
-                    .padding(14)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                    
-                    List {
-                        Picker(selection: $selectedPaymentMethod) {
-                            ForEach(PaymentMethod.allCases, id: \.self) { paymentMethod in
-                                Text(paymentMethod.rawValue)
+                        .padding()
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
+                        
+                        VStack {
+                            if let plant = viewModel.plant {
+                                OrderItemView(plant: plant)
+                                    .background(Color.clear)
+                            }
+                            
+                            Divider()
+                                .padding(.horizontal, -14)
+                                .padding(.vertical, 10)
+                            
+                            
+                            HStack {
+                                Text("Phí vận chuyển:")
                                     .font(.subheadline)
-                                    .fontWeight(.medium)
+                                    .fontWeight(.regular)
+                                
+                                Spacer()
+                                
+                                Text(viewModel.deliveriteFree, format: .currency(code: "VND"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
                             }
-                        } label: {
-                            Text("Phương thức thanh toán")
-                                .fontWeight(.medium)
+                            
+                            Divider()
+                                .padding(.horizontal, -14)
+                                .padding(.vertical, 10)
+                            
+                            HStack {
+                                Text("Giá Thuê")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                Spacer()
+                                HStack(spacing: 0) {
+                                    Text(viewModel.plant?.finalPrice ?? 0, format: .currency(code: "VND"))
+                                    
+                                    Text("/tháng")
+                                }
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            }
                         }
+                        .padding(14)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal)
                         
-                        HStack {
-                            Text(selectedPaymentMethod.rawValue)
-                            
-                            Spacer()
-                            
-                            Image(systemName: selectedPaymentMethod == .cashOnDelivery ? "coloncurrencysign.circle" : "creditcard.fill")
-                                .foregroundStyle(selectedPaymentMethod == .cashOnDelivery ? .green : .red)
+                        List {
+                            HStack {
+                                Text("Thanh toán bằng ví")
+                                
+                                Spacer()
+                                
+                                Image(systemName: "creditcard.fill")
+                                    .foregroundStyle(.red)
+                            }
+                            .listRowSeparator(.hidden, edges: .bottom)
                         }
-                        
-                        HStack {
-                            Text("Phí vận chuyển:")
-                            
-                            Spacer()
-                            
-                            Text(viewModel.deliveriteFree ?? 0, format: .currency(code: "VND"))
-                        }
-                        .listRowSeparator(.hidden, edges: .bottom)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .listStyle(.inset)
+                        .scrollDisabled(true)
                     }
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 160)
-                    .listStyle(.inset)
-                    .scrollDisabled(true)
-                    VStack(alignment: .leading, spacing: 10) {
+                }
+                .scrollIndicators(.hidden)
+                .padding(.bottom)
+                
+                HStack(alignment: .center, spacing: 20) {
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text("Tổng thanh toán")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        Text(viewModel.rentTotalPrice(), format: .currency(code: "VND"))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.red)
+                    }
+                    
+                    if viewModel.isSigned {
+                        Button {
+                            viewModel.updatePaymentStatus(paymentId: 2)
+                        } label: {
+                            Text("Thanh toán")
+                                .fontWeight(.medium)
+                                .padding()
+                                .frame(width: 140, height: 40)
+                                .background(
+                                    LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .foregroundStyle(.white)
+                        }
+                    } else {
                         NavigationLink {
                             ContractScreen(viewModel: viewModel)
                         } label: {
-                            Text("Xem hợp đồng")
-                                .font(.headline)
-                                .underline()
-                                .foregroundStyle(viewModel.contractUrl == nil ? .gray : .blue)
-                        }
-                        .disabled(viewModel.contractUrl == nil)
-                        
-                        Divider()
-                        
-                        HStack {
-                            Text("Trạng thái hợp đồng:")
-                                .font(.headline)
-                                .fontWeight(.regular)
-                                .foregroundStyle(.gray)
-                            
-                            Spacer()
-                            
-                            Text(viewModel.isSigned ? "Đã ký" : "Chưa ký")
-                                .font(.headline)
+                            Text("Đặt hàng")
                                 .fontWeight(.medium)
-                                .foregroundStyle(viewModel.isSigned ? .green : .red)
+                                .padding()
+                                .frame(width: 140, height: 40)
+                                .background(
+                                    LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .foregroundStyle(.white)
                         }
                     }
-                    .padding()
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                    
-                    //                        Spacer()
                 }
+                .padding()
+                .background(.white)
             }
-            .scrollIndicators(.hidden)
-            .padding(.bottom)
+            .disabled(viewModel.isLoading)
             
-            HStack(alignment: .center, spacing: 20) {
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text("Tổng thanh toán")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text(viewModel.rentTotalPrice(), format: .currency(code: "VND"))
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.red)
-                }
-                
-                Button {
-                    //                    guard var createOrderRequest = viewModel.createOrderRequest else {
-                    //                        return
-                    //                    }
-                    
-//                                        createOrderRequest.paymentId = selectedPaymentMethod == .cashOnDelivery ? 1 : 2
-                    //
-                    //                    viewModel.createOrderRequest = createOrderRequest
-                    //
-                    //                    viewModel.createOrder()
-                    viewModel.updatePaymentStatus(paymentId: selectedPaymentMethod == .cashOnDelivery ? 1 : 2)
-                    
-                } label: {
-                    Text("Thanh toán")
-                        .fontWeight(.medium)
-                        .padding()
-                        .frame(width: 140, height: 40)
-                        .background(viewModel.isSigned ? .blue : .gray)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .foregroundStyle(.white)
-                }
-                .disabled(!viewModel.isSigned)
-            }
-            .padding()
-            .background(.white)
+            CustomLoadingCenterView(title: "Đang thanh toán")
+                .opacity(viewModel.isLoading ? 1 : 0)
         }
         .navigationBarBackButtonHidden()
-        .background(Color(uiColor: UIColor.systemGray5))
+        .background(Color(uiColor: UIColor.systemGray6))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
-            //            viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 100.0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
+            if viewModel.addresses.isEmpty {
+                viewModel.getAddress()
+            }
+        }
+        .alert(isPresented: $viewModel.isAlertShowing) {
+            Alert(title: Text(viewModel.message), dismissButton: .cancel({
+                self.dismiss()
+            }))
         }
     }
     

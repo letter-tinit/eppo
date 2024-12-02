@@ -11,6 +11,14 @@ import SwiftUI
 import Combine
 import PhotosUI
 
+enum SelectionTypeEcommerce: String, CaseIterable, Identifiable {
+    case buy = "Bán"
+    case hire = "Cho thuê"
+    case auction = "Đấu giá"
+    
+    var id: Self { self }
+}
+
 class OwnerItemAdditionViewModel: ObservableObject {
     // MARK: - Properties
     @Published var itemName: String = ""
@@ -24,6 +32,7 @@ class OwnerItemAdditionViewModel: ObservableObject {
     
     @Published var mainImage: UIImage? = nil
     @Published var additionalImages: [UIImage] = []
+    @Published var selectedEType: SelectionTypeEcommerce = .buy
     
     private let maxImages = 5
     
@@ -43,35 +52,50 @@ class OwnerItemAdditionViewModel: ObservableObject {
         return true
     }
     
+    @Published var isLoading: Bool = false
+    @Published var isAlertShowing: Bool = false
+    @Published var message: String?
     
-//    let plantData: [String: String] = [
-//        "typeEcommerceId": "\(1)", // Thay bằng dữ liệu thực tế
-//        "width": "\(150)",
-//        "length": "\(150)",
-//        "height": "\(150)",
-//        "finalPrice": "\(5000000)",
-//        "plantName": "Mobile Demo",
-//        "title": "Mobile Demo",
-//        "categoryId": "\(1)",
-//        "description": "Mobile Demo"
-//    ]
+    //    let plantData: [String: String] = [
+    //        "typeEcommerceId": "\(1)", // Thay bằng dữ liệu thực tế
+    //        "width": "\(150)",
+    //        "length": "\(150)",
+    //        "height": "\(150)",
+    //        "finalPrice": "\(5000000)",
+    //        "plantName": "Mobile Demo",
+    //        "title": "Mobile Demo",
+    //        "categoryId": "\(1)",
+    //        "description": "Mobile Demo"
+    //    ]
     
     func createOwnerItem() {
-            // Dữ liệu hardcode cho các trường ngoài hình ảnh
-//            let plantData: [String: String] = [
-//                "typeEcommerceId": "1", // Ví dụ Ecommerce type
-//                "width": "100", // Ví dụ giá trị
-//                "length": "100", // Ví dụ giá trị
-//                "height": "100", // Ví dụ giá trị
-//                "finalPrice": "200", // Ví dụ giá trị
-//                "plantName": "Sample Plant", // Ví dụ tên cây
-//                "title": "Sample Plant Title", // Ví dụ tiêu đề
-//                "categoryId": "1", // Ví dụ category ID
-//                "description": "This is a sample description" // Ví dụ mô tả
-//            ]
+        isLoading = true
+        var typeEcommerceId = 1
+        
+        switch selectedEType {
+        case .buy:
+            typeEcommerceId = 1
+        case .hire:
+            typeEcommerceId = 2
+        case .auction:
+            typeEcommerceId = 3
+        }
+        
+        // Dữ liệu hardcode cho các trường ngoài hình ảnh
+//        let plantData: [String: String] = [
+//            "typeEcommerceId": "\(typeEcommerceId)", // Ví dụ Ecommerce type
+//            "width": "100", // Ví dụ giá trị
+//            "length": "100", // Ví dụ giá trị
+//            "height": "100", // Ví dụ giá trị
+//            "finalPrice": "200", // Ví dụ giá trị
+//            "plantName": "Sample Plant", // Ví dụ tên cây
+//            "title": "Sample Plant Title", // Ví dụ tiêu đề
+//            "categoryId": "1", // Ví dụ category ID
+//            "description": "This is a sample description" // Ví dụ mô tả
+//        ]
         
         let plantData: [String: String] = [
-            "typeEcommerceId": "1", // Ví dụ Ecommerce type
+            "typeEcommerceId": "\(typeEcommerceId)", // Ví dụ Ecommerce type
             "width": width, // Ví dụ giá trị
             "length": length, // Ví dụ giá trị
             "height": height, // Ví dụ giá trị
@@ -81,37 +105,47 @@ class OwnerItemAdditionViewModel: ObservableObject {
             "categoryId": categoryId, // Ví dụ category ID
             "description": itemDescription // Ví dụ mô tả
         ]
-            
-            // Gọi API để tạo OwnerItem
-            APIManager.shared.createPlant(
-                plantData: plantData,
-                mainImage: mainImage,
-                additionalImages: additionalImages
-            )
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("API call succeeded")
-                case .failure(let error):
-                    switch error {
-                    case .networkError:
-                        print("Network error occurred. Please check your connection.")
-                    case .serverError(let statusCode):
-                        print("Server error occurred. Status code: \(statusCode)")
-                    case .noData:
-                        print("No data returned from server.")
-                    default:
-                        print("Unexpected error: \(error)")
-                    }
+        
+        // Gọi API để tạo OwnerItem
+        APIManager.shared.createPlant(
+            plantData: plantData,
+            mainImage: mainImage,
+            additionalImages: additionalImages
+        )
+        .receive(on: DispatchQueue.main)
+        .sink(receiveCompletion: { completion in
+            self.isLoading = false
+            switch completion {
+            case .finished:
+                self.message = "Đã tạo cây thành công"
+                self.isAlertShowing = true
+                print("Đã tạo cây thành công")
+            case .failure(let error):
+                switch error {
+                case .networkError:
+                    print("Network error occurred. Please check your connection.")
+                    self.message = "Lỗi mạng, vui lòng kiểm tra lại"
+                case .serverError(let statusCode):
+                    print("Server error occurred. Status code: \(statusCode)")
+                    self.message = "Lỗi server"
+                case .noData:
+                    self.message = "Không có dữ liệu trả về"
+                    print("No data returned from server.")
+                case .custom(let message):
+                    self.message = message
+                    print(message)
+                default:
+                    self.message = "Lỗi không xác định: \(error)"
+                    print("Unexpected error: \(error)")
                 }
-            }, receiveValue: { response in
-                // Xử lý response thành công
-                print("Owner item created successfully: \(response)")
-            })
-            .store(in: &cancellables)
-        }
-
+                self.isAlertShowing = true
+            }
+        }, receiveValue: { response in
+            // Xử lý response thành công
+            print("Owner item created successfully: \(response)")
+        })
+        .store(in: &cancellables)
+    }
     
     var validationMessage: String {
         if itemName.isEmpty { return "Tên sản phẩm không được để trống." }

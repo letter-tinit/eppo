@@ -8,7 +8,7 @@ import SwiftUI
 
 struct NotificationRow: View {
     // MARK: - PROPERTY
-    var notification: Notification
+    var notificationAPI: NotificationAPI
     
     var isFocusedNotification: Bool = false
 
@@ -25,18 +25,18 @@ struct NotificationRow: View {
             VStack(alignment: .leading) {
                 HStack {
                     // Notification Title
-                    Text(notification.title)
+                    Text(notificationAPI.title)
                         .font(.headline)
                     
                     Spacer()
                     
                     // Notification Time
-                    Text("notificationTime")
+                    Text(notificationAPI.createdDate.formatted(date: .omitted, time: .shortened))
                         .font(.footnote)
                         .foregroundStyle(.gray)
                 }
                 // Notification Content
-                Text(notification.description)
+                Text(notificationAPI.description)
                     .font(.subheadline)
             }
             .fontDesign(.rounded)
@@ -54,11 +54,5 @@ struct NotificationRow: View {
 
 // MARK: - PREVIEW
 #Preview {
-    NotificationRow(notification: Notification(
-        notificationId: 1,
-        title: "New Message",
-        description: "You have received a new message.",
-        isRead: false,
-        isNotifications: true
-    ))
+    NotificationRow(notificationAPI: NotificationAPI(title: "Tiêu đề", description: "Nội dung", createdDate: Date()))
 }
