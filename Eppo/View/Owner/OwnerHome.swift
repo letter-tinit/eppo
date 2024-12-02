@@ -19,7 +19,6 @@ struct OwnerHome: View {
     @State var searchText: String = ""
     @State private var date = Date()
     
-    private var data  = Array(1...10)
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
@@ -28,27 +27,35 @@ struct OwnerHome: View {
         VStack(spacing: 0) {
             SingleHeaderView(title: "Cây của tôi")
             
-            HStack {
+            HStack(spacing: 0) {
                 ForEach(TypeEcommerce.allCases, id: \.self) { typeEcommerce in
                     Button {
-                        withAnimation {
+                        withAnimation(.smooth(duration: 0.75)) {
                             viewModel.selectedType = typeEcommerce
                         }
                     } label: {
                         Text(typeEcommerce.rawValue)
                             .lineLimit(1)
                             .scaledToFill()
-                            .padding(.horizontal)
+                            .padding(.horizontal, 8)
                             .padding(.vertical, 4)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
                                     .foregroundStyle(viewModel.selectedType == typeEcommerce ? .blue : .gray)
                                     .opacity(0.6)
                             )
-                            .padding(8)
+                            .foregroundStyle(viewModel.selectedType == typeEcommerce ? .black : .white)
+                            .padding(.vertical, 10)
+                    }
+                    
+                    if typeEcommerce != .auction {
+                        Spacer(minLength: 30)
                     }
                 }
+                
+                Spacer()
             }
+            .padding(.horizontal)
             
             // MARK: - SEARCH BAR
 //            HStack(spacing: 14) {
@@ -89,30 +96,30 @@ struct OwnerHome: View {
                                     VStack(alignment: .leading, spacing: 10) {
                                         Image("sample-bonsai-01")
                                             .resizable()
-                                            .frame(width: 160, height: 100, alignment: .top)
+                                            .frame(height: 100, alignment: .top)
                                             .scaledToFit()
                                             .clipped()
                                         
-                                        VStack(alignment: .leading, spacing: 5){
-                                            Text(plant.name)
-                                                .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                                .multilineTextAlignment(.leading)
+                                        Text(plant.name)
+                                            .font(.system(size: 17, weight: .medium, design: .rounded))
+                                            .multilineTextAlignment(.leading)
+                                            .padding(.horizontal, 10)
+                                            .foregroundStyle(.black)
                                             
-                                            Text("30/07/2024  - 10:35:50")
-                                                .font(.caption)
-                                                .foregroundStyle(.gray)
-                                            
-                                            Text("Đang cho thuê")
-                                                .font(.caption)
-                                                .fontWeight(.semibold)
-                                                .foregroundStyle(.blue)
-                                        }
-                                        .padding(.horizontal, 10)
-                                        .padding(.bottom, 10)
+                                        
+                                        Text(10000, format: .currency(code: "VND"))
+                                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                            .foregroundStyle(.red)
+                                            .multilineTextAlignment(.leading)
+                                            .padding(.horizontal, 10)
+                                            .padding(.bottom, 10)
+                                        
+                                        Spacer()
                                     }
+                                    .frame(width: 160)
                                     .background(.white)
                                     .clipShape(RoundedRectangle(cornerRadius: 6))
-                                    .shadow(color: .black.opacity(0.5), radius: 2, y: 4)
+                                    .shadow(color: .gray.opacity(0.4), radius: 2, y: 4)
                                 }
                             }
                         }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 enum Tab: String, CaseIterable {
     case auction
@@ -19,6 +20,7 @@ struct MainTabView: View {
     // MARK: - PROPERTY
     @State var selectedTab: Tab
     @State var viewModel = LoginViewModel()
+    let notificationCenter = UNUserNotificationCenter.current()
     
     init (selectedTab: Tab) {
         //        UITabBar.appearance().backgroundColor = UIColor.white
@@ -67,8 +69,66 @@ struct MainTabView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             viewModel.getMyInformation()
+            requestNotification()
+            addNotification()
+            
+            // MARK: - THIS CONFIGURATION MAKE TABBAR NOT HIDDEN WHEN CONTENT IS TOO SHORT
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
     }
+    
+    private func requestNotification() {
+        Task {
+            do {
+                try await notificationCenter.requestAuthorization(options: [.alert, .badge, .sound])
+            } catch {
+                print("Request authorization error")
+            }
+        }
+    }
+    
+    private func addNotification() {
+        let center = UNUserNotificationCenter.current()
+        
+        let addRequest = {
+            let content  = UNMutableNotificationContent()
+            content.title = "Tiêu đề"
+            content.subtitle = "Tiêu đề phụ"
+            content.sound = UNNotificationSound.default
+            
+//            var dateComponents = DateComponents()
+//            dateComponents.hour = 9
+            
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            
+            center.add(request)
+        }
+        
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .authorized {
+                addRequest()
+            } else {
+                let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+                center.requestAuthorization(options: authOptions) { success, error in
+                    if success {
+                        addRequest()
+                    } else if let error {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct Prospect {
+    let id: Int
 }
 
 #Preview {

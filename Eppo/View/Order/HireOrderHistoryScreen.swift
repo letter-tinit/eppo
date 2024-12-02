@@ -6,6 +6,18 @@
 
 import SwiftUI
 
+enum HireOrderState: String, CaseIterable {
+    case waitingForConfirm = "Chờ xác nhận"
+    case waitingForPackage = "Đang chuẩn bị hàng"
+    case waitingForDeliver = "Đang giao"
+    case delivered = "Đã giao"
+    case canceled = "Đã hủy"
+    case refunded = "Đã thu hồi"
+
+    var flag: String {
+        return self.rawValue
+    }
+}
 
 struct HireOrderHistoryScreen: View {
     // MARK: - PROPERTY
@@ -19,7 +31,7 @@ struct HireOrderHistoryScreen: View {
             CustomHeaderView(title: "Đơn hàng Thuê")
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    ForEach(OrderState.allCases, id: \.self) { orderState in
+                    ForEach(HireOrderState.allCases, id: \.self) { orderState in
                         Button {
                             withAnimation {
                                 viewModel.selectedOrderState = orderState
@@ -35,7 +47,7 @@ struct HireOrderHistoryScreen: View {
                         }
                         .padding(.vertical, 10)
                         .padding(orderState == .waitingForConfirm ? .leading : [])
-                        .padding(orderState == .canceled ? .trailing : [])
+                        .padding(orderState == .refunded ? .trailing : [])
                         .matchedGeometryEffect(id: orderState, in: animation, isSource: viewModel.selectedOrderState == orderState)
                     }
                 }

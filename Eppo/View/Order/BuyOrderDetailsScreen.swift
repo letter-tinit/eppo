@@ -142,7 +142,8 @@ struct BuyOrderDetailsScreen: View {
                 .background(.white)
             }
             
-            CustomLoadingCenterView(title: "Đang xử lý")
+            
+            CustomLoadingCenterView(title: "Đang thanh toán")
                 .opacity(viewModel.isLoading ? 1 : 0)
         }
         .navigationBarBackButtonHidden()

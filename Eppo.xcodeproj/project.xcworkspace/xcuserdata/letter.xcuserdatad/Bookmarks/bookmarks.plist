@@ -68,6 +68,50 @@
 			<key>type</key>
 			<string>bookmark</string>
 		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>26</string>
+					<key>EndingLineNumber</key>
+					<string>880</string>
+					<key>StartingColumnNumber</key>
+					<string>9</string>
+					<key>StartingLineNumber</key>
+					<string>880</string>
+					<key>Timestamp</key>
+					<string>754797128.067525</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>Eppo/Manager/APIManager.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>createTransaction</string>
+				<key>leading</key>
+				<string>    }
+    
+    func </string>
+				<key>trailing</key>
+				<string>(walletId: Int, amount: Double) -&gt; AnyPublisher&lt;TransactionResponse, Error&gt; {
+        let url = APIConstants.Transaction.create
+        
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
 	</array>
 </dict>
 </plist>

@@ -47,7 +47,7 @@ struct NotificationScreen: View {
                         }
                     }
                 }
-                .padding(.bottom)
+                .padding(.bottom, 50)
                 .background(.white)
             }
         }

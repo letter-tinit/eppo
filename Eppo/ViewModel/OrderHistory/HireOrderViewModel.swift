@@ -12,7 +12,7 @@ import Observation
 
 @Observable
 class HireOrderViewModel {
-    var selectedOrderState: OrderState = .waitingForConfirm
+    var selectedOrderState: HireOrderState = .waitingForConfirm
     
     var orders: [HireHistoryOrder] = []
     var cancellables: Set<AnyCancellable> = []
@@ -36,6 +36,8 @@ class HireOrderViewModel {
             orderState = 4
         case .canceled:
             orderState = 5
+        case .refunded:
+            orderState = 6
         }
         
         APIManager.shared.getHireOrderHistory(pageIndex: 1, pageSize: 999, status: orderState)

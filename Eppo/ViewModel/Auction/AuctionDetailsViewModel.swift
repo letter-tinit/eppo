@@ -31,7 +31,7 @@ import Combine
         isLoading = true
         hasError = false
         
-        APIManager.shared.getRoomById(id: 10)
+        APIManager.shared.getRoomById(id: roomId)
             .sink { result in
                 self.isLoading = false
                 switch result {

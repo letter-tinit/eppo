@@ -187,6 +187,7 @@
 		2C05E6362CF81EA300618F4F /* OwnerOrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerOrderViewModel.swift; sourceTree = "<group>"; };
 		2C0807C92CE0706C00598AD0 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		2C0807CC2CE0712A00598AD0 /* NotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationResponse.swift; sourceTree = "<group>"; };
+		2C0D4A442CFD5B6B00A08D10 /* Eppo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Eppo.entitlements; sourceTree = "<group>"; };
 		2C129E5A2CF0CFFF002AC952 /* OwnerContractView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractView.swift; sourceTree = "<group>"; };
 		2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractAPI.swift; sourceTree = "<group>"; };
 		2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContactViewModel.swift; sourceTree = "<group>"; };
@@ -430,22 +431,22 @@
 		2C55405F2CA4030800F39C0E /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */,
-				2C5920EC2CA794FA004E996F /* BuyOrderRowView.swift */,
-				2C7900532CA79FA90015B320 /* OrderButtonLabel.swift */,
-				2CAD5A642CABA9030038F795 /* RatingSubmitView.swift */,
-				2CAD5A662CABAAA50038F795 /* RatingStarSubmitionView.swift */,
-				2C907EE92CE2154E005CDBD5 /* OrderDetailsScreen.swift */,
 				2C907EEB2CE21AC5005CDBD5 /* AddressOrderView.swift */,
-				2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */,
-				2C8C5F952CE63CE70057183C /* HireOrderScreen.swift */,
+				2CF1BACE2CE762E00021D051 /* BuyOrderDetailsScreen.swift */,
+				2C5920EC2CA794FA004E996F /* BuyOrderRowView.swift */,
+				2CDE4D4E2CFAD6C500A7FA69 /* CartHireOrderItemView.swift */,
 				2C8C5F9C2CE64E2D0057183C /* ContractScreen.swift */,
+				2CDE4D4A2CFAD4BF00A7FA69 /* HireOrderDetailsScreen.swift */,
 				2CF1BABE2CE6EBA50021D051 /* HireOrderHistoryScreen.swift */,
 				2CF1BAC02CE6EFD10021D051 /* HireOrderRowView.swift */,
-				2CF1BACE2CE762E00021D051 /* BuyOrderDetailsScreen.swift */,
+				2C8C5F952CE63CE70057183C /* HireOrderScreen.swift */,
+				2C7900532CA79FA90015B320 /* OrderButtonLabel.swift */,
+				2C907EE92CE2154E005CDBD5 /* OrderDetailsScreen.swift */,
+				2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */,
+				2C907EED2CE21C78005CDBD5 /* OrderItemView.swift */,
+				2CAD5A662CABAAA50038F795 /* RatingStarSubmitionView.swift */,
+				2CAD5A642CABA9030038F795 /* RatingSubmitView.swift */,
 				2C61687E2CF4B4EC0056B799 /* ReviewContractScreen.swift */,
-				2CDE4D4A2CFAD4BF00A7FA69 /* HireOrderDetailsScreen.swift */,
-				2CDE4D4E2CFAD6C500A7FA69 /* CartHireOrderItemView.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -738,6 +739,7 @@
 		2CC5A2252C5A019300D0035D /* Eppo */ = {
 			isa = PBXGroup;
 			children = (
+				2C0D4A442CFD5B6B00A08D10 /* Eppo.entitlements */,
 				2CEAF0F22CF8A4B400C0B880 /* Resource */,
 				2CEAF0F12CF8A49F00C0B880 /* App */,
 				2C8C5F902CE62FA30057183C /* Extension */,
@@ -1279,8 +1281,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
@@ -1320,8 +1323,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
