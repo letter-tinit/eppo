@@ -28,4 +28,10 @@ extension JSONDecoder {
         // decoder.dateDecodingStrategy = .iso8601
         return decoder
     }
+    
+    static var customSimpleDateDecoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }
 }

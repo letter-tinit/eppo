@@ -470,16 +470,26 @@ class APIManager {
         ]
         
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-            .validate() // Validates the response
-            .response { response in
+            .validate(statusCode: 200..<300) // You can also specify a valid range explicitly
+            .responseDecodable(of: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder) { response in
+                switch response.result {
+                case .success(let data):
+                    print("Data: \(data)")
+                    // Handle successful response, e.g., update UI or state
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                    // Handle failure case
+                }
+            }
+            .responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
+                    print("Response JSON: \(value)") // Inspect full response
                 case .failure(let error):
                     print("Request failed with error: \(error.localizedDescription)")
                 }
             }
-            .publishDecodable(type: NotificationResponse.self)
+            .publishDecodable(type: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error

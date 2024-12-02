@@ -9,18 +9,24 @@ import Foundation
 import Combine
 import Observation
 
-@Observable class NotificationViewModel {
-    var notifications: [Notification] = []
-    
+@Observable 
+class NotificationViewModel {
+    var notificationResponseDatas: [NotificationResponseData] = []
+    var latestNotification: NotificationAPI?
+
     var cancellables: Set<AnyCancellable> = []
+    var isLoading = false
     
     func getListNotification() {
+        isLoading = true
+        
         guard let token = UserSession.shared.token else {
             return
         }
         
         APIManager.shared.getListNotifications(token: token, pageIndex: 1, pageSize: 10)
             .sink { result in
+                self.isLoading = false
                 switch result {
                 case .finished:
                     break
@@ -28,7 +34,8 @@ import Observation
                     print(error.localizedDescription)
                 }
             } receiveValue: { notificationResponse in
-                self.notifications = notificationResponse.data
+                self.notificationResponseDatas = notificationResponse.data
+                self.latestNotification = notificationResponse.data.first?.notifications.first
             }
             .store(in: &cancellables)
     }

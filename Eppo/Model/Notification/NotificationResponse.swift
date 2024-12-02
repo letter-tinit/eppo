@@ -26,14 +26,22 @@ import Foundation
 struct NotificationResponse: Codable {
     var statusCode: Int
     var message: String
-    var data: [Notification]
+    var data: [NotificationResponseData]
 }
 
-struct Notification: Codable {
-    var notificationId: Int
+struct NotificationResponseData: Codable, Identifiable, Hashable {
+    var id: String {  // Generate a unique ID based on the date
+        return date.description // Use `date` if available or UUID fallback
+    }
+    var date: Date
+    var notifications: [NotificationAPI]
+}
+
+struct NotificationAPI: Codable, Identifiable, Hashable {
+    var id: String {  // Generate a unique ID based on `createdDate`
+        return createdDate.description  // Use the `createdDate` to create a unique ID
+    }
     var title: String
     var description: String
-    var isRead: Bool
-    var isNotifications: Bool
+    var createdDate: Date
 }
-

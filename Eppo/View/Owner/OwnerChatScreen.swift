@@ -26,8 +26,8 @@ struct OwnerChatScreen: View {
 //                            MyChatBox(textMessage: "Loại cây này trồng vào không khí ở Mỹ có thích hợp không?", textState: index == 4 ? "Sending" : "Sent" , textTime: "10:10 AM")
                         }
                     } header: {
-                        TimelineBox(timelineText: "03:22 04/09/2024")
-                            .padding(.vertical, 20)
+//                        TimelineBox(timelineText: "03:22 04/09/2024")
+//                            .padding(.vertical, 20)
                     }
                 }
                 .padding(.bottom)

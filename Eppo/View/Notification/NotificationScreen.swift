@@ -15,7 +15,7 @@ struct NotificationScreen: View {
         VStack {
             SingleHeaderView(title: "Thông báo")
             
-            if viewModel.notifications.isEmpty {
+            if viewModel.notificationResponseDatas.isEmpty {
                 Spacer()
                 
                 Text("Bạn không có thông báo mới nào")
@@ -32,17 +32,19 @@ struct NotificationScreen: View {
                             .multilineTextAlignment(.leading)
                             .padding(.horizontal)
                         
+                        if let latestNotification = viewModel.latestNotification {
+                            NotificationRow(notificationAPI: latestNotification, isFocusedNotification: true)
+                        }
                         
-                        NotificationRow(notification: viewModel.notifications[0], isFocusedNotification: true)
                     }
                     
-                    ForEach(0 ..< 2) { index in
+                    ForEach(viewModel.notificationResponseDatas, id: \.self) { notificationResponseData in
                         Section {
-                            ForEach(0 ..< 6) { _ in
-                                //                            NotificationRow(notificationTitle: "Tiêu đề thông báo", notificationTime: "10:00 AM", notificationContent: "Nội dung của thông báo")
+                            ForEach(notificationResponseData.notifications, id: \.self) { notification in
+                                NotificationRow(notificationAPI: notification)
                             }
                         } header: {
-                            TimelineBox(timelineText: "26/06/2024")
+                            TimelineBox(timeline: notificationResponseData.date)
                                 .padding(.vertical, 20)
                         }
                     }

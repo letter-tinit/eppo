@@ -44,6 +44,7 @@ struct PartnerChatBox: View {
             Spacer(minLength: 60)
             
         }
+        .padding(.horizontal, 8)
         .contentShape(Rectangle())
         .onTapGesture {
             withAnimation {
