@@ -18,12 +18,9 @@ struct HomeScreen: View {
             HomeHeader()
             
             RecomendGrid(viewModel: viewModel)
-            
-            Spacer()
-            
         }
         .background(Color.init(uiColor: UIColor.systemGray5))
-        .ignoresSafeArea(.all)
+        .ignoresSafeArea(.container, edges: .top)
     }
 }
 

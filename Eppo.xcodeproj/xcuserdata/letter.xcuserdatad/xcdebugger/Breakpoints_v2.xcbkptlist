@@ -3,4 +3,52 @@
    uuid = "8DFADA12-55AC-4305-9748-19FD9D512CA6"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "90DBE8E6-A21A-4CE9-877A-E512B33DAD67"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Eppo/ViewModel/Profile/ProfileViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "getHistoryAuction()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "90DBE8E6-A21A-4CE9-877A-E512B33DAD67 - 2988e3eb95c08908"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Eppo.HistoryRoomResponse) -&gt; () in Eppo.ProfileViewModel.getHistoryAuction() -&gt; ()"
+                  moduleName = "Eppo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/letter/Desktop/Eppo/Eppo/ViewModel/Profile/ProfileViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "107"
+                  endingLineNumber = "107">
+               </Location>
+               <Location
+                  uuid = "90DBE8E6-A21A-4CE9-877A-E512B33DAD67 - 2988e3eb95c08865"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Eppo.HistoryRoomResponse) -&gt; () in Eppo.ProfileViewModel.getHistoryAuction() -&gt; ()"
+                  moduleName = "Eppo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/letter/Desktop/Eppo/Eppo/ViewModel/Profile/ProfileViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "118"
+                  endingLineNumber = "118">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

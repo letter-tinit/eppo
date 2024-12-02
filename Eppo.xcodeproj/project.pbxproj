@@ -20,6 +20,8 @@
 		2C129E5D2CF0D3FA002AC952 /* OwnerContractAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */; };
 		2C129E5F2CF0D535002AC952 /* OwnerContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */; };
 		2C129E632CF0DB66002AC952 /* PDFWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C129E622CF0DB66002AC952 /* PDFWebView.swift */; };
+		2C1524202CFDF801000A57D3 /* HistoryRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C15241F2CFDF801000A57D3 /* HistoryRoom.swift */; };
+		2C1524222CFDFDDB000A57D3 /* HistoryRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1524212CFDFDDB000A57D3 /* HistoryRoomScreen.swift */; };
 		2C2135592C7992DA0076D82F /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2135582C7992DA0076D82F /* CustomHeaderView.swift */; };
 		2C21355D2C799E870076D82F /* CustomAvatarHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */; };
 		2C21355F2C799F8E0076D82F /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C21355E2C799F8E0076D82F /* CircleImageView.swift */; };
@@ -193,6 +195,8 @@
 		2C129E5C2CF0D3FA002AC952 /* OwnerContractAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContractAPI.swift; sourceTree = "<group>"; };
 		2C129E5E2CF0D534002AC952 /* OwnerContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerContactViewModel.swift; sourceTree = "<group>"; };
 		2C129E622CF0DB66002AC952 /* PDFWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFWebView.swift; sourceTree = "<group>"; };
+		2C15241F2CFDF801000A57D3 /* HistoryRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRoom.swift; sourceTree = "<group>"; };
+		2C1524212CFDFDDB000A57D3 /* HistoryRoomScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRoomScreen.swift; sourceTree = "<group>"; };
 		2C2135582C7992DA0076D82F /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 		2C21355C2C799E870076D82F /* CustomAvatarHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarHeader.swift; sourceTree = "<group>"; };
 		2C21355E2C799F8E0076D82F /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
@@ -630,8 +634,9 @@
 				2CA3568B2CE3269000FEB033 /* ProfileAPI.swift */,
 				2CA3568F2CE37A2400FEB033 /* AddressAPI.swift */,
 				2CDA76EA2CE45EF800860CB4 /* Address.swift */,
-				2C8C5F862CE5CB830057183C /* Wallet */,
 				2CEAF0F52CF8AF9900C0B880 /* FeedBackAPI.swift */,
+				2C8C5F862CE5CB830057183C /* Wallet */,
+				2C15241F2CFDF801000A57D3 /* HistoryRoom.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -863,6 +868,7 @@
 				2C05DE512CF1885E008E2D75 /* PaymentScreen.swift */,
 				2CEAF0F32CF8AF1300C0B880 /* FeedBackScreen.swift */,
 				2CEAF0F92CF8B3FA00C0B880 /* FeedBackItem.swift */,
+				2C1524212CFDFDDB000A57D3 /* HistoryRoomScreen.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1057,6 +1063,8 @@
 				2C78D6022C7D6C8E00204BFE /* CustomSettingNavigationLink.swift in Sources */,
 				2CDE4D492CFAC0EA00A7FA69 /* CartStateHeader.swift in Sources */,
 				2C05E6372CF81EA300618F4F /* OwnerOrderViewModel.swift in Sources */,
+				2C1524222CFDFDDB000A57D3 /* HistoryRoomScreen.swift in Sources */,
+				2C1524202CFDF801000A57D3 /* HistoryRoom.swift in Sources */,
 				2C30BCAD2CEF37EE0077FB14 /* DateExtension.swift in Sources */,
 				2CC4C3562CEF6D880084582E /* SignUpViewModel.swift in Sources */,
 				2CDE4D4B2CFAD4BF00A7FA69 /* HireOrderDetailsScreen.swift in Sources */,
@@ -1287,7 +1295,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
@@ -1329,7 +1337,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;

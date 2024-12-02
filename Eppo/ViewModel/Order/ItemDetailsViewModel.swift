@@ -81,7 +81,7 @@ enum ActiveAlert {
                 self?.averageRating = feedBackAPIResponse.data.totalRating / Double(feedBackAPIResponse.data.numberOfFeedbacks)
                 self?.numberOfFeedbacks = feedBackAPIResponse.data.numberOfFeedbacks
                 self?.feedBacks = feedBackAPIResponse.data.feedbacks
-                print(self?.feedBacks)
+                print(self?.feedBacks as Any)
             }
             .store(in: &cancellables)
 

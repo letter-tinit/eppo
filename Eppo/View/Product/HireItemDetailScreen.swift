@@ -138,9 +138,9 @@ struct HireItemDetailScreen: View {
                         }
                         .padding(.horizontal)
                     } else {
-                        Text("Đơn hàng chưa có đánh giá nào")
+                        Text("Cây này chưa có đánh giá nào")
                             .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.gray)
                             .padding(.horizontal)
                     }
                     

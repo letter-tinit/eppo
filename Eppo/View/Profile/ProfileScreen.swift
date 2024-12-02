@@ -9,8 +9,13 @@ import SwiftUI
 struct ProfileScreen: View {
     // MARK: - PROPERTY
     @AppStorage("isLogged") var isLogged: Bool = false
-    
     @State var viewModel = ProfileViewModel()
+    var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    }
+    var appBuild: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    }
     // MARK: - BODY
     
     var body: some View {
@@ -81,7 +86,7 @@ struct ProfileScreen: View {
                         
 //                        Divider()
                         
-                        CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: Text("Destination View"))
+                        CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: HistoryRoomScreen(viewModel: viewModel))
                         
                         Divider()
                         
@@ -120,7 +125,7 @@ struct ProfileScreen: View {
                 
                 Spacer(minLength: 30)
                 
-                Text("version 1.0.0")
+                Text("v\(appVersion) build \(appBuild)")
                     .foregroundStyle(.secondary)
                 
                 Spacer(minLength: 20)

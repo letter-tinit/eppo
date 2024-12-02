@@ -90,14 +90,8 @@ struct RecomendGrid: View {
             }
             .padding()
             
-            Text("Hết")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .opacity(viewModel.isLastPage ? 1 : 0)
-                .padding(.bottom)
         }
         .background(.white)
-        .padding(.bottom, 80)
         .refreshable {
             viewModel.resetPagination()
             loadMorePlant()

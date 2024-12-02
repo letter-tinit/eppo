@@ -59,7 +59,8 @@ struct APIConstants {
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
         static let getHistoryBid = baseURL + "api/HistoryBid/GetHistoryBidsByRoomId"
-        
+        static let getHistoryAuction = baseURL + "api/v1/GetList/History/AllRoom"
+
     }
     
     struct Category {
@@ -325,6 +326,26 @@ class APIManager {
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .validate()
             .publishDecodable(type: AuctionDetailHistoryResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getHistoryAuction(pageIndex: Int, pageSize: Int) -> AnyPublisher<HistoryRoomResponse, Error> {
+        let url = APIConstants.Room.getHistoryAuction
+        
+        let headers = setupHeaderToken()
+        
+        let parameters: [String: Any] = [
+            "page": pageIndex,
+            "size": pageSize
+        ]
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: HistoryRoomResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error

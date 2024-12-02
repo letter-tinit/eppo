@@ -25,6 +25,9 @@ class ProfileViewModel {
     // MARK: - TRANSACTION HISTORY SCREEN
     var transactions: [TransactionAPI] = []
     
+    // MARK: - AUCTION HISTORY SCREEN
+    var auctions: [HistoryRoom] = []
+    
     // MARK: - Trạng thái cho UI
     var isLoading = false
     var hasError = false
@@ -92,6 +95,30 @@ class ProfileViewModel {
             }
             .store(in: &cancellables)
         
+    }
+    
+    func getHistoryAuction() {
+        isLoading = true
+        hasError = false
+        errorMessage = nil
+        
+        APIManager.shared.getHistoryAuction(pageIndex: 1, pageSize: 999)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.hasError = true
+                    self.handleAPIError(error)
+                }
+            } receiveValue: { historyRoomResponse in
+                print(historyRoomResponse.data)
+                self.auctions = historyRoomResponse.data
+            }
+            .store(in: &cancellables)
     }
     
     private func handleAPIError(_ error: Error) {
