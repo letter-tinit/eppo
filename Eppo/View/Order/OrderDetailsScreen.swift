@@ -141,6 +141,7 @@ struct OrderDetailsScreen: View {
                 .padding()
                 .background(.white)
             }
+            .disabled(viewModel.isLoading)
             
             CustomLoadingCenterView(title: "Đang thanh toán")
                 .opacity(viewModel.isLoading ? 1 : 0)
