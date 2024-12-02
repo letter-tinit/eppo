@@ -519,25 +519,42 @@ class APIManager {
                 .eraseToAnyPublisher()
         }
         
-        //        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzIiwicm9sZUlkIjoiNSIsInJvbGVOYW1lIjoiY3VzdG9tZXIiLCJmdWxsTmFtZSI6IlVzZXIgVGhyZWUiLCJlbWFpbCI6ImN1c3RvbWVyQGV4YW1wbGUuY29tIiwicGhvbmVOdW1iZXIiOiIwMTEyMjMzNDQ1IiwiZ2VuZGVyIjoiTWFsZSIsIndhbGxldElkIjoiMiIsImlkZW50aWZpY2F0aW9uQ2FyZCI6IjEyMzQ1NiIsImRhdGVPZkJpcnRoIjoiMy8zLzE5OTQgMTI6MDA6MDAgQU0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjdXN0b21lciIsImV4cCI6MTczMTQwMDY0MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDAifQ.TFZ_kqsJ27dltRVfud-IJXbhy94SnQIbwMxeDvSKJFE"
-        
         // Set up headers with the authorization token
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
+            "accept": "*/*",
             "Content-Type": "application/json"
         ]
         
         return AF.request(apiUrl, method: .get, headers: headers)
             .validate()
-            .response { response in
-                switch response.result {
-                case .success(let value):
-                    print("Response JSON: \(String(describing: value))") // Print the JSON response to inspect
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                }
-            }
             .publishDecodable(type: UserResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getMyInformationTest() -> AnyPublisher<UserResponseTest, Error> {
+        let apiUrl = APIConstants.User.getMyInfor
+        
+        // Ensure there's a token available
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "application/json"
+        ]
+        
+        return AF.request(apiUrl, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: UserResponseTest.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
                 return error as Error

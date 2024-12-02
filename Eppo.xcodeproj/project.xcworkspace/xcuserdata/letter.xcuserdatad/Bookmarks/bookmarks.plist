@@ -31,13 +31,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>940</string>
+					<string>957</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>939</string>
+					<string>956</string>
 					<key>Timestamp</key>
-					<string>754723830.19309</string>
+					<string>754814939.7522351</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -74,15 +74,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>26</string>
+					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>880</string>
+					<string>898</string>
 					<key>StartingColumnNumber</key>
-					<string>9</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>880</string>
+					<string>897</string>
 					<key>Timestamp</key>
-					<string>754797128.067525</string>
+					<string>754814939.752269</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -98,15 +98,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>createTransaction</string>
+				<string>    func createTransaction(walletId: Int, amount: Double) -&gt; AnyPublisher&lt;TransactionResponse, Error&gt; {
+</string>
 				<key>leading</key>
 				<string>    }
     
-    func </string>
+</string>
 				<key>trailing</key>
-				<string>(walletId: Int, amount: Double) -&gt; AnyPublisher&lt;TransactionResponse, Error&gt; {
-        let url = APIConstants.Transaction.create
+				<string>        let url = APIConstants.Transaction.create
         
+        guard let token = UserSession.shared.token else {
 </string>
 			</dict>
 			<key>type</key>

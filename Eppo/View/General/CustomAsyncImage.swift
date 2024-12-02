@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CustomAsyncImage: View {
     let imageUrl: String
@@ -13,35 +14,18 @@ struct CustomAsyncImage: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: URL(string: imageUrl), transaction: .init(animation: .bouncy(duration: 1))) { phase in
-            switch phase {
-            case .failure:
-                VStack(spacing: 20) {
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-//                    
-//                    Text("Tải ảnh thất bại")
-                }
-            case .success(let image):
-                image
+        KFImage(URL(string: imageUrl))
+            .placeholder {
+                Image("no-image")
                     .resizable()
                     .scaledToFill()
                     .clipped()
-            default:
-//                ZStack {
-//                    Image(systemName: "photo")
-//                        .font(.largeTitle)
-//                        .padding(.top, 8)
-//                    
-//                    Text("Đang tải ảnh...")
-//                    
-                    ProgressView()
-//                }
+                    .frame(width: width, height: height)
             }
-        }
-        .frame(width: width, height: height)
-        .scaledToFill()
-        .clipped()
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: width, height: height)
+            .clipped()
     }
 }
 
@@ -51,38 +35,17 @@ struct CustomRoundedAsyncImage: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: URL(string: imageUrl), transaction: .init(animation: .bouncy(duration: 1))) { phase in
-            switch phase {
-            case .failure:
-                VStack(spacing: 20) {
-                    Image(systemName: "photo")
-                        .font(.largeTitle)
-                        .background(RoundedRectangle(cornerRadius: 6))
-                        .clipped()
-//
-//                    Text("Tải ảnh thất bại")
-                }
-            case .success(let image):
-                image
+        KFImage(URL(string: imageUrl))
+            .placeholder {
+                Image("no-image")
                     .resizable()
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .background(RoundedRectangle(cornerRadius: 6))
-                    .clipped()
-            default:
-//                ZStack {
-//                    Image(systemName: "photo")
-//                        .font(.largeTitle)
-//                        .padding(.top, 8)
-//
-//                    Text("Đang tải ảnh...")
-//
-                    ProgressView()
-//                }
+                    .scaledToFit()
+                    .frame(width: width, height: height)
             }
-        }
-        .frame(width: width, height: height)
-        .scaledToFill()
-        .clipped()
+            .resizable()
+            .frame(width: width, height: height)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipped()
     }
 }
 

@@ -20,8 +20,12 @@ extension JSONDecoder {
     static var customDateDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" // adjust this format to match your API's date format
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         decoder.dateDecodingStrategy = .formatted(formatter)
+        
+        // Alternatively, use .iso8601 if the format strictly adheres to ISO standards
+        // decoder.dateDecodingStrategy = .iso8601
         return decoder
     }
 }

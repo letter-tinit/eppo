@@ -36,6 +36,20 @@ class ProfileViewModel {
     
     func getMyInformation() {
         isLoading = true
+//        APIManager.shared.getMyInformationTest()
+//            .sink { completion in
+//                self.isLoading = false
+//                switch completion {
+//                case .finished:
+//                    break
+//                case .failure(let error):
+//                    print(error.localizedDescription)
+//                }
+//            } receiveValue: { userResponse in
+//                print(userResponse as Any)
+//            }
+//            .store(in: &cancellables)
+        
         APIManager.shared.getMyInformation()
             .sink { completion in
                 self.isLoading = false
