@@ -109,6 +109,7 @@ struct APIConstants {
     struct Transaction {
         static let getHistory = baseURL + "api/v1/Transaction/GetAllTransactionsInWallet"
         static let create = baseURL + "api/v1/Transaction/CreateTransaction"
+        static let createZalopayTransaction = baseURL + "api/v1/Payment/ZaloPay/Recharge"
     }
     
     struct Conversation {
@@ -479,14 +480,6 @@ class APIManager {
                 case .failure(let error):
                     print("Request failed with error: \(error.localizedDescription)")
                     // Handle failure case
-                }
-            }
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    print("Response JSON: \(value)") // Inspect full response
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
                 }
             }
             .publishDecodable(type: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder)
@@ -945,6 +938,49 @@ class APIManager {
             "walletId": walletId,
             "paymentId": 2,
             "withdrawNumber": 0.0,
+            "rechargeNumber": amount
+        ]
+        
+        return AF.upload(
+            multipartFormData: { formData in
+                for (key, value) in parameters {
+                    if let value = value as? String {
+                        formData.append(Data(value.utf8), withName: key)
+                    } else if let value = value as? Int {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    } else if let value = value as? Double {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    }
+                }
+            },
+            to: url,
+            headers: headers
+        )
+        .validate()
+        .publishDecodable(type: TransactionResponse.self, decoder: JSONDecoder())
+        .value()
+        .mapError { error in
+            return error as Error
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func createZalopayTransaction(amount: Double) -> AnyPublisher<TransactionResponse, Error> {
+        let url = APIConstants.Transaction.createZalopayTransaction
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Parameters
+        let parameters: [String: Any] = [
             "rechargeNumber": amount
         ]
         

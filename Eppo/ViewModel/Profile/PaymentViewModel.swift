@@ -80,4 +80,39 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
             }
             .store(in: &cancellables)
     }
+    
+    func createZalopayTransaction() {
+        isLoading = true
+        isSucessCreation = false
+        
+        guard let amount = Double(amountInput) else {
+            isLoading = false
+            return
+        }
+        
+        APIManager.shared.createZalopayTransaction(amount: amount)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                    self.message = "Lỗi khi tạo transaction"
+                    self.isAlertShowing = true
+                }
+            } receiveValue: { result in
+                print(result)
+                if let zpTransToken = result.zp_trans_token {
+                    self.zpTransToken = zpTransToken
+                    self.message = "Đã tạo thành công transaction"
+                    self.isAlertShowing = true
+                    self.isSucessCreation = true
+                } else {
+                    self.message = "Lỗi khi tạo transaction"
+                    self.isAlertShowing = true
+                }
+            }
+            .store(in: &cancellables)
+    }
 }
