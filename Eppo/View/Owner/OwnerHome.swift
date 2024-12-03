@@ -94,11 +94,7 @@ struct OwnerHome: View {
                                     OwnerItemDetailScreen()
                                 } label: {
                                     VStack(alignment: .leading, spacing: 10) {
-                                        Image("sample-bonsai-01")
-                                            .resizable()
-                                            .frame(height: 100, alignment: .top)
-                                            .scaledToFit()
-                                            .clipped()
+                                        CustomAsyncImage(imageUrl: plant.mainImage, width: 160, height: 150)
                                         
                                         Text(plant.name)
                                             .font(.system(size: 17, weight: .medium, design: .rounded))

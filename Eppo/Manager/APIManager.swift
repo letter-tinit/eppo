@@ -49,6 +49,7 @@ struct APIConstants {
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
         static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
         static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
+        static let search = baseURL + "api/v1/GetList/Plants/Search/Keyword"
     }
     
     struct Room {
@@ -164,6 +165,32 @@ class APIManager {
                 } else {
                     return APIError.decodingError
                 }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func searchPlant(searchText: String, pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.search) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId)),
+            URLQueryItem(name: "keyword", value: searchText)
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
             }
             .eraseToAnyPublisher()
     }
