@@ -8,7 +8,7 @@ import SwiftUI
 
 struct NotificationScreen: View {
     // MARK: - PROPERTY
-    var viewModel = NotificationViewModel()
+    @State private var viewModel = NotificationViewModel()
     // MARK: - BODY
     
     var body: some View {

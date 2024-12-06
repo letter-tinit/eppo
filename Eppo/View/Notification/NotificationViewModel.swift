@@ -24,7 +24,7 @@ class NotificationViewModel {
             return
         }
         
-        APIManager.shared.getListNotifications(token: token, pageIndex: 1, pageSize: 10)
+        APIManager.shared.getListNotifications(token: token, pageIndex: 1, pageSize: 999)
             .sink { result in
                 self.isLoading = false
                 switch result {
