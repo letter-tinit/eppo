@@ -110,7 +110,7 @@ struct ItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.textDarkBlue)
                 }
             }
 //            .overlay(alignment: .topTrailing) {
@@ -233,7 +233,6 @@ struct ItemDetailScreen: View {
         return plants.contains { $0.id == id }
     }
 }
-
 
 // MARK: - PREVIEW
 #Preview {

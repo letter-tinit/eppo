@@ -26,6 +26,7 @@ import Combine
     // MARK: - UILOADING
     var isLoading = false
     var hasError = false
+    var isSucessRegisted = false
     
     func getRoomById(roomId: Int) {
         isLoading = true
@@ -59,6 +60,7 @@ import Combine
                 switch completion {
                 case .finished:
                     self.message = "Đăng ký thành công"
+                    self.isSucessRegisted = true
                     break
                 case .failure(let error):
                     print(error.localizedDescription)

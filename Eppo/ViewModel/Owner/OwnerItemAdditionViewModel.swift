@@ -54,6 +54,7 @@ class OwnerItemAdditionViewModel: ObservableObject {
     
     @Published var isLoading: Bool = false
     @Published var isAlertShowing: Bool = false
+    @Published var isSuccessAddition: Bool = false
     @Published var message: String?
     
     //    let plantData: [String: String] = [
@@ -119,6 +120,7 @@ class OwnerItemAdditionViewModel: ObservableObject {
             case .finished:
                 self.message = "Đã tạo cây thành công"
                 self.isAlertShowing = true
+                self.isSuccessAddition = true
                 print("Đã tạo cây thành công")
             case .failure(let error):
                 switch error {

@@ -48,6 +48,9 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/Plant/"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
         static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
+        static let accept = baseURL + "api/v1/GetList/Plants/Accept"
+        static let waitToAccept = baseURL + "api/v1/GetList/Plants/WaitToAccept"
+        static let unAccept = baseURL + "api/v1/GetList/Plants/UnAccept"
         static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
         static let search = baseURL + "api/v1/GetList/Plants/Search/Keyword"
     }
@@ -1667,7 +1670,88 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getAcceptPlant(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.accept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getWaitToAcceptPlant(pageIndex: Int, pageSize: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.waitToAccept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getUnAcceptPlant(pageIndex: Int, pageSize: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.unAccept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .publishDecodable(type: CategoryPlantResponse.self)
             .value()
             .mapError { error in

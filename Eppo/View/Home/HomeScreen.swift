@@ -20,6 +20,10 @@ struct HomeScreen: View {
         }
         .background(Color.init(uiColor: UIColor.systemGray5))
         .ignoresSafeArea(.container, edges: .top)
+        .onDisappear {
+            viewModel.isBuyDataLoaded = false
+            viewModel.isHireDataLoaded = false
+        }
     }
 }
 

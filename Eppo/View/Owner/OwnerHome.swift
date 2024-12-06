@@ -27,7 +27,7 @@ struct OwnerHome: View {
         VStack(spacing: 0) {
             SingleHeaderView(title: "Cây của tôi")
             
-            HStack(spacing: 0) {
+            HStack(spacing: 20) {
                 ForEach(TypeEcommerce.allCases, id: \.self) { typeEcommerce in
                     Button {
                         withAnimation(.smooth(duration: 0.75)) {
@@ -47,15 +47,11 @@ struct OwnerHome: View {
                             .foregroundStyle(viewModel.selectedType == typeEcommerce ? .black : .white)
                             .padding(.vertical, 10)
                     }
-                    
-                    if typeEcommerce != .auction {
-                        Spacer(minLength: 30)
-                    }
                 }
                 
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
             
             // MARK: - SEARCH BAR
 //            HStack(spacing: 14) {
@@ -91,7 +87,11 @@ struct OwnerHome: View {
                         Section {
                             ForEach(viewModel.plants, id: \.self) { plant in
                                 NavigationLink {
-                                    OwnerItemDetailScreen()
+                                    if plant.typeEcommerceId == 2 {
+                                        OwnerItemDetailScreen(plant: plant)
+                                    } else {
+                                        SimpleOwnerItemDetailScreen(plant: plant)
+                                    }
                                 } label: {
                                     VStack(alignment: .leading, spacing: 10) {
                                         CustomAsyncImage(imageUrl: plant.mainImage, width: 160, height: 150)
@@ -103,7 +103,7 @@ struct OwnerHome: View {
                                             .foregroundStyle(.black)
                                             
                                         
-                                        Text(10000, format: .currency(code: "VND"))
+                                        Text(plant.finalPrice, format: .currency(code: "VND"))
                                             .font(.system(size: 14, weight: .semibold, design: .rounded))
                                             .foregroundStyle(.red)
                                             .multilineTextAlignment(.leading)
@@ -123,7 +123,7 @@ struct OwnerHome: View {
                     .padding(.bottom, 100)
                     .background(.white)
                 }
-                
+
                 CenterView {
                     Text("Không tìm thấy dữ liệu")
                 }

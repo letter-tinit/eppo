@@ -32,7 +32,7 @@ struct PartnerChatBox: View {
                     .foregroundStyle(.black)
                     .padding(8)
                     .background(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 6)
                             .foregroundStyle(.white)
                     )
                     .shadow(radius: 2, x: 1, y: 1)

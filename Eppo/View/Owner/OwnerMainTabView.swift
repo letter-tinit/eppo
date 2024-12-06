@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum OwnerTab: String, CaseIterable {
-    case addition
+    case waitingPlant
     case notification
     case home
     case order
@@ -29,11 +29,17 @@ struct OwnerMainTabView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                OwnerItemAdditionScreen()
+                OwnerHome()
                     .tabItem {
-                        Label("Tạo cây", systemImage: "plus.circle")
+                        Label("Cây", systemImage: "tree.fill")
                     }
-                    .tag(OwnerTab.addition)
+                    .tag(OwnerTab.home)
+                
+                OwnerWaitingPlantScreen()
+                    .tabItem {
+                        Label("Chờ duyệt", systemImage: "person.badge.clock")
+                    }
+                    .tag(OwnerTab.waitingPlant)
                 
                 NotificationScreen()
                     .tabItem {
@@ -43,16 +49,11 @@ struct OwnerMainTabView: View {
                 
                 OwnerOrderScreen()
                     .tabItem {
+                        Spacer(minLength: 20)
                         Label("Đơn hàng", systemImage: "list.clipboard.fill")
                     }
                     .tag(OwnerTab.order)
-                
-                OwnerHome()
-                    .tabItem {
-                        Label("Cây", systemImage: "tree.circle.fill")
-                    }
-                    .tag(OwnerTab.home)
-                
+                               
                 OwnerProfileScreen()
                     .tabItem {
                         Label("Tài khoản", systemImage: "person.fill")
@@ -65,6 +66,11 @@ struct OwnerMainTabView: View {
         .onAppear {
             viewModel.getMyInformation()
             print(UserSession.shared.token as Any)
+            
+            // MARK: - THIS CONFIGURATION MAKE TABBAR NOT HIDDEN WHEN CONTENT IS TOO SHORT
+            let tabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         }
     }
 }

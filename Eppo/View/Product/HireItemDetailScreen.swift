@@ -164,7 +164,7 @@ struct HireItemDetailScreen: View {
                         .font(.system(size: 30, weight: .medium))
                         .padding(.leading, 30)
                         .padding(.top, 20)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.textDarkBlue)
                 }
             }
             //            .overlay(alignment: .topTrailing) {

@@ -31,7 +31,7 @@ class OwnerHomeViewModel {
             typeEcommerceId = 3
         }
         
-        APIManager.shared.getOwnerPlant(pageIndex: 1, pageSize: 9999, typeEcommerceId: typeEcommerceId)
+        APIManager.shared.getAcceptPlant(pageIndex: 1, pageSize: 9999, typeEcommerceId: typeEcommerceId)
             .sink { [weak self] completion in
                 self?.isLoading = false
                 switch completion {

@@ -29,6 +29,7 @@ struct HireOrderHistoryScreen: View {
     var body: some View {
         VStack {
             CustomHeaderView(title: "Đơn hàng Thuê")
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(HireOrderState.allCases, id: \.self) { orderState in

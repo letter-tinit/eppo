@@ -68,6 +68,8 @@ struct OwnerOrderItem: View {
                 orderStatus = "Đã giao"
             case 5:
                 orderStatus = "Đã huỷ"
+            case 6:
+                orderStatus = "Đã Thu hồi"
             default:
                 orderStatus = "Không xác định"
                 break

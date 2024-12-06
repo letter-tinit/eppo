@@ -11,6 +11,7 @@ struct AuctionDetailScreen: View {
     var roomId: Int
     @State var viewModel = AuctionDetailsViewModel()
     @State var timeRemaining = 3600
+    @Environment(\.dismiss) private var dismiss
     
     // MARK: - BODY
     
@@ -196,7 +197,9 @@ struct AuctionDetailScreen: View {
             viewModel.getRoomById(roomId: self.roomId)
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel())
+            Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel({
+                self.dismiss()
+            }))
         }
     }
 }

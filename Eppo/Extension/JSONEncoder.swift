@@ -21,7 +21,7 @@ extension JSONDecoder {
         let decoder = JSONDecoder()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone = TimeZone(secondsFromGMT: 7 * 3600)
         decoder.dateDecodingStrategy = .formatted(formatter)
         
         // Alternatively, use .iso8601 if the format strictly adheres to ISO standards
