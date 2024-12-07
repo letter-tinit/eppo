@@ -303,7 +303,9 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .validate()
             .publishDecodable(type: AuctionResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
@@ -398,7 +400,9 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .validate()
             .publishDecodable(type: AuctionDetailResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()

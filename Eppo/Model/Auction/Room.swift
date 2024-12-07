@@ -17,5 +17,9 @@ struct Room: Codable, Hashable {
     let priceStep: Double
     let activeDate: Date
     let endDate: Date
+    let userRooms: [IsActiveUserRoom?]
 }
 
+struct IsActiveUserRoom: Codable, Hashable {
+    let isActive: Bool?
+}

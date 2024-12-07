@@ -22,6 +22,7 @@ import Combine
     var isAlertShowing: Bool = false
 
     var cancellables: Set<AnyCancellable> = []
+    var isRegisted: Bool = false
     
     // MARK: - UILOADING
     var isLoading = false
@@ -46,6 +47,13 @@ import Combine
                 self.room = auctionDetailResponse.data.room
                 self.registedNumber = auctionDetailResponse.data.registeredCount
                 self.opeiningCooldown = auctionDetailResponse.data.openingCoolDown
+                if let userRoom = auctionDetailResponse.data.room.userRooms.first {
+                    if let isActive = userRoom?.isActive {
+                        self.isRegisted = isActive
+                    }
+                } else {
+                    self.isRegisted = false
+                }
             }
             .store(in: &cancellables)
     }

@@ -10,8 +10,9 @@ struct AuctionRoomDetailScreen: View {
     // MARK: - PROPERTY
     @State var viewModel: AuctionRoomDetailViewModel
     @State var priceInputTextField: String = ""
-    
     @State var isPriceInputPopup: Bool = false
+    @Environment(\.dismiss) private var dismiss
+    @State private var isPopoverShowing: Bool = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -115,6 +116,7 @@ struct AuctionRoomDetailScreen: View {
                                         viewModel.endTimeRemaining -= 1
                                     } else {
                                         self.timer.upstream.connect().cancel()
+                                        self.viewModel.finishAuction()
                                     }
                                 }
                         } else {
@@ -144,7 +146,7 @@ struct AuctionRoomDetailScreen: View {
                             Spacer()
                             
                             Button {
-                                
+                                isPopoverShowing.toggle()
                             } label: {
                                 HStack {
                                     Text("Thể lệ")
@@ -153,35 +155,50 @@ struct AuctionRoomDetailScreen: View {
                                 .font(.system(size: 14, weight: .bold))
                                 .foregroundStyle(.gray)
                             }
-                        }
-                        
-                        LazyVStack {
-                            ForEach(viewModel.bidhistories) { historyBid in
-                                LazyVStack(alignment: .leading, spacing: 10) {
-                                    HStack {
-                                        Text("Người chơi \(historyBid.userId)")
-                                            .font(.system(size: 20, weight: .medium))
-                                        Spacer()
-                                        
-                                        Text(historyBid.bidAmount, format: .currency(code: "VND"))
-                                            .font(.system(size: 18, weight: .semibold))
-                                    }
-                                    
-                                    Text(historyBid.bidTime, format: .dateTime)
-                                        .font(.system(size: 16, weight: .medium))
-                                        .foregroundStyle(.gray)
-                                }
-                                .padding(.horizontal)
-                                .padding(.vertical, 6)
-                                
-//                                if index != customers.count - 1 {
-//                                    Divider()
-//                                }
+                            .popover(isPresented: $isPopoverShowing) {
+                                PopoverBSRule()
+                                    .presentationCompactAdaptation(.popover)
                             }
                         }
-                        .padding(.vertical)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
+                        
+                        if !viewModel.bidhistories.isEmpty {
+                            LazyVStack {
+                                ForEach(viewModel.bidhistories) { historyBid in
+                                    LazyVStack(alignment: .leading, spacing: 10) {
+                                        HStack {
+                                            if viewModel.myInfor.userId == historyBid.userId {
+                                                Text("\(viewModel.myInfor.fullName) (bạn)")
+                                                    .font(.system(size: 20, weight: .medium))
+                                            } else {
+                                                Text("Người chơi \(historyBid.userId)")
+                                                    .font(.system(size: 20, weight: .medium))
+                                            }
+                                            Spacer()
+                                            
+                                            Text(historyBid.bidAmount, format: .currency(code: "VND"))
+                                                .font(.system(size: 18, weight: .semibold))
+                                        }
+                                        
+                                        Text(historyBid.bidTime, format: .dateTime)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundStyle(.gray)
+                                    }
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 6)
+                                    
+                                    if historyBid.id != viewModel.bidhistories.last?.id {
+                                        Divider()
+                                    }
+                                }
+                            }
+                            .padding(.vertical)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
+                        } else {
+                            Text("Vẫn chưa có người chơi nào ra giá")
+                                .font(.headline)
+                                .foregroundStyle(.gray)
+                        }
                     }
                     .padding()
                 }
@@ -199,6 +216,9 @@ struct AuctionRoomDetailScreen: View {
             viewModel.getRegistedAuctionRoomById()
             viewModel.getHistoryBids()
             viewModel.connectWebSocket()
+        }
+        .onDisappear {
+            viewModel.closeWebSocket()
         }
         .sheet(isPresented: $isPriceInputPopup, content: {
             VStack(alignment: .trailing, spacing: 20) {
@@ -228,7 +248,11 @@ struct AuctionRoomDetailScreen: View {
             .presentationDetents([.height(300)])
         })
         .alert(isPresented: $viewModel.isShowingAlert) {
-            Alert(title: Text(viewModel.currentErrorMessage ?? "Nhắc nhở"), dismissButton: .cancel())
+            Alert(title: Text(viewModel.currentErrorMessage ?? "Nhắc nhở"), dismissButton: .cancel({
+                if viewModel.isAuctionFinish {
+                    self.dismiss()
+                }
+            }))
         }
     }
     

@@ -12,7 +12,7 @@ struct CustomHeaderView: View {
     
     var title: String
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     
     // MARK: - BODY

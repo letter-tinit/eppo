@@ -41,19 +41,19 @@ struct OwnerMainTabView: View {
                     }
                     .tag(OwnerTab.waitingPlant)
                 
-                NotificationScreen()
-                    .tabItem {
-                        Label("Thông báo", systemImage: "bell")
-                    }
-                    .tag(OwnerTab.notification)
-                
                 OwnerOrderScreen()
                     .tabItem {
                         Spacer(minLength: 20)
                         Label("Đơn hàng", systemImage: "list.clipboard.fill")
                     }
                     .tag(OwnerTab.order)
-                               
+                
+                NotificationScreen()
+                    .tabItem {
+                        Label("Thông báo", systemImage: "bell")
+                    }
+                    .tag(OwnerTab.notification)
+                
                 OwnerProfileScreen()
                     .tabItem {
                         Label("Tài khoản", systemImage: "person.fill")

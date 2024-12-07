@@ -12,7 +12,7 @@ import Combine
 @Observable
 class AuctionRoomDetailViewModel: ObservableObject {
     var registedRoomResponseData: RegistedRoomResponseData?
-    
+    let myInfor: User
     var cancellables: Set<AnyCancellable> = []
     
     var starTimeRemaining: Int = 0
@@ -22,7 +22,8 @@ class AuctionRoomDetailViewModel: ObservableObject {
     var isLoading = false
     var hasError = false
     var errorMessage: String?
-    
+    var isAuctionFinish: Bool = false
+
     var isShowingAlert: Bool = false
     
     // MARK: - Websocket
@@ -44,6 +45,13 @@ class AuctionRoomDetailViewModel: ObservableObject {
         } else {
             self.token = "NO_TOKEN"
         }
+        
+        if let myInfor = UserSession.shared.myInformation {
+            self.myInfor = myInfor
+        } else {
+            self.myInfor = User(userId: 0, userName: "Lỗi", fullName: "Lỗi", gender: "Nam", dateOfBirth: Date(), phoneNumber: "0", email: "Lỗi", identificationCard: "Lỗi")
+        }
+        
     }
     
     func getRegistedAuctionRoomById() {
@@ -84,6 +92,26 @@ class AuctionRoomDetailViewModel: ObservableObject {
                 self.bidhistories = auctionDetailHistoryResponse.data
             }
             .store(in: &cancellables)
+    }
+    
+    func finishAuction() {
+        endTimeRemaining = 0
+        isAuctionFinish = true
+        generateWinnerMessage()
+        isShowingAlert = true
+    }
+    
+    func generateWinnerMessage() {
+        guard let winner = bidhistories.first else {
+            currentErrorMessage = "Phiên đấu gía đã kết thúc, có lỗi xảy ra khi lấy dữ liệu người thắng cuộc"
+            return
+        }
+        
+        if winner.userId == myInfor.userId {
+            currentErrorMessage = "Phiên đấu gía đã kết thúc, Bạn là người thắng cuộc với mức giá \(winner.bidAmount)"
+        } else {
+            currentErrorMessage = "Phiên đấu gía đã kết thúc, Người chơi \(winner.userId) là người thắng cuộc với mức giá \(winner.bidAmount)"
+        }
     }
     
     deinit {
