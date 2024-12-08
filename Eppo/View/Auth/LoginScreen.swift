@@ -52,9 +52,22 @@ struct LoginScreen: View {
                                 .font(.system(size: 16, weight: .semibold))
                                 .padding(.top, 30)
                             BorderTextField {
-                                SecureField("Mật khẩu", text: $passwordTextField)
+                                if viewModel.isShowingPassword {
+                                    TextField("Mật khẩu", text: $passwordTextField)
+                                } else {
+                                    SecureField("Mật khẩu", text: $passwordTextField)
+                                }
                             }
                             .frame(height: 50)
+                            .overlay(alignment: .trailing) {
+                                Button {
+                                    viewModel.isShowingPassword.toggle()
+                                } label: {
+                                    Image(systemName: viewModel.isShowingPassword ? "eye" : "eye.slash")
+                                        .foregroundStyle(viewModel.isShowingPassword ? .black : .gray)
+                                        .padding(.trailing)
+                                }
+                            }
                             
                         } // TEXT FIELD STACK
                         .padding(.top, 80)

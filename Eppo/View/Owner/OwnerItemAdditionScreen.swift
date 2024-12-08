@@ -135,12 +135,12 @@ struct OwnerItemAdditionScreen: View {
                 }
                 
                 Button(action: {
-                    //                if viewModel.isValid {
-                    viewModel.createOwnerItem()
-                    //                } else {
-                    //                    viewModel.message = viewModel.validationMessage
-                    //                    viewModel.isAlertShowing = true
-                    //                }
+                    if viewModel.isValid {
+                        viewModel.createOwnerItem()
+                    } else {
+                        viewModel.message = viewModel.validationMessage
+                        viewModel.isAlertShowing = true
+                    }
                 }) {
                     Text("Xác nhận")
                         .frame(maxWidth: .infinity)

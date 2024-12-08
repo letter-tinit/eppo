@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 @Observable class LoginViewModel {
+    var isShowingPassword: Bool = false
     var errorMessage: String?
     var isPopupMessage: Bool {
         get {
