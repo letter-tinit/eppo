@@ -47,6 +47,11 @@ struct OwnerOrderScreen: View {
                 }
                 .listStyle(.inset)
                 
+                CenterView {
+                    Text("Bạn chưa có đơn hàng nào cả!")
+                }
+                .opacity((viewModel.ownerOrders.isEmpty && !viewModel.isLoading) ? 1 : 0)
+                
                 LoadingCenterView()
                     .opacity(viewModel.isLoading ? 1 : 0)
             }

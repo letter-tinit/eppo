@@ -37,6 +37,8 @@ class WaitingPlantViewModel {
     }
     
     func getPendingApproval() {
+        self.isLoading = true
+        
         APIManager.shared.getWaitToAcceptPlant(pageIndex: 1, pageSize: 999)
             .sink { [weak self] completion in
                 self?.isLoading = false
@@ -55,6 +57,8 @@ class WaitingPlantViewModel {
     }
     
     func getApprovalFailed() {
+        self.isLoading = true
+        
         APIManager.shared.getUnAcceptPlant(pageIndex: 1, pageSize: 999)
             .sink { [weak self] completion in
                 self?.isLoading = false

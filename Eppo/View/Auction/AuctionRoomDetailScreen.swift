@@ -45,53 +45,99 @@ struct AuctionRoomDetailScreen: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let registedRoomResponseData = viewModel.registedRoomResponseData {
-                // Hiển thị nội dung khi có dữ liệu
-                HStack(spacing: 20) {
-                    ZStack(alignment: .center) {
-                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                switch viewModel.webSocketState {
+                case .connecting:
+                    HStack {
+                        Text(viewModel.webSocketState.rawValue)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
                         
-                        VStack(alignment: .leading) {
-                            Text("Số dư ví")
-                                .fontWeight(.semibold)
-                                .fontDesign(.rounded)
-                                .foregroundStyle(.black)
-                            
-                            if let myInformation = UserSession.shared.myInformation,
-                               let wallet = myInformation.wallet {
-                                Text(wallet.numberBalance, format: .currency(code: "VND"))
-                                    .fontWeight(.medium)
-                                    .fontDesign(.rounded)
-                                    .foregroundStyle(.white)
-                            } else {
-                                Text(0, format: .currency(code: "VND"))
-                                    .fontWeight(.medium)
-                                    .fontDesign(.rounded)
-                                    .foregroundStyle(.white)
-                            }
-                            
-                        }
+                        Circle()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: 160, height: 70)
-                    
-                    Spacer()
-                    
-                    ZStack(alignment: .center) {
-                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                        VStack(alignment: .leading) {
-                            Text("Số người")
-                                .fontWeight(.semibold)
+                    .padding(.top)
+                    .padding(.horizontal)
+                    .foregroundStyle(.gray)
+                case .connected:
+                    HStack {
+                        Text(viewModel.webSocketState.rawValue)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                        
+                        Circle()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                    }
+                    .padding(.top)
+                    .padding(.horizontal)
+                    .foregroundStyle(.green)
+                case .disconnected:
+                    HStack {
+                        Text(viewModel.webSocketState.rawValue)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                        
+                        Circle()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                    }
+                    .padding(.top)
+                    .padding(.horizontal)
+                    .foregroundStyle(.red)
+                }
+                
+                // Hiển thị nội dung khi có dữ liệu
+                HStack(spacing: 10) {
+                    VStack(alignment: .leading) {
+                        Text("Số dư ví")
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                            .foregroundStyle(.black)
+                        
+                        if let myInformation = UserSession.shared.myInformation,
+                           let wallet = myInformation.wallet {
+                            Text(wallet.numberBalance, format: .currency(code: "VND"))
+                                .fontWeight(.medium)
                                 .fontDesign(.rounded)
-                                .foregroundStyle(.black)
-                            
-                            Text(registedRoomResponseData.registeredCount, format: .number)
+                                .foregroundStyle(.white)
+                        } else {
+                            Text(0, format: .currency(code: "VND"))
                                 .fontWeight(.medium)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.white)
                         }
+                        
                     }
+                    .frame(width: 170, height: 70, alignment: .leading)
+                    .padding(.horizontal)
+                    .background(
+                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                    )
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: 120, height: 70)
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Số người")
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                            .foregroundStyle(.black)
+                        
+                        Text(registedRoomResponseData.registeredCount, format: .number)
+                            .fontWeight(.medium)
+                            .fontDesign(.rounded)
+                            .foregroundStyle(.white)
+                    }
+                    .frame(width: 80, height: 70)
+                    .padding(.horizontal)
+                    .background(
+                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .padding()
                 
@@ -116,7 +162,6 @@ struct AuctionRoomDetailScreen: View {
                                         viewModel.endTimeRemaining -= 1
                                     } else {
                                         self.timer.upstream.connect().cancel()
-                                        self.viewModel.finishAuction()
                                     }
                                 }
                         } else {
@@ -202,12 +247,24 @@ struct AuctionRoomDetailScreen: View {
                     }
                     .padding()
                 }
-            } else {
+            } else if !viewModel.isLoading {
                 CenterView {
                     Text("Không có dữ liệu")
                         .font(.headline)
                         .foregroundColor(.gray)
                 }
+            } else {
+                VStack(spacing: 16) {
+                    Text(viewModel.errorMessage ?? "Lỗi không xác định")
+                        .font(.headline)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.red)
+                    Button("Thử lại") {
+                        viewModel.getRegistedAuctionRoomById()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .ignoresSafeArea(.all, edges: .top)
@@ -215,8 +272,17 @@ struct AuctionRoomDetailScreen: View {
         .onAppear {
             viewModel.getRegistedAuctionRoomById()
             viewModel.getHistoryBids()
-            viewModel.connectWebSocket()
         }
+        .onChange(of: viewModel.starTimeRemaining, { _, newValue in
+            if newValue <= 0 {
+                viewModel.startAuction()
+            }
+        })
+        .onChange(of: viewModel.endTimeRemaining, { _, newValue in
+            if newValue <= 0 {
+                viewModel.finishAuction()
+            }
+        })
         .onDisappear {
             viewModel.closeWebSocket()
         }

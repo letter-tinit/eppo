@@ -97,7 +97,7 @@ struct OwnerWaitingPlantScreen: View {
                 CenterView {
                     Text("Không tìm thấy dữ liệu")
                 }
-                .opacity((viewModel.hasError && !viewModel.isLoading) ? 1 : 0)
+                .opacity((viewModel.plants.isEmpty && !viewModel.isLoading) ? 1 : 0)
                 
                 LoadingCenterView()
                     .opacity(viewModel.isLoading ? 1 : 0)

@@ -9,6 +9,12 @@ import Foundation
 import Observation
 import Combine
 
+enum OwnerHomeActiveAlert: String {
+    case remind = "Nhắc nhở"
+    case error = "Có lỗi xảy ra"
+    case succcess = "Thành công"
+}
+
 @Observable
 class OwnerHomeViewModel {
     private var cancellables: Set<AnyCancellable> = []
@@ -16,6 +22,10 @@ class OwnerHomeViewModel {
     var selectedType: TypeEcommerce = .buy
     var hasError = false
     var isLoading = false
+    var message: String?
+    var activeAlert: OwnerHomeActiveAlert = .error
+    var isShowingAlert: Bool = false
+    var onProcessPlant: Plant?
     
     func getOwnerPlant() {
         isLoading = true
@@ -46,6 +56,41 @@ class OwnerHomeViewModel {
                 self?.plants = response.data
             }
             .store(in: &cancellables)
+    }
+    
+    func toggleRemind(plant: Plant) {
+        onProcessPlant = plant
+        showAlert(activeAlert: .remind, message: "Bạn có chắc muốn xoá cây không?")
+    }
+    
+//    func checkDeletableAndExcute() {
+//        guard let plant = onProcessPlant else {
+//            showAlert(activeAlert: .error, message: "Lỗi khi lấy dữ liệu của cây")
+//            return
+//        }
+//        
+//        if plant.isActive {
+//            deletePlant(plantId: plant.id)
+//        } else {
+//            showAlert(activeAlert: .error, message: "Cây đang bán hoặc cho thuê không thể bị xoá!")
+//        }
+//    }
+    
+    func deletePlant() {
+        guard let plantId = onProcessPlant?.id else {
+            showAlert(activeAlert: .error, message: "Lỗi khi lấy dữ liệu của cây")
+            return
+        }
+        
+        showAlert(activeAlert: .succcess, message: "Đã xoá cây thành công")
+    }
+    
+    private func showAlert(activeAlert: OwnerHomeActiveAlert, message: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.activeAlert = activeAlert
+            self?.message = message
+            self?.isShowingAlert = true
+        }
     }
     
     deinit {

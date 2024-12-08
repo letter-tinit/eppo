@@ -323,5 +323,5 @@ struct SimpleOwnerItemDetailScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    OwnerItemDetailScreen(plant: Plant(id: 1, name: "Name", title: "Title", finalPrice: 1000, description: "", mainImage: "", imagePlants: [ImagePlantResponse(id: 1, imageUrl: "")], status: 1, typeEcommerceId: 1))
+    OwnerItemDetailScreen(plant: Plant(id: 1, name: "Name", title: "Title", finalPrice: 1000, description: "", mainImage: "", imagePlants: [ImagePlantResponse(id: 1, imageUrl: "")], status: 1, isActive: false, typeEcommerceId: 1))
 }

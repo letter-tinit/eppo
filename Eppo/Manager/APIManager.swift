@@ -1764,6 +1764,10 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
+    func deletePlant() {
+        
+    }
+    
     func setupHeaderToken() -> HTTPHeaders? {
         guard let token = UserSession.shared.token else {
             return nil
