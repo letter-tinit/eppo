@@ -84,6 +84,8 @@
 		2C6E8DE02CFEEE010092E25A /* OwnerWaitingPlantScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E8DDF2CFEEE010092E25A /* OwnerWaitingPlantScreen.swift */; };
 		2C6E8DE22CFEF72F0092E25A /* WaitingPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E8DE12CFEF72F0092E25A /* WaitingPlantViewModel.swift */; };
 		2C6E99002C8BB37A00241F9C /* RecomendGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E98FF2C8BB37A00241F9C /* RecomendGrid.swift */; };
+		2C71901D2D058032001302AB /* ProtectionSystemScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C71901C2D058032001302AB /* ProtectionSystemScreen.swift */; };
+		2C71901F2D058083001302AB /* ProtectionSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C71901E2D058083001302AB /* ProtectionSystemViewModel.swift */; };
 		2C7330DE2C89598100A0F092 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7330DD2C89598100A0F092 /* HomeScreen.swift */; };
 		2C7330E22C8962E600A0F092 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7330E12C8962E600A0F092 /* SearchBar.swift */; };
 		2C7330E42C89646100A0F092 /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7330E32C89646100A0F092 /* HomeHeader.swift */; };
@@ -268,6 +270,8 @@
 		2C6E8DDF2CFEEE010092E25A /* OwnerWaitingPlantScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerWaitingPlantScreen.swift; sourceTree = "<group>"; };
 		2C6E8DE12CFEF72F0092E25A /* WaitingPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingPlantViewModel.swift; sourceTree = "<group>"; };
 		2C6E98FF2C8BB37A00241F9C /* RecomendGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecomendGrid.swift; sourceTree = "<group>"; };
+		2C71901C2D058032001302AB /* ProtectionSystemScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionSystemScreen.swift; sourceTree = "<group>"; };
+		2C71901E2D058083001302AB /* ProtectionSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectionSystemViewModel.swift; sourceTree = "<group>"; };
 		2C7330DD2C89598100A0F092 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		2C7330E12C8962E600A0F092 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		2C7330E32C89646100A0F092 /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
@@ -812,6 +816,7 @@
 				2C05DE4F2CF18546008E2D75 /* PaymentViewModel.swift */,
 				2CEAF0F72CF8B13C00C0B880 /* FeedBackViewModel.swift */,
 				2CF3EDCB2CFA38DC00018265 /* RatingSubmitViewModel.swift */,
+				2C71901E2D058083001302AB /* ProtectionSystemViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -894,6 +899,7 @@
 				2CEAF0F32CF8AF1300C0B880 /* FeedBackScreen.swift */,
 				2CEAF0F92CF8B3FA00C0B880 /* FeedBackItem.swift */,
 				2C1524212CFDFDDB000A57D3 /* HistoryRoomScreen.swift */,
+				2C71901C2D058032001302AB /* ProtectionSystemScreen.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1065,6 +1071,7 @@
 				2C37F6082C8EDB41003D7468 /* ItemDetailScreen.swift in Sources */,
 				2C7330E22C8962E600A0F092 /* SearchBar.swift in Sources */,
 				2C7900542CA79FA90015B320 /* OrderButtonLabel.swift in Sources */,
+				2C71901D2D058032001302AB /* ProtectionSystemScreen.swift in Sources */,
 				2C6E8DE22CFEF72F0092E25A /* WaitingPlantViewModel.swift in Sources */,
 				2CF209B02CF422BA00221F1A /* LoadingCenterView.swift in Sources */,
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
@@ -1092,6 +1099,7 @@
 				2C78D6022C7D6C8E00204BFE /* CustomSettingNavigationLink.swift in Sources */,
 				2CDE4D492CFAC0EA00A7FA69 /* CartStateHeader.swift in Sources */,
 				2C05E6372CF81EA300618F4F /* OwnerOrderViewModel.swift in Sources */,
+				2C71901F2D058083001302AB /* ProtectionSystemViewModel.swift in Sources */,
 				2C1524222CFDFDDB000A57D3 /* HistoryRoomScreen.swift in Sources */,
 				2C1524202CFDF801000A57D3 /* HistoryRoom.swift in Sources */,
 				2C30BCAD2CEF37EE0077FB14 /* DateExtension.swift in Sources */,

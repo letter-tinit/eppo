@@ -30,7 +30,7 @@ struct ActiveScreen: View {
             
             ScrollView(.vertical) {
                 VStack(spacing: 24) {
-                    Text("Xin lỗi vì sự bất tiện này! Nhưng chúng tôi cần bạn điền đầy đủ thông tin để tạo mới một tài khoản")
+                    Text("Xin lỗi vì sự bất tiện này! Nhưng chúng tôi cần bạn điền đầy đủ thông tin để đảm bảo an toàn khi thực hiện giao dịch")
                         .foregroundStyle(.red)
                         .font(.system(size: 15, weight: .medium))
                         .multilineTextAlignment(.leading)
@@ -186,7 +186,7 @@ struct ActiveScreen: View {
                         }
                         
                     } // ACTIVE BUTTON
-                    .padding(.top, 30)
+                    .padding(.vertical, 40)
                 }
             }
         }

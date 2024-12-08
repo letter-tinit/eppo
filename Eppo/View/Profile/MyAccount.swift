@@ -26,7 +26,7 @@ struct MyAccount: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomHeaderView(title: "Tài Khoản Của Tôi")
+            CustomMyAccountHeaderView(title: "Tài Khoản Của Tôi")
             
             ZStack {
                 ScrollView(.vertical) {
@@ -180,6 +180,57 @@ struct MyAccount: View {
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text(viewModel.message), dismissButton: .destructive(Text("Đóng")))
         }
+    }
+}
+
+struct CustomMyAccountHeaderView: View {
+    // MARK: - PROPERTY
+    var buttonWidth: CGFloat = 30
+    
+    var title: String
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    
+    // MARK: - BODY
+    
+    var body: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "arrow.backward")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonWidth, alignment: .leading)
+            }
+            
+            Spacer()
+            
+            Text(title)
+                .font(.system(size: 24, weight: .semibold))
+                .frame(width: 240)
+                .lineLimit(1)
+                .frame(alignment: .center)
+                .padding(.leading, -buttonWidth)
+                .padding(.bottom, 6)
+            
+            NavigationLink {
+                ProtectionSystemScreen()
+            } label: {
+                Image(systemName: "lock.shield.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonWidth, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, 20)
+        .foregroundStyle(.white)
+        .frame(width: UIScreen.main.bounds.size.width, height: 90, alignment: .bottom)
+        .padding(.bottom, 10)
+        .background(
+            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+        )
     }
 }
 
