@@ -34,18 +34,40 @@ struct OwnerOrderScreen: View {
                                         Text("Chuẩn bị xong")
                                     }
                                     .tint(.green)
+                                    // MARK: - Chỉ đơn thuê mới được thu hồi
                                 } else if ownerOrder.status == 4 && ownerOrder.typeEcommerceId == 2 {
                                     NavigationLink {
                                         DeliveriteConfirmedScreen(orderId: ownerOrder.id, isRefund: true)
                                     } label: {
                                         Text("Thu hồi")
                                     }
-                                    .tint(.green)
+                                    .tint(.purple)
+                                    // MARK: - Đơn thuê tự động xác nhận khi chưa thanh toán nên bị exclude
+                                } else if ownerOrder.status == 1 && ownerOrder.typeEcommerceId != 2 {
+                                    Button {
+                                        // chuyển trạng thái từ 1 sang 2
+                                    } label: {
+                                        Text("Xác nhận")
+                                    }
+                                    .tint(.red)
+                                    // MARK: - Các trường hợp khác khôn có hành động
+                                } else {
+                                    Button {
+                                        // DO NOTHING
+                                    } label: {
+                                        Text("Bỏ qua")
+                                    }
+                                    .tint(.gray)
                                 }
                             }
                     }
                 }
                 .listStyle(.inset)
+                
+                CenterView {
+                    Text("Bạn chưa có đơn hàng nào cả!")
+                }
+                .opacity((viewModel.ownerOrders.isEmpty && !viewModel.isLoading) ? 1 : 0)
                 
                 LoadingCenterView()
                     .opacity(viewModel.isLoading ? 1 : 0)

@@ -27,7 +27,7 @@ struct OwnerHome: View {
         VStack(spacing: 0) {
             SingleHeaderView(title: "Cây của tôi")
             
-            HStack(spacing: 0) {
+            HStack(spacing: 20) {
                 ForEach(TypeEcommerce.allCases, id: \.self) { typeEcommerce in
                     Button {
                         withAnimation(.smooth(duration: 0.75)) {
@@ -47,42 +47,38 @@ struct OwnerHome: View {
                             .foregroundStyle(viewModel.selectedType == typeEcommerce ? .black : .white)
                             .padding(.vertical, 10)
                     }
-                    
-                    if typeEcommerce != .auction {
-                        Spacer(minLength: 30)
-                    }
                 }
                 
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
             
             // MARK: - SEARCH BAR
-//            HStack(spacing: 14) {
-//                SearchBar(searchText: $searchText)
-//                
-//                Image(systemName: "calendar")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 30, height: 30)
-//                    .foregroundStyle(.black)
-//                    .overlay {
-//                        DatePicker(selection: $date, displayedComponents: .date) {}
-//                            .labelsHidden()
-//                            .contentShape(Rectangle())
-//                            .opacity(0.011)
-//                    }
-//                Button {
-//                    
-//                } label: {
-//                    Image(systemName: "slider.horizontal.3")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 30, height: 30)
-//                        .foregroundStyle(.black)
-//                }
-//            }
-//            .padding()
+            //            HStack(spacing: 14) {
+            //                SearchBar(searchText: $searchText)
+            //
+            //                Image(systemName: "calendar")
+            //                    .resizable()
+            //                    .scaledToFit()
+            //                    .frame(width: 30, height: 30)
+            //                    .foregroundStyle(.black)
+            //                    .overlay {
+            //                        DatePicker(selection: $date, displayedComponents: .date) {}
+            //                            .labelsHidden()
+            //                            .contentShape(Rectangle())
+            //                            .opacity(0.011)
+            //                    }
+            //                Button {
+            //
+            //                } label: {
+            //                    Image(systemName: "slider.horizontal.3")
+            //                        .resizable()
+            //                        .scaledToFit()
+            //                        .frame(width: 30, height: 30)
+            //                        .foregroundStyle(.black)
+            //                }
+            //            }
+            //            .padding()
             
             // MARK: - CONTENT
             ZStack {
@@ -91,28 +87,90 @@ struct OwnerHome: View {
                         Section {
                             ForEach(viewModel.plants, id: \.self) { plant in
                                 NavigationLink {
-                                    OwnerItemDetailScreen()
+                                    if plant.typeEcommerceId == 2 {
+                                        OwnerItemDetailScreen(plant: plant)
+                                    } else {
+                                        SimpleOwnerItemDetailScreen(plant: plant)
+                                    }
                                 } label: {
-                                    VStack(alignment: .leading, spacing: 10) {
-                                        Image("sample-bonsai-01")
-                                            .resizable()
-                                            .frame(height: 100, alignment: .top)
-                                            .scaledToFit()
-                                            .clipped()
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        CustomAsyncImage(imageUrl: plant.mainImage, width: 160, height: 150)
                                         
                                         Text(plant.name)
                                             .font(.system(size: 17, weight: .medium, design: .rounded))
                                             .multilineTextAlignment(.leading)
                                             .padding(.horizontal, 10)
                                             .foregroundStyle(.black)
-                                            
                                         
-                                        Text(10000, format: .currency(code: "VND"))
-                                            .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                            .foregroundStyle(.red)
-                                            .multilineTextAlignment(.leading)
-                                            .padding(.horizontal, 10)
-                                            .padding(.bottom, 10)
+                                        if viewModel.selectedType == .hire {
+                                            Text("\(plant.finalPrice.formatted(.currency(code: "VND")))/tháng")
+                                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                .foregroundStyle(.red)
+                                                .multilineTextAlignment(.leading)
+                                                .padding(.horizontal, 10)
+                                            
+                                            if plant.isActive {
+                                                HStack {
+                                                    Text("Có sẵn")
+                                                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                        .foregroundStyle(.gray)
+                                                        .multilineTextAlignment(.leading)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Button {
+                                                        viewModel.toggleRemind(plant: plant)
+                                                    } label: {
+                                                        Image(systemName: "trash.square.fill")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 20, height: 20)
+                                                            .foregroundStyle(.red)
+                                                    }
+                                                }
+                                                .padding(.horizontal, 10)
+                                            } else {
+                                                Text("Đang cho thuê")
+                                                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                    .foregroundStyle(.red)
+                                                    .multilineTextAlignment(.leading)
+                                                    .padding(.horizontal, 10)
+                                            }
+                                        } else {
+                                            Text(plant.finalPrice, format: .currency(code: "VND"))
+                                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                .foregroundStyle(.red)
+                                                .multilineTextAlignment(.leading)
+                                                .padding(.horizontal, 10)
+                                            
+                                            if plant.isActive {
+                                                HStack {
+                                                    Text("Có sẵn")
+                                                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                        .foregroundStyle(.gray)
+                                                        .multilineTextAlignment(.leading)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Button {
+                                                        viewModel.toggleRemind(plant: plant)
+                                                    } label: {
+                                                        Image(systemName: "trash.square.fill")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 20, height: 20)
+                                                            .foregroundStyle(.red)
+                                                    }
+                                                }
+                                                .padding(.horizontal, 10)
+                                            } else {
+                                                Text("Đã bán")
+                                                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                                    .foregroundStyle(.gray)
+                                                    .multilineTextAlignment(.leading)
+                                                    .padding(.horizontal, 10)
+                                            }
+                                        }
                                         
                                         Spacer()
                                     }
@@ -146,6 +204,18 @@ struct OwnerHome: View {
         }
         .onChange(of: viewModel.selectedType) { _, _ in
             viewModel.getOwnerPlant()
+        }
+        .alert(isPresented: $viewModel.isShowingAlert) {
+            switch viewModel.activeAlert {
+            case .remind:
+                return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), primaryButton: .destructive(Text("Huỷ")), secondaryButton: .default(Text("Xác nhận"), action: {
+                    viewModel.deletePlant()
+                }))
+            case .error:
+                return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), dismissButton: .cancel())
+            case .succcess:
+                return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), dismissButton: .cancel())
+            }
         }
     }
 }

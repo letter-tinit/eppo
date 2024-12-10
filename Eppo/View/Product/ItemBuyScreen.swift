@@ -11,7 +11,6 @@ struct ItemBuyScreen: View {
     @StateObject var viewModel = ItemBuyViewModel()
     
     @Environment(\.dismiss) var dismiss
-    @State var searchText: String = ""
     
     let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
@@ -32,6 +31,10 @@ struct ItemBuyScreen: View {
                 }
                 
                 SearchBar(searchText: $viewModel.searchText)
+                    .submitLabel(.search)
+                    .onSubmit {
+                        viewModel.search(text: viewModel.searchText)
+                    }
             }// HEADER HSTACK
             .padding(.horizontal)
             .foregroundStyle(.black)
@@ -39,6 +42,7 @@ struct ItemBuyScreen: View {
             Menu {
                 ForEach(viewModel.categories, id: \.self) { category in
                     Button {
+                        viewModel.searchText = ""
                         viewModel.selectedCategory = category
                         viewModel.resetPagination()
                         viewModel.loadMorePlantsForCate(typeEcommerceId: 1)
@@ -62,19 +66,15 @@ struct ItemBuyScreen: View {
             .disabled(viewModel.isCategoriesLoading)
             .foregroundStyle(viewModel.isCategoriesLoading ? .gray : .black)
             
-            if !viewModel.isLoading && viewModel.plants.isEmpty {
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
+//            if viewModel.isLoading {
+//                LoadingCenterView()
+//            } else 
+            if viewModel.plants.isEmpty {
+                CenterView {
                     Text("Không tìm thấy kết quả")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    
-                    Spacer()
                 }
-                
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVGrid(columns: adaptiveColumn, spacing: 20, pinnedViews: [.sectionHeaders]) {
@@ -117,6 +117,10 @@ struct ItemBuyScreen: View {
         .foregroundStyle(.black)
         .navigationBarBackButtonHidden()
         .onAppear {
+            viewModel.recommendOption = .forBuy
+            if !viewModel.searchText.isEmpty {
+                viewModel.search(text: viewModel.searchText)
+            }
             viewModel.getListCategory()
             viewModel.resetPagination()
             viewModel.loadMorePlants(typeEcommerceId: 1)

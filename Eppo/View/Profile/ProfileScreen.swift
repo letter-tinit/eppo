@@ -125,7 +125,7 @@ struct ProfileScreen: View {
                 
                 Spacer(minLength: 30)
                 
-                Text("v\(appVersion) build \(appBuild)")
+                Text("v\(appVersion).\(appBuild)")
                     .foregroundStyle(.secondary)
                 
                 Spacer(minLength: 20)

@@ -70,7 +70,7 @@ struct MainTabView: View {
         .onAppear {
             viewModel.getMyInformation()
             requestNotification()
-            addNotification()
+//            addNotification()
             
             // MARK: - THIS CONFIGURATION MAKE TABBAR NOT HIDDEN WHEN CONTENT IS TOO SHORT
             let tabBarAppearance = UITabBarAppearance()

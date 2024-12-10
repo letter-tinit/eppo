@@ -13,6 +13,7 @@ struct LoginScreen: View {
     @AppStorage("isOwner") var isOwner: Bool = false
     @AppStorage("isSigned") var isSigned: Bool = true
     @State var viewModel = LoginViewModel()
+    @State var protectionViewModel = ProtectionSystemViewModel()
     @State private var usernameTextField: String = ""
     @State private var passwordTextField: String = ""
     @State private var showAlert: Bool = false
@@ -51,12 +52,64 @@ struct LoginScreen: View {
                                 .font(.system(size: 16, weight: .semibold))
                                 .padding(.top, 30)
                             BorderTextField {
-                                SecureField("Mật khẩu", text: $passwordTextField)
+                                if viewModel.isShowingPassword {
+                                    TextField("Mật khẩu", text: $passwordTextField)
+                                } else {
+                                    SecureField("Mật khẩu", text: $passwordTextField)
+                                }
                             }
                             .frame(height: 50)
+                            .overlay(alignment: .trailing) {
+                                Button {
+                                    viewModel.isShowingPassword.toggle()
+                                } label: {
+                                    Image(systemName: viewModel.isShowingPassword ? "eye" : "eye.slash")
+                                        .foregroundStyle(viewModel.isShowingPassword ? .black : .gray)
+                                        .padding(.trailing)
+                                }
+                            }
                             
                         } // TEXT FIELD STACK
                         .padding(.top, 80)
+                        
+                        Button {
+                            protectionViewModel.isShowingPopover = true
+                        } label: {
+                            Text("Quên mật khẩu?")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                        .popover(isPresented: $protectionViewModel.isShowingPopover, arrowEdge: .bottom) {
+                            VStack(alignment: .leading) {
+                                Text("Chúng tôi sẽ gửi mật khẩu mới đến email này nếu email hợp lệ")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.black)
+                                
+                                BorderTextField {
+                                    TextField("Địa chỉ email", text: $protectionViewModel.email)
+                                }
+                                .frame(height: 40)
+                                .presentationCompactAdaptation(.popover)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    protectionViewModel.isShowingPopover = false
+                                } label: {
+                                    Text("Gửi")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 10)
+                                        .background(.blue)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                }
+                            }
+                            .frame(width: 260, height: 180)
+                            .background()
+                            .padding(.vertical, 60)
+                            .padding(.horizontal)
+                        }
                         
                         VStack(spacing: 30) {
                             Button {

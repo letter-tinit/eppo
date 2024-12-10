@@ -9,20 +9,28 @@ import Foundation
 import Observation
 import Combine
 
+enum WebSocketStatus: String {
+    case connecting = "Đang kết nối"
+    case connected = "Đã kết nối"
+    case disconnected = "Mất kết nối"
+}
+
 @Observable
 class AuctionRoomDetailViewModel: ObservableObject {
     var registedRoomResponseData: RegistedRoomResponseData?
-    
+    let myInfor: User
     var cancellables: Set<AnyCancellable> = []
     
     var starTimeRemaining: Int = 0
     var endTimeRemaining: Int = 0
+    var recommendAuctionNext: Double = 0
     
     // Trạng thái cho UI
     var isLoading = false
     var hasError = false
     var errorMessage: String?
-    
+    var isAuctionFinish: Bool = false
+
     var isShowingAlert: Bool = false
     
     // MARK: - Websocket
@@ -34,6 +42,7 @@ class AuctionRoomDetailViewModel: ObservableObject {
     var bidhistories: [BidHistory] = []
     var historyBids: [HistoryBid] = []
     var isConnected = false
+    var webSocketState: WebSocketStatus = .disconnected
     private var reconnectAttempts = 0
     private let maxReconnectAttempts = 5
     
@@ -44,12 +53,18 @@ class AuctionRoomDetailViewModel: ObservableObject {
         } else {
             self.token = "NO_TOKEN"
         }
+        
+        if let myInfor = UserSession.shared.myInformation {
+            self.myInfor = myInfor
+        } else {
+            self.myInfor = User(userId: 0, userName: "Lỗi", fullName: "Lỗi", gender: "Nam", dateOfBirth: Date(), phoneNumber: "0", email: "Lỗi", identificationCard: "Lỗi")
+        }
+        
     }
     
     func getRegistedAuctionRoomById() {
         self.isLoading = true
         APIManager.shared.getRegistedAuctonById(roomId: roomId)
-            .timeout(.seconds(10), scheduler: DispatchQueue.main)
             .sink { completion in
                 self.isLoading = false
                 switch completion {
@@ -64,6 +79,14 @@ class AuctionRoomDetailViewModel: ObservableObject {
                 self.registedRoomResponseData = registedRoomResponse.data
                 self.starTimeRemaining = registedRoomResponse.data.openingCoolDown
                 self.endTimeRemaining = registedRoomResponse.data.closingCoolDown
+                
+                if self.starTimeRemaining <= 0{
+                    self.startAuction()
+                }
+                
+                if self.endTimeRemaining <= 0{
+                    self.finishAuction()
+                }
             }
             .store(in: &cancellables)
     }
@@ -82,8 +105,35 @@ class AuctionRoomDetailViewModel: ObservableObject {
                 }
             } receiveValue: { auctionDetailHistoryResponse in
                 self.bidhistories = auctionDetailHistoryResponse.data
+                self.recommendAuctionNext = auctionDetailHistoryResponse.priceAuctionNext
             }
             .store(in: &cancellables)
+    }
+    
+    func startAuction() {
+        connectWebSocket()
+        isAuctionFinish = false
+    }
+    
+    func finishAuction() {
+        closeWebSocket()
+        endTimeRemaining = 0
+        isAuctionFinish = true
+        generateWinnerMessage()
+        isShowingAlert = true
+    }
+    
+    func generateWinnerMessage() {
+        guard let winner = bidhistories.first else {
+            currentErrorMessage = "Phiên đấu giá đã kết thúc, có lỗi xảy ra khi lấy dữ liệu người thắng cuộc"
+            return
+        }
+        
+        if winner.userId == myInfor.userId {
+            currentErrorMessage = "Phiên đấu giá đã kết thúc, Bạn là người thắng cuộc với mức giá \(winner.bidAmount)"
+        } else {
+            currentErrorMessage = "Phiên đấu giá đã kết thúc, Người chơi \(winner.userId) là người thắng cuộc với mức giá \(winner.bidAmount)"
+        }
     }
     
     deinit {
@@ -97,8 +147,12 @@ extension AuctionRoomDetailViewModel {
     
     // MARK: - Kết Nối WebSocket
     func connectWebSocket() {
+        webSocketState = .connecting
+        
         guard let url = URL(string: "wss://sep490ne-001-site1.atempurl.com/ws/auction") else {
             print("Invalid WebSocket URL")
+            webSocketState = .disconnected
+            isConnected = false
             return
         }
         
@@ -118,6 +172,8 @@ extension AuctionRoomDetailViewModel {
     func sendAuthMessage() {
         guard let webSocketTask = webSocketTask else {
             print("WebSocket task is not initialized")
+            webSocketState = .disconnected
+            isConnected = false
             return
         }
         
@@ -125,23 +181,36 @@ extension AuctionRoomDetailViewModel {
         guard let authData = try? JSONSerialization.data(withJSONObject: authMessage),
               let authString = String(data: authData, encoding: .utf8) else {
             print("Failed to serialize auth message")
+            webSocketState = .disconnected
+            isConnected = false
             return
         }
         
         webSocketTask.send(.string(authString)) { error in
             if let error = error {
                 print("Error sending auth message: \(error)")
+                self.webSocketState = .disconnected
+                self.isConnected = false
             } else {
                 print("Authentication message sent successfully")
                 self.isConnected = true
+                self.webSocketState = .connected
             }
         }
     }
     
     // MARK: - Gửi Tin Nhắn
     func sendMessage(bidAmount: Int) {
+        guard starTimeRemaining <= 0 else {
+            self.currentErrorMessage = "Phiên đấu giá chưa bắt đầu"
+            self.isShowingAlert = true
+            return
+        }
+        
         guard isConnected else {
             print("Socket is not connected")
+            self.currentErrorMessage = "Bạn bị mất kết nối"
+            self.isShowingAlert = true
             self.handleReconnection() // Try to reconnect if not connected
             return
         }
@@ -191,6 +260,7 @@ extension AuctionRoomDetailViewModel {
             case .failure(let error):
                 print("Error receiving message: \(error)")
                 self?.isConnected = false
+                self?.webSocketState = .disconnected
                 self?.handleReconnection()
             }
             
@@ -310,6 +380,7 @@ extension AuctionRoomDetailViewModel {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         webSocketTask = nil
         isConnected = false
+        webSocketState = .disconnected
         print("WebSocket connection closed")
     }
 }

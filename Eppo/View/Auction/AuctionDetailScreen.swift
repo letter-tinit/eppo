@@ -11,6 +11,7 @@ struct AuctionDetailScreen: View {
     var roomId: Int
     @State var viewModel = AuctionDetailsViewModel()
     @State var timeRemaining = 3600
+    @Environment(\.dismiss) private var dismiss
     
     // MARK: - BODY
     
@@ -157,16 +158,19 @@ struct AuctionDetailScreen: View {
                 
                 // MARK: - FOOTER BUTTON
                 Button {
-                    viewModel.auctionRegistration()
+                    if !viewModel.isRegisted {
+                        viewModel.auctionRegistration()
+                    }
                 } label: {
-                    Text("Đăng Ký")
+                    Text(viewModel.isRegisted ? "Đã Đăng Ký" : "Đăng Ký")
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(viewModel.isRegisted ? .green : .blue)
                         .frame(width: UIScreen.main.bounds.size.width / 2, height: 80, alignment: .top)
                         .padding(.top, 16)
                 }
                 .frame(width: UIScreen.main.bounds.size.width, height: 80, alignment: .top)
                 .shadow(radius: 1, x: 1, y: 1)
+                .disabled(viewModel.isRegisted)
             } else if viewModel.isLoading {
                 CenterView {
                     ProgressView("Đang tải")
@@ -196,7 +200,9 @@ struct AuctionDetailScreen: View {
             viewModel.getRoomById(roomId: self.roomId)
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
-            Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel())
+            Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel({
+                self.dismiss()
+            }))
         }
     }
 }

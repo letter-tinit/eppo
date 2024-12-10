@@ -19,11 +19,11 @@ struct ReviewRentalPlantScreen: View {
                         //                    AddressOrderView()
                         //                        .padding(.horizontal)
                         Text("Địa chỉ: \(viewModel.deliveryAddress)")
-                            .padding(14)
+                            .padding()
+                            .frame(maxWidth: .infinity)
                             .background(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                             .padding(.horizontal)
-                            .frame(maxWidth: .infinity)
                         
                         VStack {
                             OrderItemView(plant: viewModel.plant)
@@ -41,6 +41,18 @@ struct ReviewRentalPlantScreen: View {
                                 Spacer()
                                 
                                 Text(viewModel.deliveriteFree, format: .currency(code: "VND"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            HStack {
+                                Text("Tiền cọc:")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                
+                                Spacer()
+                                
+                                Text(viewModel.deposit, format: .currency(code: "VND"))
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
                             }
@@ -145,6 +157,7 @@ struct ReviewRentalPlantScreen: View {
         .background(Color(uiColor: UIColor.systemGray6))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
+            viewModel.getDepositByPlantId()
             viewModel.createContract()
         }
         .alert(isPresented: $viewModel.isAlertShowing) {

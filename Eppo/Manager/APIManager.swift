@@ -48,13 +48,18 @@ struct APIConstants {
         static let getById = baseURL + "api/v1/Plant/"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
         static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
+        static let accept = baseURL + "api/v1/GetList/Plants/Accept"
+        static let waitToAccept = baseURL + "api/v1/GetList/Plants/WaitToAccept"
+        static let unAccept = baseURL + "api/v1/GetList/Plants/UnAccept"
         static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
+        static let search = baseURL + "api/v1/GetList/Plants/Search/Keyword"
+        static let deleteById = baseURL + "api/v1/GetList/Plants/CancelContractPlant"
     }
     
     struct Room {
         static let getList = baseURL + "api/v1/GetList/Rooms"
         static let getByDate = baseURL + "api/v1/GetList/Rooms/SearchRoomByDate"
-        static let getById = baseURL + "api/v1/GetList/Rooms/Id"
+        static let getById = baseURL + "api/v1/GetList/Rooms/Check/Id"
         static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
@@ -79,7 +84,9 @@ struct APIConstants {
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
         static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
         static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
+        static let getDeposit = baseURL + "api/CountValues/CalculateDeposit"
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
+        static let updateStatus = baseURL + "api/v1/Order/UpdateOrderStatus"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
         static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
@@ -109,6 +116,7 @@ struct APIConstants {
     struct Transaction {
         static let getHistory = baseURL + "api/v1/Transaction/GetAllTransactionsInWallet"
         static let create = baseURL + "api/v1/Transaction/CreateTransaction"
+        static let createZalopayTransaction = baseURL + "api/v1/Payment/ZaloPay/Recharge"
     }
     
     struct Conversation {
@@ -163,6 +171,32 @@ class APIManager {
                 } else {
                     return APIError.decodingError
                 }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func searchPlant(searchText: String, pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.search) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId)),
+            URLQueryItem(name: "keyword", value: searchText)
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
             }
             .eraseToAnyPublisher()
     }
@@ -272,7 +306,9 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .validate()
             .publishDecodable(type: AuctionResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
@@ -367,7 +403,9 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .validate()
             .publishDecodable(type: AuctionDetailResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
@@ -481,14 +519,6 @@ class APIManager {
                     // Handle failure case
                 }
             }
-            .responseJSON { response in
-                switch response.result {
-                case .success(let value):
-                    print("Response JSON: \(value)") // Inspect full response
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                }
-            }
             .publishDecodable(type: NotificationResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
             .mapError { error in
@@ -534,6 +564,25 @@ class APIManager {
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .validate()
             .publishDecodable(type: ShippingFeeResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getDeposit(plantId: Int) -> AnyPublisher<ApiResponse<Double>, Error> {
+        let url = APIConstants.Order.getDeposit
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: ApiResponse<Double>.self)
             .value()
             .mapError { error in
                 return error as Error
@@ -972,6 +1021,49 @@ class APIManager {
         .eraseToAnyPublisher()
     }
     
+    func createZalopayTransaction(amount: Double) -> AnyPublisher<TransactionResponse, Error> {
+        let url = APIConstants.Transaction.createZalopayTransaction
+        
+        guard let token = UserSession.shared.token else {
+            return Fail(error: NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: No token available"]))
+                .eraseToAnyPublisher()
+        }
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
+        ]
+        
+        // Parameters
+        let parameters: [String: Any] = [
+            "rechargeNumber": amount
+        ]
+        
+        return AF.upload(
+            multipartFormData: { formData in
+                for (key, value) in parameters {
+                    if let value = value as? String {
+                        formData.append(Data(value.utf8), withName: key)
+                    } else if let value = value as? Int {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    } else if let value = value as? Double {
+                        formData.append(Data("\(value)".utf8), withName: key)
+                    }
+                }
+            },
+            to: url,
+            headers: headers
+        )
+        .validate()
+        .publishDecodable(type: TransactionResponse.self, decoder: JSONDecoder())
+        .value()
+        .mapError { error in
+            return error as Error
+        }
+        .eraseToAnyPublisher()
+    }
+    
     func plantFeedBack(pageIndex: Int, pageSize: Int, plantId: Int) -> AnyPublisher<FeedBacksResponse, Error> {
         let url = APIConstants.Plant.feedBacks
         
@@ -1312,6 +1404,48 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
+    func updateOrderStatus(orderId: Int, newStatus: Int) -> AnyPublisher<ApiResponse<Bool?>, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Order.updateStatus) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(orderId)),
+            URLQueryItem(name: "newStatus", value: String(newStatus))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.badUrl
+                }
+                
+                print(statusCode)
+                
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                return responseData
+            }
+            .decode(type: ApiResponse<Bool?>.self, decoder: JSONDecoder())
+            .mapError { error in
+                debugPrint(error)
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
     func confirmDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
         let url = APIConstants.Order.confirmDeliverite + String(describing: orderId)
         
@@ -1604,13 +1738,128 @@ class APIManager {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
         
-        return AF.request(url, method: .get)
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
             .publishDecodable(type: CategoryPlantResponse.self)
             .value()
             .mapError { error in
                 return error as Error
             }
             .eraseToAnyPublisher()
+    }
+    
+    func getAcceptPlant(pageIndex: Int, pageSize: Int, typeEcommerceId: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.accept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getWaitToAcceptPlant(pageIndex: Int, pageSize: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.waitToAccept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getUnAcceptPlant(pageIndex: Int, pageSize: Int) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.unAccept) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func deletePlant(plantId: Int) -> AnyPublisher<Void, Error> {
+        let url = APIConstants.Plant.deleteById
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate(statusCode: 200..<299)
+            .publishData()
+            .tryMap({ response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.invalidResponse
+                }
+                
+                // Check if the status code is in the valid range
+                if !(200..<300).contains(statusCode) {
+                    throw APIError.serverError(statusCode: statusCode)
+                }
+                
+                return response.data
+            })
+            .map({ _ in
+                return ()
+            })
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+        
     }
     
     func setupHeaderToken() -> HTTPHeaders? {

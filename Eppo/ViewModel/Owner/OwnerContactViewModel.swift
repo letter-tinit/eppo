@@ -22,8 +22,10 @@ class OwnerContactViewModel {
     var isSucessSigned = false
     
     func createOwnerContract() {
+        isLoading = true
         APIManager.shared.createOwnerContract()
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     break

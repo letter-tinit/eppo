@@ -29,6 +29,7 @@ struct HireOrderHistoryScreen: View {
     var body: some View {
         VStack {
             CustomHeaderView(title: "Đơn hàng Thuê")
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(HireOrderState.allCases, id: \.self) { orderState in
@@ -65,13 +66,12 @@ struct HireOrderHistoryScreen: View {
                             if ordersHireHistoryOrder.paymentStatus == "Chưa thanh toán" {
                                 NavigationLink {
                                     ReviewRentalPlantScreen(viewModel: ReviewRentalPlantViewModel(plant: orderDetail.plant, orderId: ordersHireHistoryOrder.id, rentTotalPrice: ordersHireHistoryOrder.finalPrice, rentTotalAmount: ordersHireHistoryOrder.finalPrice + ordersHireHistoryOrder.deliveryFee, deliveriteFree: ordersHireHistoryOrder.deliveryFee, deliveryAddress: ordersHireHistoryOrder.deliveryAddress))
-//                                    ReviewRentalPlantScreen(viewModel: ReviewRentalPlantViewModel(plant: orderDetail.plant, orderId: ordersHireHistoryOrder.id, rentTotalPrice: ordersHireHistoryOrder.finalPrice, rentTotalAmount: ordersHireHistoryOrder.finalPrice + ordersHireHistoryOrder.deliveryFee, deliveriteFree: ordersHireHistoryOrder.deliveryFee))
                                 } label: {
-                                    HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, paymentStatus: ordersHireHistoryOrder.paymentStatus, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail, isCancellable: viewModel.selectedOrderState == .waitingForConfirm)
+                                    HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, paymentStatus: ordersHireHistoryOrder.paymentStatus, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail, isCancellable: viewModel.selectedOrderState == .waitingForConfirm || viewModel.selectedOrderState == .waitingForPackage, isReceived: viewModel.selectedOrderState == .waitingForDeliver)
                                         .foregroundStyle(.black)
                                 }
                             } else {
-                                HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, paymentStatus: ordersHireHistoryOrder.paymentStatus, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail, isCancellable: viewModel.selectedOrderState == .waitingForConfirm)
+                                HireOrderRowView(viewModel: viewModel, id: ordersHireHistoryOrder.id, totalPrice: ordersHireHistoryOrder.finalPrice, paymentStatus: ordersHireHistoryOrder.paymentStatus, deliveriteFree: ordersHireHistoryOrder.deliveryFee, numberOfMonth: orderDetail.numberMonth, orderDetail: orderDetail, isCancellable: viewModel.selectedOrderState == .waitingForConfirm || viewModel.selectedOrderState == .waitingForPackage, isReceived: viewModel.selectedOrderState == .waitingForDeliver)
                             }
                         }
                     }

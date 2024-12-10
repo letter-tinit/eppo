@@ -82,7 +82,7 @@ struct EppoApp: App {
         WindowGroup {
             if isLogged {
                 if isCustomer {
-                    MainTabView(selectedTab: .notification)
+                    MainTabView(selectedTab: .explore)
                         .environment(networkMonitor)
                         .onAppear {
                             customAppDelegate.app = self

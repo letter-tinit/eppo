@@ -18,6 +18,7 @@ struct HireOrderRowView: View {
     var numberOfMonth: Int
     let orderDetail: HireHistoryOrderDetail
     var isCancellable: Bool = false
+    var isReceived: Bool = false
 
     // MARK: - BODY
 
@@ -99,6 +100,23 @@ struct HireOrderRowView: View {
                         .background(
                             RoundedRectangle(cornerRadius: 4)
                                 .foregroundStyle(.red)
+                        )
+                        .foregroundStyle(.white)
+                }
+                .padding(.horizontal, 10)
+            }
+            
+            if isReceived {
+                Button {
+                    viewModel.receiveOrder(orderId: id, newStatus: 4)
+                } label: {
+                    Text("Đã nhận hàng")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .frame(width: 140, height: 40)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundStyle(.darkBlue)
                         )
                         .foregroundStyle(.white)
                 }

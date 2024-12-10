@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct PictureSlider: View {
     // MARK: - PROPERTY
@@ -24,7 +25,7 @@ struct PictureSlider: View {
         } else {
             TabView {
                 ForEach(imagePlants, id: \.self) { imagePlant in
-                    CustomAsyncImage(imageUrl: imagePlant.imageUrl, width: UIScreen.main.bounds.size.width - 20, height: 200)
+                    CustomPictureSliderImage(imageUrl: imagePlant.imageUrl)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
@@ -34,6 +35,29 @@ struct PictureSlider: View {
         }
     }
 }
+
+struct CustomPictureSliderImage: View {
+    let imageUrl: String
+    
+    var body: some View {
+        ZStack {
+            Color.black
+            
+            KFImage(URL(string: imageUrl))
+                .placeholder {
+                    Image("no-image")
+                        .resizable()
+                        .scaledToFit()
+                        .clipped()
+                }
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipped()
+        }
+        .frame(width: UIScreen.main.bounds.size.width - 20, height: 300)
+    }
+}
+
 
 // MARK: - PREVIEW
 #Preview {

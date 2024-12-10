@@ -32,7 +32,11 @@ struct ItemHireScreen: View {
                 }
                 
                 SearchBar(searchText: $viewModel.searchText)
-
+                    .submitLabel(.search)
+                    .onSubmit {
+                        viewModel.search(text: viewModel.searchText)
+                    }
+                
             }// HEADER HSTACK
             .padding(.horizontal)
             .foregroundStyle(.black)
@@ -40,6 +44,7 @@ struct ItemHireScreen: View {
             Menu {
                 ForEach(viewModel.categories, id: \.self) { category in
                     Button {
+                        viewModel.searchText = ""
                         viewModel.selectedCategory = category
                         viewModel.resetPagination()
                         viewModel.loadMorePlantsForCate(typeEcommerceId: 2)
@@ -118,6 +123,10 @@ struct ItemHireScreen: View {
         .foregroundStyle(.black)
         .navigationBarBackButtonHidden()
         .onAppear {
+            viewModel.recommendOption = .forBuy
+            if !viewModel.searchText.isEmpty {
+                viewModel.search(text: viewModel.searchText)
+            }
             viewModel.getListCategory()
             viewModel.resetPagination()
             viewModel.loadMorePlants(typeEcommerceId: 2)

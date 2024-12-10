@@ -16,6 +16,8 @@ struct Plant: Codable, Identifiable, Hashable {
     let mainImage: String
     let imagePlants: [ImagePlantResponse]
     let status: Int
+    let isActive: Bool
+    let typeEcommerceId: Int
 
     // computed value
     var isSelected: Bool = false
@@ -29,6 +31,8 @@ struct Plant: Codable, Identifiable, Hashable {
         case mainImage
         case imagePlants = "imagePlants"
         case status = "status"
+        case isActive = "isActive"
+        case typeEcommerceId = "typeEcommerceId"
     }
 }
 

@@ -15,6 +15,7 @@ class ReviewRentalPlantViewModel {
     var rentTotalPrice: Double
     var rentTotalAmount: Double
     var deliveriteFree: Double
+    var deposit: Double = 0.0
     var deliveryAddress: String
     var contractId: Int?
     var contractUrl: String?
@@ -124,6 +125,23 @@ class ReviewRentalPlantViewModel {
                 }
             } receiveValue: { shippingFeeResponse in
                 self.deliveriteFree = shippingFeeResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getDepositByPlantId() {
+        APIManager.shared.getDeposit(plantId: plant.id)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { response in
+                if let deposit = response.data {
+                    self.deposit = deposit
+                }
             }
             .store(in: &cancellables)
     }

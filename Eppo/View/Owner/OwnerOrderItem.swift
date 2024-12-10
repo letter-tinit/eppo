@@ -11,9 +11,9 @@ struct OwnerOrderItem: View {
     var order: OwnerOrder
     @State var orderStatus: String = "Đang giao"
     @State var typeEcommerce: String = "Đơn mua"
-
+    
     // MARK: - BODY
-
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -37,7 +37,7 @@ struct OwnerOrderItem: View {
                 
                 Spacer()
                 
-                Text((order.finalPrice + order.deliveryFee).formatted(.currency(code: "VND")))
+                Text((order.finalPrice).formatted(.currency(code: "VND")))
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.red)
@@ -68,6 +68,8 @@ struct OwnerOrderItem: View {
                 orderStatus = "Đã giao"
             case 5:
                 orderStatus = "Đã huỷ"
+            case 6:
+                orderStatus = "Đã Thu hồi"
             default:
                 orderStatus = "Không xác định"
                 break

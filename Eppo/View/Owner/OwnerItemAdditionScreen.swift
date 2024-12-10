@@ -12,11 +12,12 @@ struct OwnerItemAdditionScreen: View {
     @StateObject private var viewModel = OwnerItemAdditionViewModel()
     @State private var mainImagePickerItem: PhotosPickerItem? = nil
     @State private var additionalImagePickerItems: [PhotosPickerItem] = []
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
-                SingleHeaderView(title: "Thêm sản phẩm")
+                CustomHeaderView(title: "Thêm sản phẩm")
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
@@ -134,12 +135,12 @@ struct OwnerItemAdditionScreen: View {
                 }
                 
                 Button(action: {
-                    //                if viewModel.isValid {
-                    viewModel.createOwnerItem()
-                    //                } else {
-                    //                    viewModel.message = viewModel.validationMessage
-                    //                    viewModel.isAlertShowing = true
-                    //                }
+                    if viewModel.isValid {
+                        viewModel.createOwnerItem()
+                    } else {
+                        viewModel.message = viewModel.validationMessage
+                        viewModel.isAlertShowing = true
+                    }
                 }) {
                     Text("Xác nhận")
                         .frame(maxWidth: .infinity)
@@ -150,7 +151,11 @@ struct OwnerItemAdditionScreen: View {
                 }
                 .padding()
                 .alert(isPresented: $viewModel.isAlertShowing) {
-                    Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel())
+                    Alert(title: Text(viewModel.message ?? "Nhắc nhở"), dismissButton: .cancel({
+                        if viewModel.isSuccessAddition {
+                            self.dismiss()
+                        }
+                    }))
                 }
             }
             .ignoresSafeArea(.container, edges: .top)
@@ -159,6 +164,7 @@ struct OwnerItemAdditionScreen: View {
             LoadingCenterView()
                 .opacity(viewModel.isLoading ? 1 : 0)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

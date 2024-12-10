@@ -59,7 +59,7 @@ struct TransactionHistoryScreen: View {
             }
         }
         .navigationBarBackButtonHidden()
-        .ignoresSafeArea(.container, edges: .vertical)
+        .ignoresSafeArea(.container, edges: .top)
         .onAppear {
             viewModel.getTransactionHistory()
         }

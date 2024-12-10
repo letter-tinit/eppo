@@ -63,7 +63,7 @@ struct OrderHistoryScreen: View {
             } else if !viewModel.orders.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach (viewModel.orders) { order in
-                        BuyOrderRowView(viewModel: viewModel, orderId: order.id, totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: viewModel.selectedOrderState == .waitingForConfirm)
+                        BuyOrderRowView(viewModel: viewModel, orderId: order.id, totalPrice: order.finalPrice, deliveriteFree: order.deliveryFee, orderDetails: order.orderDetails, isCancellable: viewModel.selectedOrderState == .waitingForConfirm || viewModel.selectedOrderState == .waitingForPackage, isReceived: viewModel.selectedOrderState == .waitingForDeliver)
                             .padding(10)
                     }
                     .background(Color(uiColor: UIColor.systemGray5))

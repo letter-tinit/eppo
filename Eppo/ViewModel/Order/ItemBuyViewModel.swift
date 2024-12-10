@@ -10,6 +10,7 @@ import Combine
 
 class ItemBuyViewModel: ObservableObject {
     @Published var searchText: String = ""
+    @Published var recommendOption: RecomendOption = .forBuy
     @Published var plants: [Plant] = []
     @Published var categories: [Category] = []
     @Published var selectedCategory: Category?
@@ -21,6 +22,28 @@ class ItemBuyViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private var currentPage = 1
+    
+    init() {
+        createSearchTextPublisher()
+    }
+    
+    init(searchText: String, recommendOption: RecomendOption) {
+        self.createSearchTextPublisher()
+        self.recommendOption = recommendOption
+        self.searchText = searchText
+        self.search(text: searchText)
+    }
+    
+    private func createSearchTextPublisher() {
+        $searchText
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink { [weak self] searchText in
+                guard let self = self, !searchText.isEmpty else { return }
+                self.search(text: searchText)
+            }
+            .store(in: &cancellables)
+    }
     
     func loadMorePlants(typeEcommerceId: Int) {
         guard !isLoading, !isLastPage else { return }
@@ -81,7 +104,7 @@ class ItemBuyViewModel: ObservableObject {
         guard !isLoading, !isLastPage else { return } // Prevent multiple loading
         
         isLoading = true
-        APIManager.shared.getPlantByTypeAndCate(pageIndex: currentPage, pageSize: 10 , typeEcommerceId: typeEcommerceId, categoryId: self.selectedCategory?.categoryId ?? 0)
+        APIManager.shared.getPlantByTypeAndCate(pageIndex: currentPage, pageSize: 10, typeEcommerceId: typeEcommerceId, categoryId: self.selectedCategory?.categoryId ?? 0)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 self.isLoading = false
@@ -101,6 +124,25 @@ class ItemBuyViewModel: ObservableObject {
                 
                 self.isEmptyResult = !self.isLoading && self.plants.isEmpty
             })
+            .store(in: &cancellables)
+    }
+    
+    func search(text: String) {
+        isLoading = true
+        APIManager.shared.searchPlant(searchText: text, pageIndex: 1, pageSize: 999, typeEcommerceId: recommendOption == .forBuy ? 1 : 2)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print("Search API error: \(error)")
+                    self?.plants.removeAll()
+                }
+            } receiveValue: { [weak self] response in
+                self?.plants = response.data
+            }
             .store(in: &cancellables)
     }
 }

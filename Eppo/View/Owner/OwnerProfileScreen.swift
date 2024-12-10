@@ -39,37 +39,6 @@ struct OwnerProfileScreen: View {
                     OwnerBalanceBox(balance: viewModel.user.wallet?.numberBalance ?? 0)
                 }
                 .padding(.top, 20)
-                
-                
-                // MARK: - DELIVER TOOLS BAR
-                ZStack(alignment: .center) {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundStyle(.settingBoxBackground)
-                    
-                    HStack(spacing: 24) {
-                        Button {
-                        } label: {
-                            OwnerCustomButtomImageLabel(imageName: "doc.append.fill", title: "Hợp đồng")
-                        }
-                        
-                        Button {
-                        } label: {
-                            OwnerCustomButtomImageLabel(imageName: "creditcard.fill", title: "Nạp tiền")
-                        }
-                        
-                        Button {
-                        } label: {
-                            OwnerCustomButtomImageLabel(imageName: "dollarsign.square.fill", title: "Rút tiền")
-                        }
-                        
-                        Button {
-                        } label: {
-                            OwnerCustomButtomImageLabel(imageName: "star.bubble.fill", title: "Đánh giá")
-                        }
-                    }
-                }
-                .frame(height: 90)
-                .padding(.top)
             }
             
             // MARK: - CONTENT STACK
@@ -92,14 +61,19 @@ struct OwnerProfileScreen: View {
                     
                     Divider()
                     
-                    CustomSettingNavigationLink(image: "creditcard", title: "Thông tin thanh toán", destination: Text("Destination View"))
+                    CustomSettingNavigationLink(image: "doc.append", title: "Hợp đồng", destination: ReviewOwnerContractScreen())
+                    
+                    Divider()
+                    
+                    CustomSettingNavigationLink(image: "creditcard", title: "Rút tiền", destination: CashOutScreen())
                     
                     Divider()
                     
                     CustomSettingNavigationLink(image: "questionmark.bubble", title: "Hỗ trợ", destination: Text("Destination View"))
                 }
             }
-            .frame(height: 250)
+            .frame(height: 320)
+            .padding(.top)
             
             Spacer(minLength: 80)
             
@@ -123,7 +97,7 @@ struct OwnerProfileScreen: View {
             
             Spacer(minLength: 30)
             
-            Text("v\(appVersion) build \(appBuild)")
+            Text("v\(appVersion).\(appBuild)")
                 .foregroundStyle(.secondary)
             
             Spacer(minLength: 20)

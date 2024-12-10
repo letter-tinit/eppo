@@ -53,7 +53,7 @@ struct MyChatBox: View {
                             .padding(8)
                             .multilineTextAlignment(.leading)
                             .background(
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 6)
                                     .foregroundStyle(
                                         LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
                                     )

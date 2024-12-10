@@ -20,6 +20,7 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
     var isAlertShowing = false
     var message = "Nhắc nhở"
     var isSucessCreation: Bool = false
+    var recommendAmounts: [Int] = []
 
     // MARK: - ZPPaymentDelegate methods
     func paymentDidSucceeded(_ transactionId: String!, zpTranstoken: String!, appTransId: String!) {
@@ -52,6 +53,8 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
         
         guard let walletId = UserSession.shared.myInformation?.wallet?.walletId,
               let amount = Double(amountInput) else {
+            self.message = "Lỗi nhập liệu"
+            self.isAlertShowing = true
             return
         }
         
@@ -80,4 +83,59 @@ class PaymentViewModel: NSObject, ZPPaymentDelegate {
             }
             .store(in: &cancellables)
     }
+    
+    func createZalopayTransaction() {
+        isLoading = true
+        isSucessCreation = false
+        
+        guard let amount = Double(amountInput) else {
+            isLoading = false
+            return
+        }
+        
+        APIManager.shared.createZalopayTransaction(amount: amount)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                    self.message = "Lỗi khi tạo transaction"
+                    self.isAlertShowing = true
+                }
+            } receiveValue: { result in
+                print(result)
+                if let zpTransToken = result.zp_trans_token {
+                    self.zpTransToken = zpTransToken
+                    self.message = "Đã tạo thành công transaction"
+                    self.isAlertShowing = true
+                    self.isSucessCreation = true
+                } else {
+                    self.message = "Lỗi khi tạo transaction"
+                    self.isAlertShowing = true
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func setRcommendAmount() {
+        var result = [Int]()
+        guard let cashOutAmount = Int(amountInput) else {
+            recommendAmounts = []
+            return
+        }
+        
+        for i in 1..<4 {
+            let value = cashOutAmount * Int(pow(10.0, Double(i)))
+            result.append(value)
+        }
+        
+        recommendAmounts = result
+    }
+    
+    func setAmount(amount: Int) {
+        amountInput = String(describing: amount)
+    }
+
 }

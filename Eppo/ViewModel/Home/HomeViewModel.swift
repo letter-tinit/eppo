@@ -9,6 +9,7 @@ import Combine
 import Alamofire
 
 class HomeViewModel: ObservableObject {
+    @Published var searchText = ""
     @Published var plants: [Plant] = []
     @Published var hirePlants: [Plant] = []
     @Published var errorMessage: String? = nil

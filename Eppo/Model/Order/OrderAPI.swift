@@ -11,6 +11,7 @@ struct OrderDetail: Codable {
     var plantId: Int
     var rentalStartDate: Date  // Có thể sử dụng Date nếu cần, nhưng với định dạng này là String
     var numberMonth: Int
+    var deposit: Double
 }
 
 // Định nghĩa struct cho Order

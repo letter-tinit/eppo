@@ -9,6 +9,12 @@ import Foundation
 import Observation
 import Combine
 
+enum OwnerHomeActiveAlert: String {
+    case remind = "Nhắc nhở"
+    case error = "Có lỗi xảy ra"
+    case succcess = "Thành công"
+}
+
 @Observable
 class OwnerHomeViewModel {
     private var cancellables: Set<AnyCancellable> = []
@@ -16,6 +22,10 @@ class OwnerHomeViewModel {
     var selectedType: TypeEcommerce = .buy
     var hasError = false
     var isLoading = false
+    var message: String?
+    var activeAlert: OwnerHomeActiveAlert = .error
+    var isShowingAlert: Bool = false
+    var onProcessPlant: Plant?
     
     func getOwnerPlant() {
         isLoading = true
@@ -31,7 +41,7 @@ class OwnerHomeViewModel {
             typeEcommerceId = 3
         }
         
-        APIManager.shared.getOwnerPlant(pageIndex: 1, pageSize: 9999, typeEcommerceId: typeEcommerceId)
+        APIManager.shared.getAcceptPlant(pageIndex: 1, pageSize: 9999, typeEcommerceId: typeEcommerceId)
             .sink { [weak self] completion in
                 self?.isLoading = false
                 switch completion {
@@ -46,6 +56,40 @@ class OwnerHomeViewModel {
                 self?.plants = response.data
             }
             .store(in: &cancellables)
+    }
+    
+    func toggleRemind(plant: Plant) {
+        onProcessPlant = plant
+        showAlert(activeAlert: .remind, message: "Bạn có chắc muốn xoá cây không?")
+    }
+    
+    func deletePlant() {
+        guard let plantId = onProcessPlant?.id else {
+            showAlert(activeAlert: .error, message: "Lỗi khi lấy dữ liệu của cây")
+            return
+        }
+        
+        isLoading = true
+        APIManager.shared.deletePlant(plantId: plantId)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    self?.showAlert(activeAlert: .succcess, message: "Đã xoá cây thành công")
+                    break
+                case .failure(let error):
+                    self?.showAlert(activeAlert: .error, message: error.localizedDescription)
+                }
+            } receiveValue: {}
+            .store(in: &cancellables)
+    }
+    
+    private func showAlert(activeAlert: OwnerHomeActiveAlert, message: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.activeAlert = activeAlert
+            self?.message = message
+            self?.isShowingAlert = true
+        }
     }
     
     deinit {

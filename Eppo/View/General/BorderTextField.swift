@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct BorderTextField<Content: View>: View {
-    let content: () -> Content
+    @ViewBuilder let content: Content
 
     var body: some View {
         ZStack(alignment: .leading) {
             Color(.textFieldBackground)
             
-            content()
+            content
                 .textInputAutocapitalization(.never)
                 .padding(.horizontal, 20)
         }
