@@ -206,6 +206,16 @@ struct AuctionRoomDetailScreen: View {
                             }
                         }
                         
+//                        if viewModel.recommendAuctionNext == 0 {
+                        Text("Giá gợi ý tiếp theo: \(viewModel.recommendAuctionNext.formatted(.currency(code: "VND")))")
+                            .multilineTextAlignment(.leading)
+                            .padding()
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
+                            .padding(.horizontal)
+//                        }
+                        
                         if !viewModel.bidhistories.isEmpty {
                             LazyVStack {
                                 ForEach(viewModel.bidhistories) { historyBid in
@@ -330,6 +340,39 @@ struct AuctionRoomDetailScreen: View {
     func secondString(time: Int) -> String {
         let seconds = Int(time) % 60
         return String(format:"%02i", seconds)
+    }
+        
+//    private func formattedPriceBinding() -> Binding<String> {
+//        Binding<String>(
+//            get: {
+//                if let priceInput = priceInputTextField {
+//                    // Use the currency formatter to display the formatted value
+//                    return NumberFormatter.currencyFormatter.string(from: NSNumber(value: priceInput)) ?? ""
+//                } else {
+//                    return "" // Return an empty string if no input
+//                }
+//            },
+//            set: { newValue in
+//                // Parse numeric value from the input
+//                let filtered = newValue.filter { $0.isNumber } // Extract numeric characters
+//                if let numericValue = Double(filtered) {
+//                    priceInputTextField = numericValue // Update the state with the numeric value
+//                } else {
+//                    priceInputTextField = nil // Reset if input cannot be parsed
+//                }
+//            }
+//        )
+//    }
+}
+
+extension NumberFormatter {
+    static var currencyFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "VND"
+        formatter.locale = Locale(identifier: "vi_VN")
+        formatter.maximumFractionDigits = 0 // No decimals for VND
+        return formatter
     }
 }
 

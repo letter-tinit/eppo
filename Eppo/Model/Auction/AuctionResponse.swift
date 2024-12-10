@@ -30,6 +30,7 @@ struct RoomResponseData: Codable {
 struct AuctionDetailHistoryResponse: Codable {
     let statusCode: Int
     let message: String
+    let priceAuctionNext: Double
     let data: [BidHistory]
 }
 

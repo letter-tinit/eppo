@@ -55,6 +55,18 @@ struct HireOrderScreen: View {
                             
                             
                             HStack {
+                                Text("Tiền cọc:")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                
+                                Spacer()
+                                
+                                Text(viewModel.deposit, format: .currency(code: "VND"))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            HStack {
                                 Text("Phí vận chuyển:")
                                     .font(.subheadline)
                                     .fontWeight(.regular)

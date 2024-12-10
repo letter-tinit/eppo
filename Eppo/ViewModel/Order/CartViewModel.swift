@@ -58,6 +58,7 @@ import Observation
         }
         
         createOrderRequest.deliveryAddress = addressDescription
+        createOrderRequest.deliveryFee = totalShippingFee
         
         APIManager.shared.createOrder(createOrderRequest: createOrderRequest)
             .sink(receiveCompletion: { completion in

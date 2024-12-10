@@ -63,26 +63,25 @@ class OwnerHomeViewModel {
         showAlert(activeAlert: .remind, message: "Bạn có chắc muốn xoá cây không?")
     }
     
-//    func checkDeletableAndExcute() {
-//        guard let plant = onProcessPlant else {
-//            showAlert(activeAlert: .error, message: "Lỗi khi lấy dữ liệu của cây")
-//            return
-//        }
-//        
-//        if plant.isActive {
-//            deletePlant(plantId: plant.id)
-//        } else {
-//            showAlert(activeAlert: .error, message: "Cây đang bán hoặc cho thuê không thể bị xoá!")
-//        }
-//    }
-    
     func deletePlant() {
         guard let plantId = onProcessPlant?.id else {
             showAlert(activeAlert: .error, message: "Lỗi khi lấy dữ liệu của cây")
             return
         }
         
-        showAlert(activeAlert: .succcess, message: "Đã xoá cây thành công")
+        isLoading = true
+        APIManager.shared.deletePlant(plantId: plantId)
+            .sink { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    self?.showAlert(activeAlert: .succcess, message: "Đã xoá cây thành công")
+                    break
+                case .failure(let error):
+                    self?.showAlert(activeAlert: .error, message: error.localizedDescription)
+                }
+            } receiveValue: {}
+            .store(in: &cancellables)
     }
     
     private func showAlert(activeAlert: OwnerHomeActiveAlert, message: String) {

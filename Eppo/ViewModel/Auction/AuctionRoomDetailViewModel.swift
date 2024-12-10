@@ -23,6 +23,7 @@ class AuctionRoomDetailViewModel: ObservableObject {
     
     var starTimeRemaining: Int = 0
     var endTimeRemaining: Int = 0
+    var recommendAuctionNext: Double = 0
     
     // Trạng thái cho UI
     var isLoading = false
@@ -104,6 +105,7 @@ class AuctionRoomDetailViewModel: ObservableObject {
                 }
             } receiveValue: { auctionDetailHistoryResponse in
                 self.bidhistories = auctionDetailHistoryResponse.data
+                self.recommendAuctionNext = auctionDetailHistoryResponse.priceAuctionNext
             }
             .store(in: &cancellables)
     }

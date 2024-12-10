@@ -151,6 +151,7 @@
 		2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5A2282C5A019300D0035D /* LoginScreen.swift */; };
 		2CC5A22B2C5A019500D0035D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CC5A22A2C5A019500D0035D /* Assets.xcassets */; };
 		2CC5A22E2C5A019500D0035D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CC5A22D2C5A019500D0035D /* Preview Assets.xcassets */; };
+		2CC6746C2D07C1BE00A59E58 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC6746B2D07C1BE00A59E58 /* APIResponse.swift */; };
 		2CDA76EB2CE45EF800860CB4 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDA76EA2CE45EF800860CB4 /* Address.swift */; };
 		2CDB80992C9143AE0006D3E6 /* ToAuctionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDB80982C9143AE0006D3E6 /* ToAuctionItem.swift */; };
 		2CDC7E032C77F31100028AC8 /* ActiveScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDC7E022C77F31100028AC8 /* ActiveScreen.swift */; };
@@ -338,6 +339,7 @@
 		2CC5A2282C5A019300D0035D /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		2CC5A22A2C5A019500D0035D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CC5A22D2C5A019500D0035D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2CC6746B2D07C1BE00A59E58 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		2CDA76EA2CE45EF800860CB4 /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		2CDB80982C9143AE0006D3E6 /* ToAuctionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToAuctionItem.swift; sourceTree = "<group>"; };
 		2CDC7E022C77F31100028AC8 /* ActiveScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScreen.swift; sourceTree = "<group>"; };
@@ -864,6 +866,7 @@
 			children = (
 				2C45B5D72CDC94C8008670F1 /* Plant.swift */,
 				2CEAF0E72CF86DCA00C0B880 /* SimpleResponse.swift */,
+				2CC6746B2D07C1BE00A59E58 /* APIResponse.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1197,6 +1200,7 @@
 				2C45B5EC2CDC95C0008670F1 /* OwnerCustomHeaderView.swift in Sources */,
 				2CAB77B62D03D8230030A551 /* CashOutScreen.swift in Sources */,
 				2CDC94C32D034E2100129C1E /* PopoverTest.swift in Sources */,
+				2CC6746C2D07C1BE00A59E58 /* APIResponse.swift in Sources */,
 				2CAA6AB12CB0226700003EC1 /* LoginAPI.swift in Sources */,
 				2C5920F02CA7982C004E996F /* TransactionHistoryScreen.swift in Sources */,
 				2C8BC3102CA7DDFA0082F075 /* CartScreen.swift in Sources */,
@@ -1339,7 +1343,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
@@ -1382,7 +1386,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;

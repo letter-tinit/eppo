@@ -31,6 +31,7 @@ enum ActiveAlert {
     let step = 1
     let range = 1...99
     var deliveriteFree: Double = 0.0
+    var deposit: Double = 0.0
     var contractNumber: Int?
     var contractId: Int?
     var contractUrl: String?
@@ -63,6 +64,7 @@ enum ActiveAlert {
             } receiveValue: { plantResponse in
                 self.plant = plantResponse.data
                 self.getShippingFeeByPlantId()
+                self.getDepositByPlantId()
             }
             .store(in: &cancellables)
     }
@@ -102,6 +104,25 @@ enum ActiveAlert {
                 }
             } receiveValue: { shippingFeeResponse in
                 self.deliveriteFree = shippingFeeResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getDepositByPlantId() {
+        guard let plantId = plant?.id else {
+            return
+        }
+        
+        APIManager.shared.getDeposit(plantId: plantId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { response in
+                self.deposit = response.data
             }
             .store(in: &cancellables)
     }
@@ -147,7 +168,8 @@ enum ActiveAlert {
             orderDetails: [
                 OrderDetail(plantId: plant.id,
                             rentalStartDate: selectedDate,
-                            numberMonth: numberOfMonth)
+                            numberMonth: numberOfMonth, 
+                            deposit: deposit)
             ]
         )
         
@@ -329,7 +351,7 @@ enum ActiveAlert {
     }
     
     func rentTotalPrice() -> Double {
-        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + self.deliveriteFree
+        return ((self.plant?.finalPrice ?? 0) * Double(self.numberOfMonth)) + self.deliveriteFree + self.deposit
     }
     
     func rentTotalPriceWithoutDeliveriteFree() -> Double {

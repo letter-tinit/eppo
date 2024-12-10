@@ -53,12 +53,13 @@ struct APIConstants {
         static let unAccept = baseURL + "api/v1/GetList/Plants/UnAccept"
         static let feedBacks = baseURL + "api/v1/GetList/Feedback/ByPlant"
         static let search = baseURL + "api/v1/GetList/Plants/Search/Keyword"
+        static let deleteById = baseURL + "api/v1/GetList/Plants/CancelContractPlant"
     }
     
     struct Room {
         static let getList = baseURL + "api/v1/GetList/Rooms"
         static let getByDate = baseURL + "api/v1/GetList/Rooms/SearchRoomByDate"
-        static let getById = baseURL + "api/v1/GetList/Rooms/Id"
+        static let getById = baseURL + "api/v1/GetList/Rooms/Check/Id"
         static let auctionRegistration = baseURL + "api/v1/GetList/UserRoom/Create/UserRoom"
         static let getListRegisterdAuctionRoom = baseURL + "api/v1/GetList/UserRoom/Registered/ByToken"
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
@@ -83,6 +84,7 @@ struct APIConstants {
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
         static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
         static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
+        static let getDeposit = baseURL + "api/CountValues/CalculateDeposit"
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
@@ -561,6 +563,25 @@ class APIManager {
         return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
             .validate()
             .publishDecodable(type: ShippingFeeResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getDeposit(plantId: Int) -> AnyPublisher<ApiResponse<Double>, Error> {
+        let url = APIConstants.Order.getDeposit
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate()
+            .publishDecodable(type: ApiResponse<Double>.self)
             .value()
             .mapError { error in
                 return error as Error
@@ -1764,7 +1785,37 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func deletePlant() {
+    func deletePlant(plantId: Int) -> AnyPublisher<Void, Error> {
+        let url = APIConstants.Plant.deleteById
+        
+        let parameters: [String: Any] = [
+            "plantId": plantId
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, parameters: parameters, encoding: URLEncoding.default, headers: headers)
+            .validate(statusCode: 200..<299)
+            .publishData()
+            .tryMap({ response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.invalidResponse
+                }
+                
+                // Check if the status code is in the valid range
+                if !(200..<300).contains(statusCode) {
+                    throw APIError.serverError(statusCode: statusCode)
+                }
+                
+                return response.data
+            })
+            .map({ _ in
+                return ()
+            })
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
         
     }
     

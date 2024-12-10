@@ -34,10 +34,11 @@ struct ContractScreen: View {
                 
                 Spacer()
                 
-                HStack {
+                HStack(alignment: .top) {
                     Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản trong hợp đồng ở trên")
                         .font(.headline)
                         .fontWeight(.medium)
+                        .lineLimit(nil)
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
