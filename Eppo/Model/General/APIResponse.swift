@@ -10,5 +10,5 @@ import Foundation
 struct ApiResponse<T: Decodable>: Decodable {
     let statusCode: Int
     let message: String
-    let data: T
+    let data: T?
 }

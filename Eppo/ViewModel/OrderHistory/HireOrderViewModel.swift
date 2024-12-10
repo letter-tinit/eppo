@@ -57,6 +57,36 @@ class HireOrderViewModel {
             .store(in: &cancellables)
     }
     
+    func receiveOrder(orderId: Int, newStatus: Int) {
+        isLoading = true
+        
+        APIManager.shared.updateOrderStatus(orderId: orderId, newStatus: newStatus)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
+                }
+            } receiveValue: { response in
+                if (200..<299).contains(response.statusCode) {
+                    self.getHireOrderHistory()
+                    self.errorMessage = "Cảm ơn bạn đã phản hồi"
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
+                } else {
+                    self.errorMessage = "Phản hồi thất bại"
+                    self.activeAlert = .error
+                    self.isAlertShowing = true
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     func cancelOrder(id: Int) {
         isLoading = true
         

@@ -122,7 +122,9 @@ enum ActiveAlert {
                     print(error.localizedDescription)
                 }
             } receiveValue: { response in
-                self.deposit = response.data
+                if let deposit = response.data {
+                    self.deposit = deposit
+                }
             }
             .store(in: &cancellables)
     }

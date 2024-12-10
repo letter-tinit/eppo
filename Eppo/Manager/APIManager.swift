@@ -86,6 +86,7 @@ struct APIConstants {
         static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
         static let getDeposit = baseURL + "api/CountValues/CalculateDeposit"
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
+        static let updateStatus = baseURL + "api/v1/Order/UpdateOrderStatus"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
         static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
@@ -1395,6 +1396,48 @@ class APIManager {
             .validate()
             .publishDecodable(type: OwnerOrderResponse.self, decoder: JSONDecoder.customDateDecoder)
             .value()
+            .mapError { error in
+                debugPrint(error)
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func updateOrderStatus(orderId: Int, newStatus: Int) -> AnyPublisher<ApiResponse<Bool?>, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Order.updateStatus) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(orderId)),
+            URLQueryItem(name: "newStatus", value: String(newStatus))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate()
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.badUrl
+                }
+                
+                print(statusCode)
+                
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                return responseData
+            }
+            .decode(type: ApiResponse<Bool?>.self, decoder: JSONDecoder())
             .mapError { error in
                 debugPrint(error)
                 // Xử lý lỗi hoặc trả về lỗi mặc định
