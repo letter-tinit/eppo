@@ -45,6 +45,10 @@ class ProtectionSystemViewModel {
         
     }
     
+    func forgetPassword() {
+        
+    }
+    
     private func showAlert(activeAlert: ProtectionSystemActiveAlert, message: String) {
         DispatchQueue.main.async { [weak self] in
             self?.activeAlert = activeAlert

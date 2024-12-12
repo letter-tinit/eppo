@@ -7,8 +7,12 @@
 
 import Foundation
 import Combine
+import Observation
+import LocalAuthentication
 
 @Observable class LoginViewModel {
+    var usernameTextField: String = ""
+    var passwordTextField: String = ""
     var isShowingPassword: Bool = false
     var errorMessage: String?
     var isPopupMessage: Bool {
@@ -80,6 +84,28 @@ import Combine
             .store(in: &cancellables)
     }
     
+    func loginWithBiometrics() {
+        BiometricAuthManager.shared.authenticateWithBiometrics { success, error in
+            if success {
+                let credentials = KeychainManager.shared.getCredentials()
+                if let username = credentials.username, let password = credentials.password {
+                    // Gọi API login
+                    self.usernameTextField = username
+                    self.passwordTextField = password
+                    self.login(userName: username, password: password)
+                } else {
+                    self.errorMessage = "Không tìm thấy thông tin nào được lưu trong hệ thống sinh trắc"
+                    self.isPopupMessage = true
+                    print("Không tìm thấy thông tin nào được lưu trong hệ thống sinh trắc")
+                }
+            } else {
+                if let error = error as? LAError {
+                    print("Biometric error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     func getMyInformation() {
         APIManager.shared.getMyInformation()
             .sink { completion in
@@ -99,11 +125,13 @@ import Combine
         switch role {
         case .customer:
             UserSession.shared.saveToken(token)
+            UserSession.shared.saveLoginInformation(username: usernameTextField, password: passwordTextField)
             isCustomer = true
             isLogged = true
             errorMessage = nil
         case .owner:
             UserSession.shared.saveToken(token)
+            UserSession.shared.saveLoginInformation(username: usernameTextField, password: passwordTextField)
             isOwner = true
             isLogged = true
             errorMessage = nil

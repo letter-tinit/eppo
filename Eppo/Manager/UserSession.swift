@@ -28,11 +28,18 @@ import Observation
     
     var cart: [Plant] = []
     var hireCart: [Plant] = []
+    var username: String?
+    var password: String?
     
     var myInformation: User?
     // Save token to UserDefaults
     func saveToken(_ token: String) {
         self.token = token
+    }
+    
+    func saveLoginInformation(username: String, password: String) {
+        self.username = username
+        self.password = password
     }
     
     // Load token from UserDefaults
@@ -43,6 +50,8 @@ import Observation
     // Clear token from UserDefaults
     func clearSession() {
         token = nil
+        username = nil
+        password = nil
         self.myInformation = nil
         self.cart = []
         self.hireCart = []
