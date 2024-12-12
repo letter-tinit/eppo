@@ -74,7 +74,8 @@ struct EppoApp: App {
     @AppStorage("isCustomer") var isCustomer: Bool = false
     @AppStorage("isOwner") var isOwner: Bool = false
     @AppStorage("isSigned") var isSigned: Bool = false
-    
+    @AppStorage("isBiometricToggled") var isBiometricToggled: Bool = false
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @UIApplicationDelegateAdaptor private var customAppDelegate: CustomAppDelegate
     

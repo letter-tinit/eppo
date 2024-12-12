@@ -14,10 +14,11 @@ struct LoginScreen: View {
     @AppStorage("isSigned") var isSigned: Bool = true
     @State var viewModel = LoginViewModel()
     @State var protectionViewModel = ProtectionSystemViewModel()
-    @State private var usernameTextField: String = ""
-    @State private var passwordTextField: String = ""
     @State private var showAlert: Bool = false
-    
+    @State private var biometricImageName: String = "touchid"
+    @State private var biometricType: String = "Touch ID"
+    @State private var biometricAlertShowing: Bool = false
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -43,7 +44,7 @@ struct LoginScreen: View {
                                 .foregroundStyle(.textDarkBlue)
                                 .font(.system(size: 16, weight: .semibold))
                             BorderTextField {
-                                TextField("Tên đăng nhập", text: $usernameTextField)
+                                TextField("Tên đăng nhập", text: $viewModel.usernameTextField)
                             }
                             .frame(height: 50)
                             
@@ -53,9 +54,9 @@ struct LoginScreen: View {
                                 .padding(.top, 30)
                             BorderTextField {
                                 if viewModel.isShowingPassword {
-                                    TextField("Mật khẩu", text: $passwordTextField)
+                                    TextField("Mật khẩu", text: $viewModel.passwordTextField)
                                 } else {
-                                    SecureField("Mật khẩu", text: $passwordTextField)
+                                    SecureField("Mật khẩu", text: $viewModel.passwordTextField)
                                 }
                             }
                             .frame(height: 50)
@@ -112,27 +113,45 @@ struct LoginScreen: View {
                         }
                         
                         VStack(spacing: 30) {
-                            Button {
-                                if usernameTextField.isEmpty || passwordTextField.isEmpty {
-                                    viewModel.errorMessage = "Tên đăng nhập và mật khẩu không được để trống."
-                                    viewModel.isPopupMessage = true
-                                } else {
-                                    viewModel.login(userName: usernameTextField, password: passwordTextField)
-                                }
-                            } label: {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .frame(height: 60)
-                                        .foregroundStyle(
-                                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
-                                        )
-                                    
-                                    Text("Đăng Nhập")
-                                        .foregroundStyle(.black)
-                                        .font(.system(size: 16, weight: .bold))
-                                }
+                            HStack(spacing: 0) {
+                                Spacer()
                                 
-                            } // LOGIN BUTTON
+                                Button {
+                                    if viewModel.usernameTextField.isEmpty || viewModel.passwordTextField.isEmpty {
+                                        viewModel.errorMessage = "Tên đăng nhập và mật khẩu không được để trống."
+                                        viewModel.isPopupMessage = true
+                                    } else {
+                                        viewModel.login(userName: viewModel.usernameTextField, password: viewModel.passwordTextField)
+                                    }
+                                } label: {
+                                        Text("Đăng Nhập")
+                                            .foregroundStyle(.black)
+                                            .font(.system(size: 16, weight: .bold))
+                                            .frame(alignment: .center)
+                                    
+                                } // LOGIN BUTTON
+                                
+                                Spacer()
+                                
+                                Rectangle()
+                                    .frame(width: 3)
+                                    .foregroundStyle(.white)
+                                
+                                Button {
+                                    enableBiometrics()
+                                } label: {
+                                    Image(systemName: biometricImageName)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 30, height: 30, alignment: .center)
+                                        .foregroundStyle(.white)
+                                }
+                                .frame(width: 60, alignment: .center)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 60)
+                            .background(LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                             
                             //                            HStack {
                             //                                RoundedRectangle(cornerRadius: 0)
@@ -192,6 +211,8 @@ struct LoginScreen: View {
                     
                 }
                 .disabled(viewModel.isLoading)
+                .disabled(biometricAlertShowing)
+                .blur(radius: viewModel.isLoading || biometricAlertShowing ? 1 : 0)
                 
                 Rectangle()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -210,6 +231,74 @@ struct LoginScreen: View {
                 }
                 .shadow(radius: 2, x: 1, y: 1)
                 .opacity(viewModel.isLoading ? 1 : 0)
+                
+//                VStack(spacing: 10) {
+//                    Image(systemName: biometricImageName)
+//                        .font(.largeTitle)
+//                        .foregroundStyle(.red)
+//                    Text("\(biometricType) cho \"Eppo\"")
+//                        .font(.headline)
+//                    Text("Quí khách vui lonhg thực hiện")
+//                    Text("A")
+//                }
+//                .frame(maxWidth: .infinity)
+//                .frame(height: 200)
+//                .padding()
+//                .background(.white)
+//                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                .padding(40)
+//                .opacity(0.95)
+//                .shadow(radius: 1)
+                
+                VStack(spacing: 10) {
+                    Image(systemName: "xmark.shield")
+                        .font(.largeTitle)
+                        .foregroundStyle(.red)
+                    Text("Có lỗi xảy ra")
+                        .font(.headline)
+                    Text("Tính năng xác thực sinh trắc chưa được kích hoạt")
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                    
+                    Divider()
+                        .padding(.horizontal, -20)
+                    HStack(spacing: 0) {
+                        Button {
+                            biometricAlertShowing = false
+                            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+                            }
+                        } label: {
+                            Text("Cài đặt")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        Divider()
+                            .padding(.vertical, -20)
+                        
+                        Button {
+                            biometricAlertShowing = false
+                        } label: {
+                            Text("Huỷ")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .foregroundStyle(.red)
+                                .fontWeight(.regular)
+                        }
+                    }
+                    .frame(height: 36)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(10)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(40)
+                .opacity(0.95)
+                .shadow(radius: 1)
+                .opacity(biometricAlertShowing ? 1 : 0)
+                .animation(.bouncy(duration: 0.2), value: biometricAlertShowing)
             }
             .ignoresSafeArea(.container, edges: .vertical)
             .alert(isPresented: $viewModel.isPopupMessage) {
@@ -226,8 +315,8 @@ struct LoginScreen: View {
             }
         }
         .onAppear {
-            //            viewModel.login(userName: "customer", password: "123")
             self.isSigned = true
+            setUpBiometricType()
         }
         .onChange(of: viewModel.isCustomer) { oldValue, newValue in
             self.isCustomer = newValue
@@ -242,6 +331,37 @@ struct LoginScreen: View {
         }
         .onChange(of: viewModel.isSigned) { oldValue, newValue in
             self.isSigned = newValue
+        }
+    }
+    
+    func enableBiometrics() {
+        if BiometricAuthManager.shared.canUseBiometricAuthentication() {
+            viewModel.loginWithBiometrics()
+        } else {
+            biometricAlertShowing = true
+        }
+    }
+    
+    func setUpBiometricType() {
+        if BiometricAuthManager.shared.canUseBiometricAuthentication() {
+            // Biometric authentication is available, you can enable a switch or a button to let the user turn it on.
+            switch BiometricAuthManager.shared.getBiometricType() {
+            case .faceID:
+                biometricImageName = "faceid"
+                biometricType = "Face ID"
+            case .touchID:
+                biometricImageName = "touchid"
+                biometricType = "Touch ID"
+            case .opticID:
+                biometricImageName = "opticid"
+                biometricType = "Optic ID"
+            default:
+                biometricImageName = "gear.badge.xmark"
+                biometricType = "Unknown"
+            }
+        } else {
+            biometricImageName = "gear.badge.xmark"
+            biometricType = "Unknown"
         }
     }
 }

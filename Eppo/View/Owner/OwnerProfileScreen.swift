@@ -75,6 +75,8 @@ struct OwnerProfileScreen: View {
             .frame(height: 320)
             .padding(.top)
             
+            BiometricToggleView()
+
             Spacer(minLength: 80)
             
             Button {

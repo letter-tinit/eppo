@@ -57,6 +57,9 @@
 		2C45B5F52CDC95FC008670F1 /* ToHireItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C45B5F42CDC95FC008670F1 /* ToHireItem.swift */; };
 		2C45B5F72CDCAFAE008670F1 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C45B5F62CDCAFAE008670F1 /* Category.swift */; };
 		2C45B5FA2CDCB10D008670F1 /* CategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C45B5F92CDCB10D008670F1 /* CategoryResponse.swift */; };
+		2C47E1AC2D0AA24D007CFDD5 /* BiometricAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47E1AB2D0AA24D007CFDD5 /* BiometricAuthManager.swift */; };
+		2C47E1AE2D0AA86C007CFDD5 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47E1AD2D0AA86C007CFDD5 /* KeychainManager.swift */; };
+		2C47E1B02D0AA978007CFDD5 /* BiometricToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47E1AF2D0AA978007CFDD5 /* BiometricToggleView.swift */; };
 		2C4888672CA3D0A7009E93E6 /* RecommendSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4888662CA3D0A6009E93E6 /* RecommendSectionHeader.swift */; };
 		2C5540612CA4032400F39C0E /* OrderHistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */; };
 		2C5920ED2CA794FA004E996F /* BuyOrderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5920EC2CA794FA004E996F /* BuyOrderRowView.swift */; };
@@ -244,6 +247,9 @@
 		2C45B5F42CDC95FC008670F1 /* ToHireItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToHireItem.swift; sourceTree = "<group>"; };
 		2C45B5F62CDCAFAE008670F1 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		2C45B5F92CDCB10D008670F1 /* CategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryResponse.swift; sourceTree = "<group>"; };
+		2C47E1AB2D0AA24D007CFDD5 /* BiometricAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthManager.swift; sourceTree = "<group>"; };
+		2C47E1AD2D0AA86C007CFDD5 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		2C47E1AF2D0AA978007CFDD5 /* BiometricToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricToggleView.swift; sourceTree = "<group>"; };
 		2C4888662CA3D0A6009E93E6 /* RecommendSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendSectionHeader.swift; sourceTree = "<group>"; };
 		2C5540602CA4032400F39C0E /* OrderHistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryScreen.swift; sourceTree = "<group>"; };
 		2C5920EC2CA794FA004E996F /* BuyOrderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyOrderRowView.swift; sourceTree = "<group>"; };
@@ -752,6 +758,8 @@
 				2CB106392CB10B9000D4C07B /* WebSocketManager.swift */,
 				2CA1472D2CEAF79600E26D4E /* NetworkMonitor.swift */,
 				2CA147332CEB690B00E26D4E /* AuctionWebSocket.swift */,
+				2C47E1AB2D0AA24D007CFDD5 /* BiometricAuthManager.swift */,
+				2C47E1AD2D0AA86C007CFDD5 /* KeychainManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -930,6 +938,7 @@
 				2CF209AF2CF422BA00221F1A /* LoadingCenterView.swift */,
 				2CDC94C42D035A3B00129C1E /* PopoverRow.swift */,
 				2CDC94C62D035A9E00129C1E /* PopoverBSRule.swift */,
+				2C47E1AF2D0AA978007CFDD5 /* BiometricToggleView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1063,6 +1072,7 @@
 				2C6C176D2C91E3F6004DB795 /* TimerView.swift in Sources */,
 				2C5920ED2CA794FA004E996F /* BuyOrderRowView.swift in Sources */,
 				2CA3568E2CE3708B00FEB033 /* AddressScreen.swift in Sources */,
+				2C47E1B02D0AA978007CFDD5 /* BiometricToggleView.swift in Sources */,
 				2C30BCA72CEEF0040077FB14 /* OwnerProfileViewModel.swift in Sources */,
 				2C7330E42C89646100A0F092 /* HomeHeader.swift in Sources */,
 				2CDD31572C87297000B731E0 /* EditAvatarButton.swift in Sources */,
@@ -1131,6 +1141,7 @@
 				2C5920F22CA79913004E996F /* TransactionHeader.swift in Sources */,
 				2CF1BAC92CE70A710021D051 /* HireHistoryAPI.swift in Sources */,
 				2CDC7E032C77F31100028AC8 /* ActiveScreen.swift in Sources */,
+				2C47E1AE2D0AA86C007CFDD5 /* KeychainManager.swift in Sources */,
 				2CC5A2272C5A019300D0035D /* EppoApp.swift in Sources */,
 				2CA1472E2CEAF79600E26D4E /* NetworkMonitor.swift in Sources */,
 				2C907EEE2CE21C78005CDBD5 /* OrderItemView.swift in Sources */,
@@ -1148,6 +1159,7 @@
 				2C8C6CB42CF00B9700FC412D /* AddressViewModel.swift in Sources */,
 				2C45B5DD2CDC9575008670F1 /* ItemBuyViewModel.swift in Sources */,
 				2C7330DE2C89598100A0F092 /* HomeScreen.swift in Sources */,
+				2C47E1AC2D0AA24D007CFDD5 /* BiometricAuthManager.swift in Sources */,
 				2CF1BACD2CE74EF50021D051 /* BuyOrderViewModel.swift in Sources */,
 				2C907EEC2CE21AC5005CDBD5 /* AddressOrderView.swift in Sources */,
 				2C7330E82C896E8500A0F092 /* FlashSaleItem.swift in Sources */,

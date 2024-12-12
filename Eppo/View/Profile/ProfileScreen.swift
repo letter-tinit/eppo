@@ -10,6 +10,7 @@ struct ProfileScreen: View {
     // MARK: - PROPERTY
     @AppStorage("isLogged") var isLogged: Bool = false
     @State var viewModel = ProfileViewModel()
+
     var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     }
@@ -82,10 +83,6 @@ struct ProfileScreen: View {
                         
                         Divider()
                         
-//                        CustomSettingNavigationLink(image: "message", title: "Nhắn tin với quản trị", destination: ChatScreen())
-                        
-//                        Divider()
-                        
                         CustomSettingNavigationLink(image: "clock", title: "Lịch sử đấu giá", destination: HistoryRoomScreen(viewModel: viewModel))
                         
                         Divider()
@@ -102,6 +99,8 @@ struct ProfileScreen: View {
                     }
                 }
                 .frame(height: 330)
+                
+                BiometricToggleView()
                 
                 Spacer(minLength: 80)
                 
