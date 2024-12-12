@@ -17,7 +17,7 @@ struct OwnerOrderScreen: View {
             
             ZStack {
                 List {
-                    ForEach (viewModel.ownerOrders) { ownerOrder in
+                    ForEach (viewModel.ownerOrders, id: \.self) { ownerOrder in
                         OwnerOrderItem(order: ownerOrder)
                             .swipeActions {
                                 if ownerOrder.status == 3 {
@@ -46,18 +46,12 @@ struct OwnerOrderScreen: View {
                                 } else if ownerOrder.status == 1 && ownerOrder.typeEcommerceId != 2 {
                                     Button {
                                         // chuyển trạng thái từ 1 sang 2
+                                        viewModel.confirmed(orderId: ownerOrder.id)
                                     } label: {
                                         Text("Xác nhận")
                                     }
                                     .tint(.red)
                                     // MARK: - Các trường hợp khác khôn có hành động
-                                } else {
-                                    Button {
-                                        // DO NOTHING
-                                    } label: {
-                                        Text("Bỏ qua")
-                                    }
-                                    .tint(.gray)
                                 }
                             }
                     }
@@ -85,6 +79,25 @@ struct OwnerOrderScreen: View {
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text(viewModel.errorMessage), dismissButton: .cancel())
+        }
+    }
+    
+    func getOrderStatus(order: OwnerOrder) -> String {
+        switch order.status {
+        case 1:
+            return "Chờ xác nhận"
+        case 2:
+            return "Đang chuẩn bị hàng"
+        case 3:
+            return "Đang giao"
+        case 4:
+            return "Đã giao"
+        case 5:
+            return "Đã huỷ"
+        case 6:
+            return "Đã Thu hồi"
+        default:
+            return "Không xác định"
         }
     }
 }

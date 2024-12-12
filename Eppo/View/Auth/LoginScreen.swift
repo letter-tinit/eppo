@@ -134,40 +134,40 @@ struct LoginScreen: View {
                                 
                             } // LOGIN BUTTON
                             
-//                            HStack {
-//                                RoundedRectangle(cornerRadius: 0)
-//                                    .frame(width: 100, height: 1)
-//                                
-//                                Text("Hoặc tiếp tục với")
-//                                    .font(.system(size: 14))
-//                                
-//                                RoundedRectangle(cornerRadius: 0)
-//                                    .frame(width: 100, height: 1)
-//                            } //DIVIDER STACK
-//                            .foregroundStyle(Color(UIColor.darkGray))
-//                            
-//                            Button {
-//                                
-//                            } label: {
-//                                ZStack {
-//                                    RoundedRectangle(cornerRadius: 10)
-//                                        .stroke(.black, lineWidth: 1)
-//                                        .frame(height: 60)
-//                                    
-//                                    
-//                                    HStack(spacing: 10) {
-//                                        Image("google-logo")
-//                                            .resizable()
-//                                            .scaledToFit()
-//                                            .frame(width: 26, height: 26)
-//                                        
-//                                        Text("Google")
-//                                            .font(.system(size: 16, weight: .bold))
-//                                            .foregroundStyle(Color(UIColor.darkGray))
-//                                    }
-//                                    .foregroundStyle(Color(UIColor.darkGray))
-//                                }
-//                            } // LOGIN WITH GOOGLE BUTTON
+                            //                            HStack {
+                            //                                RoundedRectangle(cornerRadius: 0)
+                            //                                    .frame(width: 100, height: 1)
+                            //
+                            //                                Text("Hoặc tiếp tục với")
+                            //                                    .font(.system(size: 14))
+                            //
+                            //                                RoundedRectangle(cornerRadius: 0)
+                            //                                    .frame(width: 100, height: 1)
+                            //                            } //DIVIDER STACK
+                            //                            .foregroundStyle(Color(UIColor.darkGray))
+                            //
+                            //                            Button {
+                            //
+                            //                            } label: {
+                            //                                ZStack {
+                            //                                    RoundedRectangle(cornerRadius: 10)
+                            //                                        .stroke(.black, lineWidth: 1)
+                            //                                        .frame(height: 60)
+                            //
+                            //
+                            //                                    HStack(spacing: 10) {
+                            //                                        Image("google-logo")
+                            //                                            .resizable()
+                            //                                            .scaledToFit()
+                            //                                            .frame(width: 26, height: 26)
+                            //
+                            //                                        Text("Google")
+                            //                                            .font(.system(size: 16, weight: .bold))
+                            //                                            .foregroundStyle(Color(UIColor.darkGray))
+                            //                                    }
+                            //                                    .foregroundStyle(Color(UIColor.darkGray))
+                            //                                }
+                            //                            } // LOGIN WITH GOOGLE BUTTON
                             
                         }// LOGIN BUTTON STACK
                         .padding(.top, 40)
@@ -211,7 +211,7 @@ struct LoginScreen: View {
                 .shadow(radius: 2, x: 1, y: 1)
                 .opacity(viewModel.isLoading ? 1 : 0)
             }
-            .ignoresSafeArea(.container, edges: .top)
+            .ignoresSafeArea(.container, edges: .vertical)
             .alert(isPresented: $viewModel.isPopupMessage) {
                 Alert(
                     title: Text("Lỗi"),
@@ -226,7 +226,7 @@ struct LoginScreen: View {
             }
         }
         .onAppear {
-//            viewModel.login(userName: "customer", password: "123")
+            //            viewModel.login(userName: "customer", password: "123")
             self.isSigned = true
         }
         .onChange(of: viewModel.isCustomer) { oldValue, newValue in

@@ -46,7 +46,7 @@ enum ActiveAlert {
     // MARK: - CONTRACTSCREEN
     var loadingMessage: String = ""
     var isContactLoading: Bool = false
-
+    
     private var cancellables = Set<AnyCancellable>()
     
     func getPlantById(id: Int) {
@@ -86,7 +86,7 @@ enum ActiveAlert {
                 print(self?.feedBacks as Any)
             }
             .store(in: &cancellables)
-
+        
     }
     
     func getShippingFeeByPlantId() {
@@ -154,7 +154,7 @@ enum ActiveAlert {
         isContactLoading = true
         loadingMessage = "Đang tạo đơn hàng"
         guard let plant = self.plant,
-//              let deliveriteFree = self.deliveriteFree,
+              //              let deliveriteFree = self.deliveriteFree,
               let addressDescription = self.selectedAddress?.description else {
             self.loadingMessage = "Tạo đơn hàng thất bại"
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -278,7 +278,7 @@ enum ActiveAlert {
                 }
             }
             .store(in: &cancellables)
-
+        
     }
     
     func updatePaymentStatus(paymentId: Int) {
@@ -310,7 +310,7 @@ enum ActiveAlert {
                 }
             }
             .store(in: &cancellables)
-
+        
     }
     
     // MARK: - BuyItemDetailScreen
@@ -318,7 +318,7 @@ enum ActiveAlert {
         isLoading = true
         
         guard let plant = self.plant,
-//              let deliveriteFree = self.deliveriteFree,
+              //              let deliveriteFree = self.deliveriteFree,
               let addressDescription = self.selectedAddress?.description else {
             return
         }

@@ -90,7 +90,8 @@ struct APIConstants {
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
         static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
-        static let finishRefund = baseURL + "api/v1/Order/UpdateReturnOrderSuccess/"
+        static let successRefund = baseURL + "api/v1/Order/UpdateReturnOrderSuccess"
+        static let failedRefund = baseURL + "api/v1/Order/UpdateReturnOrderFail"
         static let feedbacks = baseURL + "api/v1/GetList/Feedback/Order/Delivered/Plant"
         static let createFeedback = baseURL + "api/v1/GetList/Feedback/Create/Feedback"
     }
@@ -1617,8 +1618,78 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func finishRefund(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
-        let url = APIConstants.Order.finishRefund + String(describing: orderId)
+    func successRefund(orderId: Int, depositDescription: String, depositReturnOwner: Double, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Order.successRefund) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(orderId)),
+            URLQueryItem(name: "depositDescription", value: depositDescription),
+            URLQueryItem(name: "percent", value: String(depositReturnOwner))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupMultipartHeaderToken()
+        
+        let multipartFormData = MultipartFormData()
+        
+        for (index, image) in images.enumerated() {
+            if let imageData = image.jpegData(compressionQuality: 0.5),
+               let mimeType = getMimeType(from: imageData) {
+                multipartFormData.append(imageData, withName: "imageFiles", fileName: "image\(index).jpg", mimeType: mimeType)
+            } else {
+                print("Invalid additional image format for index \(index).")
+                return Fail(error: APIError.custom(message: "Dữ liệu ảnh bị bỏ trống hoặc không hợp lệ"))
+                    .eraseToAnyPublisher()
+                // Xử lý lỗi nếu định dạng ảnh không hợp lệ
+            }
+        }
+        
+        return AF.upload(multipartFormData: multipartFormData, to: url, method: .put, headers: headers)
+            .validate(statusCode: 200..<300)
+            .publishData()
+            .tryMap { response in
+                guard let statusCode = response.response?.statusCode else {
+                    throw APIError.networkError
+                }
+                guard let responseData = response.data else {
+                    throw APIError.noData
+                }
+                
+                print("Response Status Code: \(statusCode)")
+                
+                return responseData
+            }
+            .decode(type: SimpleResponse.self, decoder: JSONDecoder())
+            .mapError { error in
+                print("Error occurred: \(error)")
+                if let apiError = error as? APIError {
+                    return apiError
+                } else {
+                    return APIError.networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func failedRefund(orderId: Int) -> AnyPublisher<SimpleResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Order.failedRefund) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(orderId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
         
         let headers = setupHeaderToken()
         
@@ -1871,6 +1942,21 @@ class APIManager {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
             "Content-Type": "application/json"
+        ]
+        
+        return headers
+    }
+    
+    func setupMultipartHeaderToken() -> HTTPHeaders? {
+        guard let token = UserSession.shared.token else {
+            return nil
+        }
+        
+        // Set up headers with the authorization token
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(token)",
+            "accept": "*/*",
+            "Content-Type": "multipart/form-data"
         ]
         
         return headers
