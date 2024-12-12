@@ -29,8 +29,36 @@ class OwnerOrderViewModel {
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
-            } receiveValue: { [weak self] ownerOrderResponse in
-                self?.ownerOrders = ownerOrderResponse.data
+            } receiveValue: { ownerOrderResponse in
+                self.ownerOrders.removeAll()
+                self.ownerOrders = ownerOrderResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func confirmed(orderId: Int) {
+        isLoading = true
+        
+        APIManager.shared.updateOrderStatus(orderId: orderId, newStatus: 2)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.errorMessage = error.localizedDescription
+                    self.isAlertShowing = true
+                }
+            } receiveValue: { response in
+                if (200..<299).contains(response.statusCode) {
+                    self.errorMessage = "Đã xác nhận thành công"
+                    self.isAlertShowing = true
+                    self.updateData()
+                } else {
+                    self.errorMessage = "Quá trình xác nhận xảy ra lỗi"
+                    self.isAlertShowing = true
+                }
             }
             .store(in: &cancellables)
     }
@@ -42,9 +70,10 @@ class OwnerOrderViewModel {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    self.errorMessage = "Đã cập nhật trạng thái thành công, Đơn hàng sẽ phải chờ xét duyệt"
+                    self.errorMessage = "Đã cập nhật trạng thái thành công"
                     self.isAlertShowing = true
                     print("Đã cập nhật trạng thái thành công")
+                    self.updateData()
                 case .failure(let error):
                     self.errorMessage = "Lỗi không xác định: \(error)"
                     print("Unexpected error: \(error)")
@@ -55,6 +84,13 @@ class OwnerOrderViewModel {
                 print("Đã cập nhật trạng thái thành công: \(response)")
             })
             .store(in: &cancellables)
+    }
+    
+    func updateData() {
+//        DispatchQueue.main.asyncAfter(deadline:.now() + 0) { [weak self] in
+        DispatchQueue.main.async { [weak self] in
+            self?.getOwnerOrders()
+        }
     }
     
     deinit {

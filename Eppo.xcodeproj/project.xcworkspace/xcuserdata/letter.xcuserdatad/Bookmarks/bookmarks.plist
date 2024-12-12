@@ -3,6 +3,51 @@
 <plist version="1.0">
 <dict>
 	<key>top-level-items</key>
-	<array/>
+	<array>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>14</string>
+					<key>EndingLineNumber</key>
+					<string>92</string>
+					<key>StartingColumnNumber</key>
+					<string>8</string>
+					<key>StartingLineNumber</key>
+					<string>92</string>
+					<key>Timestamp</key>
+					<string>755496197.8881069</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>Eppo/Manager/APIManager.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>static</string>
+				<key>leading</key>
+				<string>        static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
+        static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
+        </string>
+				<key>trailing</key>
+				<string> let successRefund = baseURL + "api/v1/Order/UpdateReturnOrderSuccess"
+        static let failedRefund = baseURL + "api/v1/Order/UpdateReturnOrderFail"
+        static let feedbacks = baseURL + "api/v1/GetList/Feedback/Order/Delivered/Plant"
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+	</array>
 </dict>
 </plist>

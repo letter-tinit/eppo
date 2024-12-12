@@ -8,7 +8,7 @@
 import Foundation
 
 // Định nghĩa struct cho OrderDetail
-struct OwnerOrderDetail: Codable {
+struct OwnerOrderDetail: Codable, Hashable {
     let orderDetailId: Int
     let rentalStartDate: Date?
     let rentalEndDate: Date?
@@ -17,7 +17,7 @@ struct OwnerOrderDetail: Codable {
 }
 
 // Định nghĩa struct cho Order
-struct OwnerOrder: Codable, Identifiable {
+struct OwnerOrder: Codable, Identifiable, Hashable {
     let id: Int
     let deliveryFee: Double
     let deliveryAddress: String
