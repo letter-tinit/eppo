@@ -71,6 +71,7 @@ struct ProtectionSystemScreen: View {
                         Spacer()
                         
                         Button {
+                            forgetPassword()
                             viewModel.isShowingPopover = false
                         } label: {
                             Text("Gửi")
@@ -117,6 +118,21 @@ struct ProtectionSystemScreen: View {
                 return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? ""), dismissButton: .cancel())
             case .success:
                 return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? ""), dismissButton: .cancel())
+            }
+        }
+    }
+    
+    private func forgetPassword() {
+        viewModel.forgetPassword { completion in
+            switch completion {
+            case .success(let message):
+                viewModel.activeAlert = .success
+                viewModel.message = message
+                viewModel.isShowingAlert = true
+            case .failure(let error):
+                viewModel.activeAlert = .error
+                viewModel.message = error.localizedDescription
+                viewModel.isShowingAlert = true
             }
         }
     }

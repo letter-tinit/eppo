@@ -214,7 +214,9 @@ struct OwnerHome: View {
             case .error:
                 return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), dismissButton: .cancel())
             case .succcess:
-                return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), dismissButton: .cancel())
+                return Alert(title: Text(viewModel.activeAlert.rawValue), message: Text(viewModel.message ?? "Lỗi không xác định"), dismissButton: .cancel({
+                    viewModel.getOwnerPlant()
+                }))
             }
         }
     }

@@ -21,7 +21,7 @@ class ProtectionSystemViewModel {
     var newPassword: String = ""
     var email: String = ""
     var isShowingPassword: Bool = false
-    
+    var cancellables: Set<AnyCancellable> = []
     
     // MARK: - ALERT COMPONENTS
     var activeAlert: ProtectionSystemActiveAlert = .remind
@@ -45,8 +45,24 @@ class ProtectionSystemViewModel {
         
     }
     
-    func forgetPassword() {
-        
+    func forgetPassword(completion: @escaping (Result<String, Error>) -> Void) {
+        APIManager.shared.forgetPassword(email: email)
+            .sink(
+                receiveCompletion: { completionResult in
+                    switch completionResult {
+                    case .finished:
+                        print("Request finished")
+                    case .failure(let error):
+                        print("Request failed with error: \(error)")
+                        completion(.failure(error)) // Pass the error to the completion handler
+                    }
+                },
+                receiveValue: { message in
+                    // Send the result to the completion handler
+                    completion(.success(message))
+                }
+            )
+            .store(in: &cancellables)
     }
     
     private func showAlert(activeAlert: ProtectionSystemActiveAlert, message: String) {
@@ -55,5 +71,9 @@ class ProtectionSystemViewModel {
             self?.message = message
             self?.isShowingAlert = true
         }
+    }
+    
+    deinit {
+        cancellables.forEach { $0.cancel() }
     }
 }

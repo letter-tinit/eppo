@@ -40,6 +40,7 @@ struct APIConstants {
         static let login = baseURL + "api/v1/Users/Login"
         static let createOwner = baseURL + "api/v1/Owner/CreateAccount/Owner"
         static let createCustomer = baseURL + "api/v1/Customer/CreateAccount/Customer"
+        static let forgetPassword = baseURL + "api/User/ForgotPassword"
     }
     
     struct Plant {
@@ -171,6 +172,45 @@ class APIManager {
                     return apiError
                 } else {
                     return APIError.decodingError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func forgetPassword(email: String) -> AnyPublisher<String, Error> {
+        guard let encodedEmail = email.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        guard var urlComponets = URLComponents(string: APIConstants.Auth.forgetPassword) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        urlComponets.queryItems = [
+            URLQueryItem(name: "email", value: encodedEmail)
+        ]
+        
+        guard let url = urlComponets.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+//        let url = APIConstants.Auth.forgetPassword
+//        
+//        let parameters: [String: String] = [
+//            "email": email
+//        ]
+//        
+        return AF.request(url, method: .post)
+            .validate(statusCode: 200..<300) // Automatically validate successful status codes
+            .publishData()
+            .tryMap { response in
+                switch response.response?.statusCode {
+                case 200:
+                    return "Mật khẩu mới đã được gửi đến mail \(email)"
+                case 404:
+                    return "Không tìm thấy người dùng"
+                default:
+                    return "Unexpected status code: \(response.response?.statusCode ?? -1)"
                 }
             }
             .eraseToAnyPublisher()
@@ -1447,7 +1487,7 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func confirmDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<SimpleResponse, Error> {
+    func confirmDeliverited(orderId: Int, images: [UIImage]) -> AnyPublisher<ApiResponse<String>, Error> {
         let url = APIConstants.Order.confirmDeliverite + String(describing: orderId)
         
         guard let token = UserSession.shared.token else {
@@ -1490,21 +1530,22 @@ class APIManager {
                 
                 print("Response Status Code: \(statusCode)")
                 
-                if statusCode >= 200 && statusCode <= 300 {
-                    return responseData
-                } else {
-                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
-                       let jsonDict = jsonObject as? [String: Any],
-                       let errorMessage = jsonDict["error"] as? String {
-                        print("Error Message: \(errorMessage)")
-                        throw APIError.custom(message: errorMessage)
-                    } else {
-                        print("Unable to parse error message.")
-                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
-                    }
-                }
+//                if statusCode >= 200 && statusCode <= 300 {
+//                    return responseData
+//                } else {
+//                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
+//                       let jsonDict = jsonObject as? [String: Any],
+//                       let errorMessage = jsonDict["error"] as? String {
+//                        print("Error Message: \(errorMessage)")
+//                        throw APIError.custom(message: errorMessage)
+//                    } else {
+//                        print("Unable to parse error message.")
+//                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
+//                    }
+//                }
+                return responseData
             }
-            .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .decode(type: ApiResponse<String>.self, decoder: JSONDecoder.customDateDecoder)
             .mapError { error in
                 print("Error occurred: \(error)")
                 if let apiError = error as? APIError {
@@ -1899,38 +1940,47 @@ class APIManager {
             .eraseToAnyPublisher()
     }
     
-    func deletePlant(plantId: Int) -> AnyPublisher<Void, Error> {
-        let url = APIConstants.Plant.deleteById
+    func deletePlant(plantId: Int) -> AnyPublisher<String, APIError> {
+//        let url = APIConstants.Plant.deleteById
+//        
+//        let parameters: [String: Any] = [
+//            "plantId": plantId
+//        ]
         
-        let parameters: [String: Any] = [
-            "plantId": plantId
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.deleteById) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        urlComponents.queryItems = [
+            URLQueryItem(name: "plantId", value: String(describing: plantId))
         ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
         
         let headers = setupHeaderToken()
         
-        return AF.request(url, method: .put, parameters: parameters, encoding: URLEncoding.default, headers: headers)
-            .validate(statusCode: 200..<299)
-            .publishData()
-            .tryMap({ response in
-                guard let statusCode = response.response?.statusCode else {
-                    throw APIError.invalidResponse
+        return AF.request(url, method: .put, headers: headers)
+            .publishDecodable(type: ApiResponse<NoDataResponse>.self) // Decode as ApiResponse with EmptyResponse for data
+            .value() // Extract the value
+            .tryMap { response in
+                // Process the response statusCode
+                guard (200..<299).contains(response.statusCode) else {
+                    // Throw an error for non-success status codes
+                    throw APIError.custom(message: response.message)
                 }
                 
-                // Check if the status code is in the valid range
-                if !(200..<300).contains(statusCode) {
-                    throw APIError.serverError(statusCode: statusCode)
-                }
-                
-                return response.data
-            })
-            .map({ _ in
-                return ()
-            })
-            .mapError { error in
-                return error as Error
+                return response.message
             }
-            .eraseToAnyPublisher()
-        
+            .mapError { error -> APIError in
+                guard let apiError = error as? APIError else {
+                    return .custom(message: error.localizedDescription)
+                }
+                
+                return apiError
+            }
+            .eraseToAnyPublisher() // Erase to AnyPublisher for simplified type
     }
     
     func setupHeaderToken() -> HTTPHeaders? {

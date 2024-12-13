@@ -30,16 +30,17 @@ class RatingSubmitViewModel {
         self.plantId = plantId
     }
     
-    func submitRating() {
+    func submitRating(completion: @escaping () -> Void) {
         isLoading = true
         APIManager.shared.createFeedback(description: textRating, plantId: plantId, rating: rating, images: additionalImages)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { sinkCompletion in
                 self.isLoading = false
-                switch completion {
+                switch sinkCompletion {
                 case .finished:
                     self.errorMessage = "Đã đánh giá thành công"
                     self.isAlertShowing = true
                     print("Đã cập nhật trạng thái thành công")
+                    completion()
 //                    self.isRequestSucesss = true
                 case .failure(let error):
                     self.errorMessage = "Đánh giá thất bại"

@@ -75,12 +75,17 @@ class OwnerHomeViewModel {
                 self?.isLoading = false
                 switch completion {
                 case .finished:
-                    self?.showAlert(activeAlert: .succcess, message: "Đã xoá cây thành công")
                     break
                 case .failure(let error):
-                    self?.showAlert(activeAlert: .error, message: error.localizedDescription)
+                    if case .custom(let message) = error {
+                        self?.showAlert(activeAlert: .error, message: message )
+                    } else {
+                        self?.showAlert(activeAlert: .error, message: error.localizedDescription)
+                    }
                 }
-            } receiveValue: {}
+            } receiveValue: { [weak self] message in
+                self?.showAlert(activeAlert: .succcess, message: message)
+            }
             .store(in: &cancellables)
     }
     

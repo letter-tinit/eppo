@@ -3,4 +3,100 @@
    uuid = "8DFADA12-55AC-4305-9748-19FD9D512CA6"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0839D2A6-AECB-4F47-BCE2-5590B95BCC2D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Eppo/ViewModel/Order/CartViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "createOrder()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0839D2A6-AECB-4F47-BCE2-5590B95BCC2D - 19a0a7119c23c47c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Eppo.Plant) -&gt; Swift.Bool in closure #1 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in Eppo.CartViewModel.createOrder() -&gt; ()"
+                  moduleName = "Eppo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/letter/Desktop/Eppo/Eppo/ViewModel/Order/CartViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71">
+               </Location>
+               <Location
+                  uuid = "0839D2A6-AECB-4F47-BCE2-5590B95BCC2D - 85d792b4ca85a952"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Eppo.Plant) -&gt; Swift.Bool in closure #1 (Eppo.Plant) -&gt; Swift.Bool in closure #1 (Combine.Subscribers.Completion&lt;Swift.Error&gt;) -&gt; () in Eppo.CartViewModel.createOrder() -&gt; ()"
+                  moduleName = "Eppo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/letter/Desktop/Eppo/Eppo/ViewModel/Order/CartViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EFD4654A-F754-4D01-80FE-8D9672194FFC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Eppo/Manager/APIManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1963"
+            endingLineNumber = "1963"
+            landmarkName = "deletePlant(plantId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B75D9639-39B7-4C86-82A4-4C705DAE34EF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Eppo/Manager/APIManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1524"
+            endingLineNumber = "1524"
+            landmarkName = "APIManager"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C2C4A107-1DFE-4735-A198-380AF9F0A1AD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Eppo/View/Order/BuyOrderDetailsScreen.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

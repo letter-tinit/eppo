@@ -33,6 +33,39 @@ struct SearchBar: View {
     }
 }
 
+struct HomeSearchBar: View {
+    // MARK: - PROPERTY
+    var searchPlaceHolder: String
+    @Binding var searchText: String
+    
+    init(searchPlaceHolder: String, searchText: Binding<String>) {
+        self.searchPlaceHolder = searchPlaceHolder
+        self._searchText = searchText
+    }
+
+    // MARK: - BODY
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .font(.title3)
+            
+            TextField(searchPlaceHolder, text: $searchText)
+                .font(.system(size: 18))
+                .textInputAutocapitalization(.never)
+            
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 15)
+        .frame(height: 45)
+        .foregroundStyle(.black)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.textFieldBackground)
+        )
+    }
+}
+
 // MARK: - PREVIEW
 #Preview {
     SearchBar(searchText: .constant("Cay canh"))

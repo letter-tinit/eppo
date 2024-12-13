@@ -24,6 +24,14 @@ struct HomeScreen: View {
             viewModel.isBuyDataLoaded = false
             viewModel.isHireDataLoaded = false
         }
+        .navigationDestination(isPresented: $viewModel.navigateToResults) {
+            switch viewModel.recomendOption {
+            case .forBuy:
+                ItemBuyScreen(viewModel: ItemBuyViewModel(searchText: viewModel.searchText, recommendOption: .forBuy))
+            case .forHire:
+                ItemHireScreen(viewModel: ItemBuyViewModel(searchText: viewModel.searchText, recommendOption: .forHire))
+            }
+        }
     }
 }
 

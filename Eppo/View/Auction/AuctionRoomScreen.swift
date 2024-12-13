@@ -1,6 +1,6 @@
 //
 // Created by Letter ♥
-// 
+//
 // https://github.com/tinit4ever
 //
 
@@ -22,50 +22,43 @@ struct AuctionRoomScreen: View {
         VStack(spacing: 30) {
             CustomHeaderView(title: "Các phòng đấu giá")
             
-            HStack(spacing: 15) {
-                SearchBar(searchText: $searchText)
-                
-                Image(systemName: "calendar")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundStyle(.black)
-                    .overlay {
-                        DatePicker(selection: $date, displayedComponents: .date) {}
-                            .labelsHidden()
-                            .contentShape(Rectangle())
-                            .opacity(0.011)
-                    }
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "slider.horizontal.3")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .foregroundStyle(.black)
-                }
-            }
-            .padding(.horizontal)
+            //            HStack(spacing: 15) {
+            //                SearchBar(searchText: $searchText)
+            //
+            //                Image(systemName: "calendar")
+            //                    .resizable()
+            //                    .scaledToFit()
+            //                    .frame(width: 30, height: 30)
+            //                    .foregroundStyle(.black)
+            //                    .overlay {
+            //                        DatePicker(selection: $date, displayedComponents: .date) {}
+            //                            .labelsHidden()
+            //                            .contentShape(Rectangle())
+            //                            .opacity(0.011)
+            //                    }
+            //
+            //                Button {
+            //
+            //                } label: {
+            //                    Image(systemName: "slider.horizontal.3")
+            //                        .resizable()
+            //                        .scaledToFit()
+            //                        .frame(width: 30, height: 30)
+            //                        .foregroundStyle(.black)
+            //                }
+            //            }
+            //            .padding(.horizontal)
             
-            if viewModel.hasError {
+            if viewModel.isLoading {
+                LoadingCenterView()
+            } else if viewModel.userRooms.isEmpty {
                 CenterView {
-                    VStack {
-                        Text("Tải thất bại")
-                            .foregroundStyle(.gray)
-                        
-                        Button {
-                            viewModel.getListRegistedAuctionRoom()
-                        } label: {
-                            Text("Thử lại")
-                                .foregroundStyle(.blue)
-                                .underline()
-                        }
-                    }
-                    .font(.headline)
+                    Text("Bạn chưa đăng ký phòng đấu giá nào cả")
+                        .foregroundStyle(.gray)
                 }
-                } else { ScrollView(.vertical, showsIndicators: false) { LazyVGrid(columns: adaptiveColumn, spacing: 20) {
+            } else {
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVGrid(columns: adaptiveColumn, spacing: 20) {
                         ForEach(viewModel.userRooms) { userRoom in
                             NavigationLink {
                                 AuctionRoomDetailScreen(viewModel: AuctionRoomDetailViewModel(roomId: userRoom.roomId))

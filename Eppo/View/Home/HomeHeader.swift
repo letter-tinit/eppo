@@ -9,7 +9,6 @@ import SwiftUI
 struct HomeHeader: View {
     // MARK: - PROPERTY
     @ObservedObject var viewModel: HomeViewModel
-    @State private var navigateToResults = false
     
     // MARK: - BODY
     
@@ -17,20 +16,13 @@ struct HomeHeader: View {
         VStack(spacing: 30) {
             CustomAvatarHeader(withClose: false)
             
-            SearchBar(searchText: $viewModel.searchText)
+            HomeSearchBar(searchPlaceHolder: viewModel.recomendOption == .forBuy ? "Tìm cây mua" : "Tìm cây thuê", searchText: $viewModel.searchText)
                 .padding(.horizontal)
                 .submitLabel(.search)
                 .onSubmit {
-                    navigateToResults = true
+                    viewModel.navigateToResults = true
                 }
-                .navigationDestination(isPresented: $navigateToResults) {
-                    switch viewModel.recomendOption {
-                    case .forBuy:
-                        ItemBuyScreen(viewModel: ItemBuyViewModel(searchText: viewModel.searchText, recommendOption: .forBuy))
-                    case .forHire:
-                        ItemHireScreen(viewModel: ItemBuyViewModel(searchText: viewModel.searchText, recommendOption: .forHire))
-                    }
-                }
+            
             HStack(spacing: 30) {
                 NavigationLink {
                     ItemBuyScreen()
