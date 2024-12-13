@@ -333,6 +333,9 @@ enum ActiveAlert {
                 switch completion {
                 case .finished:
                     print("Thực thi thành công")
+                    if let index = UserSession.shared.cart.firstIndex(of: plant) {
+                        UserSession.shared.cart.remove(at: index)
+                    }
                     self.isFinishPayment = true
                     
                 case .failure(let error):

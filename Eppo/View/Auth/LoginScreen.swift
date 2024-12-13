@@ -95,6 +95,7 @@ struct LoginScreen: View {
                                 Spacer()
                                 
                                 Button {
+                                    forgetPassword()
                                     protectionViewModel.isShowingPopover = false
                                 } label: {
                                     Text("Gửi")
@@ -125,10 +126,12 @@ struct LoginScreen: View {
                                     }
                                 } label: {
                                         Text("Đăng Nhập")
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 16, weight: .bold))
-                                            .frame(alignment: .center)
-                                    
+                                            .foregroundStyle(.white)
+                                            .font(.system(size: 18, weight: .bold))
+//                                            .frame(alignment: .center)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .frame(height: 38)
+//                                            .background(.red)
                                 } // LOGIN BUTTON
                                 
                                 Spacer()
@@ -302,13 +305,9 @@ struct LoginScreen: View {
             }
             .ignoresSafeArea(.container, edges: .vertical)
             .alert(isPresented: $viewModel.isPopupMessage) {
-                Alert(
-                    title: Text("Lỗi"),
-                    message: Text(viewModel.errorMessage ?? "Lỗi không xác định"),
-                    dismissButton: .default(Text("Xác nhận"), action: {
-                        viewModel.errorMessage = nil
-                    })
-                )
+                Alert(title: Text(viewModel.errorMessage ?? "Lỗi không xác định"), dismissButton: .default(Text("Xác nhận"), action: {
+                    viewModel.errorMessage = nil
+                }))
             }
             .navigationDestination(isPresented: $viewModel.isLogged) {
                 MainTabView(selectedTab: .explore)
@@ -362,6 +361,19 @@ struct LoginScreen: View {
         } else {
             biometricImageName = "gear.badge.xmark"
             biometricType = "Unknown"
+        }
+    }
+    
+    private func forgetPassword() {
+        protectionViewModel.forgetPassword { completion in
+            switch completion {
+            case .success(let message):
+                viewModel.errorMessage = message
+                viewModel.isPopupMessage = true
+            case .failure(let error):
+                viewModel.errorMessage = error.localizedDescription
+                viewModel.isPopupMessage = true
+            }
         }
     }
 }

@@ -150,6 +150,8 @@ struct DeliveriteConfirmedScreen: View {
                             errorMessage = "Bạn phải đính kèm hình ảnh chứng minh"
                             activeAlert = .first
                             isAlertShowing.toggle()
+                        } else {
+                            showAlert(activeAlert: .second, message: "Bạn muốn xác nhận đơn hàng giao thành công hay thất bại?")
                         }
                     }
                 } label: {
@@ -222,16 +224,13 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
-                    print("Đã cập nhật trạng thái thành công")
                     self.isRequestSucesss = true
                 case .failure(let error):
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error)")
                     print("Unexpected error: \(error)")
                 }
             }, receiveValue: { response in
-                // Xử lý response thành công
-                print("Đã cập nhật trạng thái thành công: \(response)")
+                showAlert(activeAlert: .first, message: response.message)
             })
             .store(in: &cancellables)
     }

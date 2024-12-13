@@ -20,7 +20,8 @@ class HomeViewModel: ObservableObject {
     @Published var isHireDataLoaded = false
     @Published var recomendOption: RecomendOption = .forBuy
     private var cancellables = Set<AnyCancellable>()
-    
+    var navigateToResults = false
+
     private var currentPage = 1
     private var currentHirePage = 1
 

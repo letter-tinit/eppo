@@ -28,15 +28,15 @@ class AuctionRoomViewModel {
         errorMessage = nil
         
         APIManager.shared.getListRegisteredAuction(pageIndex: 1, pageSize: 999)
-            .timeout(.seconds(10), scheduler: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 self.isLoading = false
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.userRooms.removeAll()
                     print(error.localizedDescription)
-                    self.hasError = true
                     self.errorMessage = error.localizedDescription
                 }
             } receiveValue: { registeredRoomsResponse in

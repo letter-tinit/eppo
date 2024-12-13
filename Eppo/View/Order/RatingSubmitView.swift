@@ -10,7 +10,7 @@ import PhotosUI
 struct RatingSubmitView: View {
     // MARK: - PROPERTY
     @State var viewModel: RatingSubmitViewModel
-    
+    @Environment(\.dismiss) private var dismiss
     @State private var additionalImagePickerItems: [PhotosPickerItem] = []
     
     
@@ -97,7 +97,9 @@ struct RatingSubmitView: View {
             .padding(.horizontal)
             
             Button {
-                viewModel.submitRating()
+                viewModel.submitRating {
+                    dismiss()
+                }
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)

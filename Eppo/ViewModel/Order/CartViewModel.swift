@@ -9,7 +9,8 @@ import Foundation
 import Combine
 import Observation
 
-@Observable class CartViewModel {
+@Observable 
+class CartViewModel {
     var createOrderRequest: CreateOrderRequest?
     var addresses: [Address] = []
     var selectedAddress: Address?
@@ -95,7 +96,8 @@ import Observation
                     completion(.failure(error)) // Pass the error to the completion handler
                 }
             } receiveValue: { shippingFeeResponse in
-                completion(.success(shippingFeeResponse.data))            }
+                completion(.success(shippingFeeResponse.data))
+            }
             .store(in: &cancellables)
     }
 

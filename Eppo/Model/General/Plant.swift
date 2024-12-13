@@ -19,8 +19,12 @@ struct Plant: Codable, Identifiable, Hashable {
     let isActive: Bool
     let typeEcommerceId: Int
 
-    // computed value
-    var isSelected: Bool = false
+    // computed property for mutability
+    var isSelected: Bool = false {
+        didSet {
+            // Không ảnh hưởng đến Hashable
+        }
+    }
     
     enum CodingKeys: String, CodingKey {
         case id = "plantId"
