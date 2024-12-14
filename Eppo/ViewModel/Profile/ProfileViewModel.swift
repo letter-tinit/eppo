@@ -73,7 +73,7 @@ class ProfileViewModel {
         hasError = false
         errorMessage = nil
         
-        guard let walletId = user.walletId else {
+        guard let walletId = UserSession.shared.myInformation?.wallet?.walletId else {
             return
         }
         
@@ -94,7 +94,6 @@ class ProfileViewModel {
                 self.transactions = transactions
             }
             .store(in: &cancellables)
-        
     }
     
     func getHistoryAuction() {

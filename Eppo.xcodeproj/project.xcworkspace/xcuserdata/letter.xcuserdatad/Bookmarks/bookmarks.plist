@@ -57,14 +57,12 @@
 					<string>47</string>
 					<key>EndingLineNumber</key>
 					<string>59</string>
-					<key>LocationEncoding</key>
-					<string>1</string>
 					<key>StartingColumnNumber</key>
 					<string>20</string>
 					<key>StartingLineNumber</key>
 					<string>59</string>
 					<key>Timestamp</key>
-					<string>755866219.193971</string>
+					<string>755867907.218426</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -103,14 +101,12 @@
 					<string>51</string>
 					<key>EndingLineNumber</key>
 					<string>89</string>
-					<key>LocationEncoding</key>
-					<string>1</string>
 					<key>StartingColumnNumber</key>
 					<string>24</string>
 					<key>StartingLineNumber</key>
 					<string>89</string>
 					<key>Timestamp</key>
-					<string>755866222.580943</string>
+					<string>755867909.634506</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -179,6 +175,50 @@
 				<string>()
         }
     }
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>30</string>
+					<key>EndingLineNumber</key>
+					<string>958</string>
+					<key>StartingColumnNumber</key>
+					<string>9</string>
+					<key>StartingLineNumber</key>
+					<string>958</string>
+					<key>Timestamp</key>
+					<string>755867935.459711</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>Eppo/Manager/APIManager.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>getTransactionHistory</string>
+				<key>leading</key>
+				<string>    }
+    
+    func </string>
+				<key>trailing</key>
+				<string>(pageIndex: Int, pageSize: Int, walletId: Int) -&gt; AnyPublisher&lt;[TransactionAPI], Error&gt;{
+        let url = APIConstants.Transaction.getHistory
+        
 </string>
 			</dict>
 			<key>type</key>
