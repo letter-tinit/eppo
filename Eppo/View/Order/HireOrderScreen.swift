@@ -184,8 +184,11 @@ struct HireOrderScreen: View {
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text(viewModel.message), dismissButton: .cancel({
-                self.dismiss()
+                viewModel.isFinishHiringPayment = true
             }))
+        }
+        .navigationDestination(isPresented: $viewModel.isFinishHiringPayment) {
+            MainTabView(selectedTab: .explore)
         }
     }
     

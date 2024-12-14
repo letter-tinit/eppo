@@ -13,16 +13,30 @@ struct FeedBackScreen: View {
     // MARK: - BODY
     
     var body: some View {
-        VStack(spacing: 0) {
-            CustomHeaderView(title: "Đánh giá")
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                ForEach (viewModel.plants) { plant in
-                    FeedBackItem(viewModel: viewModel, plant: plant)
-                        .padding(10)
+        ZStack {
+            VStack(spacing: 0) {
+                CustomHeaderView(title: "Đánh giá")
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    ForEach (viewModel.plants) { plant in
+                        FeedBackItem(viewModel: viewModel, plant: plant)
+                            .padding(10)
+                    }
+                    .background(Color(uiColor: UIColor.systemGray5))
                 }
-                .background(Color(uiColor: UIColor.systemGray5))
             }
+            .blur(radius: viewModel.isLoading ? 2 : 0)
+            .disabled(viewModel.isLoading)
+            
+            CenterView {
+                Text("Không có cây nào chờ đánh giá")
+                    .font(.headline)
+                    .foregroundStyle(.gray)
+            }
+            .opacity(viewModel.isEmptyData() ? 1 : 0)
+            
+            LoadingCenterView()
+                .opacity(viewModel.isLoading ? 1 : 0)
         }
         .padding(.bottom, 30)
         .background(.white)

@@ -18,21 +18,26 @@ class FeedBackViewModel {
     var errorMessage: String?
     
     func getFeedBackOrder() {
+        isLoading = true
         APIManager.shared.getFeedBackOrder(pageIndex: 1, pageSize: 999)
-            .sink { completion in
-                self.isLoading = false
+            .sink { [weak self] completion in
+                self?.isLoading = false
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
+                    self?.plants.removeAll()
                     print(error)
-                    self.plants = []
                 }
             } receiveValue: { buyHistoryResponse in
                 print(buyHistoryResponse)
                 self.plants = buyHistoryResponse.data
             }
             .store(in: &cancellables)
+    }
+    
+    func isEmptyData() -> Bool {
+        return plants.isEmpty && !isLoading
     }
     
     deinit {

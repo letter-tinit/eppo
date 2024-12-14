@@ -61,43 +61,16 @@ struct OwnerOrderItem: View {
             }
             
         }
-//        .onAppear {
-//            switch order.status {
-//            case 1:
-//                orderStatus = "Chờ xác nhận"
-//            case 2:
-//                orderStatus = "Đang chuẩn bị hàng"
-//            case 3:
-//                orderStatus = "Đang giao"
-//            case 4:
-//                orderStatus = "Đã giao"
-//            case 5:
-//                orderStatus = "Đã huỷ"
-//            case 6:
-//                orderStatus = "Đã Thu hồi"
-//            default:
-//                orderStatus = "Không xác định"
-//                break
-//            }
-//            
-//            switch order.typeEcommerceId {
-//            case 1:
-//                typeEcommerce = "Cây bán"
-//            case 2:
-//                typeEcommerce = "Cây cho thuê"
-//            case 3:
-//                typeEcommerce = "Cây đấu giá"
-//            default:
-//                typeEcommerce = "Không xác định"
-//                break
-//            }
-//        }
     }
     
     func getOrderStatus() -> String {
         switch order.status {
         case 1:
-            return "Chờ xác nhận"
+            if order.typeEcommerceId == 2 {
+                return "Chưa thanh toán"
+            } else {
+                return "Chờ xác nhận"
+            }
         case 2:
             return "Đang chuẩn bị hàng"
         case 3:
