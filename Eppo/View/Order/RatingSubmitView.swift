@@ -122,7 +122,7 @@ struct RatingSubmitView: View {
                 Spacer()
             }
             .blur(radius: viewModel.isLoading ? 2 : 0)
-            .disabled(viewModel.isLoading ? 1 : 0)
+            .disabled(viewModel.isLoading)
             
             LoadingCenterView()
                 .opacity(viewModel.isLoading ? 1 : 0)
