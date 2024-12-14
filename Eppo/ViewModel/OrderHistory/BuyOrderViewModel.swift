@@ -81,7 +81,7 @@ class BuyOrderViewModel {
                     self.activeAlert = .error
                     self.isAlertShowing = true
                 } else {
-                    self.errorMessage = "Phản hồi thất bại"
+                    self.errorMessage = "Phản hồi thất bại: \(response.message)"
                     self.activeAlert = .error
                     self.isAlertShowing = true
                 }

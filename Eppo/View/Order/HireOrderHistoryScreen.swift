@@ -61,8 +61,7 @@ struct HireOrderHistoryScreen: View {
             } else if !viewModel.orders.isEmpty {
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach (viewModel.orders) { ordersHireHistoryOrder in
-                        if let orderDetail = ordersHireHistoryOrder.orderDetails.first
-                        {
+                        if let orderDetail = ordersHireHistoryOrder.orderDetails.first {
                             if ordersHireHistoryOrder.paymentStatus == "Chưa thanh toán" {
                                 NavigationLink {
                                     ReviewRentalPlantScreen(viewModel: ReviewRentalPlantViewModel(plant: orderDetail.plant, orderId: ordersHireHistoryOrder.id, rentTotalPrice: ordersHireHistoryOrder.finalPrice, rentTotalAmount: ordersHireHistoryOrder.finalPrice + ordersHireHistoryOrder.deliveryFee, deliveriteFree: ordersHireHistoryOrder.deliveryFee, deliveryAddress: ordersHireHistoryOrder.deliveryAddress))

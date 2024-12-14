@@ -288,7 +288,6 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
                     print("Đã cập nhật trạng thái thành công")
                     self.isRequestSucesss = true
                 case .failure(let error):
@@ -296,8 +295,11 @@ struct DeliveriteConfirmedScreen: View {
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error)")
                 }
             }, receiveValue: { response in
-                // Xử lý response thành công
-                print("Đã ghi nhận thành công: \(response)")
+                if (200..<299).contains(response.statusCode) {
+                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
+                } else {
+                    showAlert(activeAlert: .first, message: response.message)
+                }
             })
             .store(in: &cancellables)
     }
