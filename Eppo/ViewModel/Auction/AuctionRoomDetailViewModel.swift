@@ -24,13 +24,16 @@ class AuctionRoomDetailViewModel: ObservableObject {
     var starTimeRemaining: Int = 0
     var endTimeRemaining: Int = 0
     var recommendAuctionNext: Double = 0
-    
+    var priceInput: String = ""
+    var recommendAmounts: [Int] = []
+
     // Trạng thái cho UI
     var isLoading = false
+    var isHistoryBidLoading = false
     var hasError = false
     var errorMessage: String?
     var isAuctionFinish: Bool = false
-
+    
     var isShowingAlert: Bool = false
     
     // MARK: - Websocket
@@ -60,6 +63,25 @@ class AuctionRoomDetailViewModel: ObservableObject {
             self.myInfor = User(userId: 0, userName: "Lỗi", fullName: "Lỗi", gender: "Nam", dateOfBirth: Date(), phoneNumber: "0", email: "Lỗi", identificationCard: "Lỗi")
         }
         
+    }
+    
+    func setRecommendAmount() {
+        var result = [Int]()
+        guard let cashOutAmount = Int(priceInput) else {
+            recommendAmounts = []
+            return
+        }
+        
+        for i in 1..<4 {
+            let value = cashOutAmount * Int(pow(10.0, Double(i)))
+            result.append(value)
+        }
+        
+        recommendAmounts = result
+    }
+    
+    func setAmount(amount: Int) {
+        priceInput = String(describing: amount)
     }
     
     func getRegistedAuctionRoomById() {
@@ -92,11 +114,11 @@ class AuctionRoomDetailViewModel: ObservableObject {
     }
     
     func getHistoryBids() {
-        isLoading = true
+        isHistoryBidLoading = true
         
         APIManager.shared.getHistoryBid(pageIndex: 1, pageSize: 999, roomId: roomId)
             .sink { completion in
-                self.isLoading = false
+                self.isHistoryBidLoading = false
                 switch completion {
                 case .finished:
                     break
@@ -200,7 +222,13 @@ extension AuctionRoomDetailViewModel {
     }
     
     // MARK: - Gửi Tin Nhắn
-    func sendMessage(bidAmount: Int) {
+    func sendMessage() {
+        guard let bidAmount = Int(priceInput) else {
+            self.currentErrorMessage = "Giá trị nhập vào không hợp lệ"
+            self.isShowingAlert = true
+            return
+        }
+        
         guard starTimeRemaining <= 0 else {
             self.currentErrorMessage = "Phiên đấu giá chưa bắt đầu"
             self.isShowingAlert = true
@@ -334,14 +362,14 @@ extension AuctionRoomDetailViewModel {
             return
         }
         
-//        // Case 3: JSON nội dung đấu giá mới
-//        if message.starts(with: "{") && message.contains("\"Message\"") {
-//            if let historyBid = decodeHistoryBid(from: message) {
-//                print("Decoded HistoryBid: \(historyBid)")
-//            } else {
-//                print("Decode thất bại")
-//            }
-//        }
+        //        // Case 3: JSON nội dung đấu giá mới
+        //        if message.starts(with: "{") && message.contains("\"Message\"") {
+        //            if let historyBid = decodeHistoryBid(from: message) {
+        //                print("Decoded HistoryBid: \(historyBid)")
+        //            } else {
+        //                print("Decode thất bại")
+        //            }
+        //        }
         
         // Case 4: Số dư không đủ
         if message.contains("Số dư ví không đủ") {

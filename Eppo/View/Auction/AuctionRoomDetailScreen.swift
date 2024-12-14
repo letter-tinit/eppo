@@ -9,7 +9,6 @@ import SwiftUI
 struct AuctionRoomDetailScreen: View {
     // MARK: - PROPERTY
     @State var viewModel: AuctionRoomDetailViewModel
-    @State var priceInputTextField: String = ""
     @State var isPriceInputPopup: Bool = false
     @Environment(\.dismiss) private var dismiss
     @State private var isPopoverShowing: Bool = false
@@ -26,24 +25,23 @@ struct AuctionRoomDetailScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             AuctionDetailsHeader(isPriceInputPopup: $isPriceInputPopup)
             
-            if viewModel.isLoading {
-                VStack {
-                    ProgressView("Đang tải dữ liệu...")
-                        .padding()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.hasError {
-                VStack(spacing: 16) {
-                    Text(viewModel.errorMessage ?? "Lỗi không xác định")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.red)
-                    Button("Thử lại") {
-                        viewModel.getRegistedAuctionRoomById()
+            if viewModel.hasError {
+                CenterView {
+                    VStack {
+                        Text("Tải thất bại")
+                        
+                        Button {
+                            viewModel.getRegistedAuctionRoomById()
+                        } label: {
+                            Text("Thử lại")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                                .padding(4)
+                                .padding(.horizontal, 4)
+                                .background(RoundedRectangle(cornerRadius: 8).foregroundStyle(.darkBlue))
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let registedRoomResponseData = viewModel.registedRoomResponseData {
                 switch viewModel.webSocketState {
                 case .connecting:
@@ -90,191 +88,175 @@ struct AuctionRoomDetailScreen: View {
                     .foregroundStyle(.red)
                 }
                 
-                // Hiển thị nội dung khi có dữ liệu
-                HStack(spacing: 10) {
-                    VStack(alignment: .leading) {
-                        Text("Số dư ví")
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.black)
-                        
-                        if let myInformation = UserSession.shared.myInformation,
-                           let wallet = myInformation.wallet {
-                            Text(wallet.numberBalance, format: .currency(code: "VND"))
-                                .fontWeight(.medium)
+                VStack {
+                    // Hiển thị nội dung khi có dữ liệu
+                    HStack(spacing: 10) {
+                        VStack(alignment: .leading) {
+                            Text("Số dư ví")
+                                .fontWeight(.semibold)
                                 .fontDesign(.rounded)
-                                .foregroundStyle(.white)
-                        } else {
-                            Text(0, format: .currency(code: "VND"))
+                                .foregroundStyle(.black)
+                            
+                            if let myInformation = UserSession.shared.myInformation,
+                               let wallet = myInformation.wallet {
+                                Text(wallet.numberBalance, format: .currency(code: "VND"))
+                                    .fontWeight(.medium)
+                                    .fontDesign(.rounded)
+                                    .foregroundStyle(.white)
+                            } else {
+                                Text(0, format: .currency(code: "VND"))
+                                    .fontWeight(.medium)
+                                    .fontDesign(.rounded)
+                                    .foregroundStyle(.white)
+                            }
+                            
+                        }
+                        .frame(width: 170, height: 70, alignment: .leading)
+                        .padding(.horizontal)
+                        .background(
+                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Số người")
+                                .fontWeight(.semibold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(.black)
+                            
+                            Text(registedRoomResponseData.registeredCount, format: .number)
                                 .fontWeight(.medium)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.white)
                         }
-                        
+                        .frame(width: 80, height: 70)
+                        .padding(.horizontal)
+                        .background(
+                            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
-                    .frame(width: 170, height: 70, alignment: .leading)
-                    .padding(.horizontal)
-                    .background(
-                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding()
                     
-                    Spacer()
-                    
-                    VStack(alignment: .leading) {
-                        Text("Số người")
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.black)
-                        
-                        Text(registedRoomResponseData.registeredCount, format: .number)
+                    HStack {
+                        Text(registedRoomResponseData.room.room.plant.name)
+                            .font(.title)
                             .fontWeight(.medium)
                             .fontDesign(.rounded)
-                            .foregroundStyle(.white)
-                    }
-                    .frame(width: 80, height: 70)
-                    .padding(.horizontal)
-                    .background(
-                        LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .top, endPoint: .bottom)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                .padding()
-                
-                HStack {
-                    Text(registedRoomResponseData.room.room.plant.name)
-                        .font(.title)
-                        .fontWeight(.medium)
-                        .fontDesign(.rounded)
-                        .padding(.horizontal)
-                        .multilineTextAlignment(.leading)
-                        .frame(alignment: .leading)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Image(systemName: "clock")
-                            .font(.title)
-                        if viewModel.starTimeRemaining == 0 {
-                            Text("\(minuteString(time: viewModel.endTimeRemaining)) : \(secondString(time: viewModel.endTimeRemaining))")
-                                .onReceive(timer) { _ in
-                                    if viewModel.endTimeRemaining > 0 {
-                                        viewModel.endTimeRemaining -= 1
-                                    } else {
-                                        self.timer.upstream.connect().cancel()
-                                    }
-                                }
-                        } else {
-                            Text("Chưa bắt đầu")
-                        }
-                    }
-                    .foregroundStyle(.red)
-                    .shadow(radius: 2)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundStyle(.lightBlue)
-                    )
-                    
-                }
-                .padding()
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    PictureSlider(imagePlants: registedRoomResponseData.room.room.plant.imagePlants)
-                        .shadow(radius: 4)
-                        .padding(.top)
-                    
-                    VStack(spacing: 30) {
-                        HStack {
-                            Text("Diễn biến cuộc đấu giá")
-                                .font(.system(size: 20, weight: .medium))
-                            Spacer()
-                            
-                            Button {
-                                isPopoverShowing.toggle()
-                            } label: {
-                                HStack {
-                                    Text("Thể lệ")
-                                    Image(systemName: "questionmark.circle.fill")
-                                }
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundStyle(.gray)
-                            }
-                            .popover(isPresented: $isPopoverShowing) {
-                                PopoverBSRule()
-                                    .presentationCompactAdaptation(.popover)
-                            }
-                        }
-                        
-//                        if viewModel.recommendAuctionNext == 0 {
-                        Text("Giá gợi ý tiếp theo: \(viewModel.recommendAuctionNext.formatted(.currency(code: "VND")))")
-                            .multilineTextAlignment(.leading)
-                            .padding()
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
                             .padding(.horizontal)
-//                        }
+                            .multilineTextAlignment(.leading)
+                            .frame(alignment: .leading)
                         
-                        if !viewModel.bidhistories.isEmpty {
-                            LazyVStack {
-                                ForEach(viewModel.bidhistories) { historyBid in
-                                    LazyVStack(alignment: .leading, spacing: 10) {
-                                        HStack {
-                                            if viewModel.myInfor.userId == historyBid.userId {
-                                                Text("\(viewModel.myInfor.fullName) (bạn)")
-                                                    .font(.system(size: 20, weight: .medium))
-                                            } else {
-                                                Text("Người chơi \(historyBid.userId)")
-                                                    .font(.system(size: 20, weight: .medium))
-                                            }
-                                            Spacer()
-                                            
-                                            Text(historyBid.bidAmount, format: .currency(code: "VND"))
-                                                .font(.system(size: 18, weight: .semibold))
+                        Spacer()
+                        
+                        VStack {
+                            Image(systemName: "clock")
+                                .font(.title)
+                            if viewModel.starTimeRemaining == 0 {
+                                Text("\(minuteString(time: viewModel.endTimeRemaining)) : \(secondString(time: viewModel.endTimeRemaining))")
+                                    .onReceive(timer) { _ in
+                                        if viewModel.endTimeRemaining > 0 {
+                                            viewModel.endTimeRemaining -= 1
+                                        } else {
+                                            self.timer.upstream.connect().cancel()
                                         }
-                                        
-                                        Text(historyBid.bidTime, format: .dateTime)
-                                            .font(.system(size: 16, weight: .medium))
-                                            .foregroundStyle(.gray)
                                     }
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 6)
-                                    
-                                    if historyBid.id != viewModel.bidhistories.last?.id {
-                                        Divider()
-                                    }
-                                }
+                            } else {
+                                Text("Chưa bắt đầu")
                             }
-                            .padding(.vertical)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
-                        } else {
-                            Text("Vẫn chưa có người chơi nào ra giá")
-                                .font(.headline)
-                                .foregroundStyle(.gray)
                         }
+                        .foregroundStyle(.red)
+                        .shadow(radius: 2)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(.lightBlue)
+                        )
+                        
                     }
                     .padding()
-                }
-            } else if !viewModel.isLoading {
-                CenterView {
-                    Text("Không có dữ liệu")
-                        .font(.headline)
-                        .foregroundColor(.gray)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        PictureSlider(imagePlants: registedRoomResponseData.room.room.plant.imagePlants)
+                            .shadow(radius: 4)
+                            .padding(.top)
+                        
+                        VStack(spacing: 30) {
+                            HStack {
+                                Text("Diễn biến cuộc đấu giá")
+                                    .font(.system(size: 20, weight: .medium))
+                                Spacer()
+                                
+                                Button {
+                                    isPopoverShowing.toggle()
+                                } label: {
+                                    HStack {
+                                        Text("Thể lệ")
+                                        Image(systemName: "questionmark.circle.fill")
+                                    }
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundStyle(.gray)
+                                }
+                                .popover(isPresented: $isPopoverShowing) {
+                                    PopoverBSRule()
+                                        .presentationCompactAdaptation(.popover)
+                                }
+                            }
+                            
+                            Text("Giá gợi ý tiếp theo: \(viewModel.recommendAuctionNext.formatted(.currency(code: "VND")))")
+                                .multilineTextAlignment(.leading)
+                                .padding()
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
+                            
+                            if !viewModel.bidhistories.isEmpty {
+                                LazyVStack {
+                                    ForEach(viewModel.bidhistories) { historyBid in
+                                        LazyVStack(alignment: .leading, spacing: 10) {
+                                            HStack {
+                                                if viewModel.myInfor.userId == historyBid.userId {
+                                                    Text("\(viewModel.myInfor.fullName) (bạn)")
+                                                        .font(.system(size: 20, weight: .medium))
+                                                } else {
+                                                    Text("Người chơi \(historyBid.userId)")
+                                                        .font(.system(size: 20, weight: .medium))
+                                                }
+                                                Spacer()
+                                                
+                                                Text(historyBid.bidAmount, format: .currency(code: "VND"))
+                                                    .font(.system(size: 18, weight: .semibold))
+                                            }
+                                            
+                                            Text(historyBid.bidTime, format: .dateTime)
+                                                .font(.system(size: 16, weight: .medium))
+                                                .foregroundStyle(.gray)
+                                        }
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 6)
+                                        
+                                        if historyBid.id != viewModel.bidhistories.last?.id {
+                                            Divider()
+                                        }
+                                    }
+                                }
+                                .padding(.vertical)
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .background(RoundedRectangle(cornerRadius: 10).foregroundStyle(.darkBlue.opacity(0.08)))
+                                .redacted(reason: viewModel.isHistoryBidLoading ? .placeholder : .privacy)
+                            } else {
+                                Text("Vẫn chưa có người chơi nào ra giá")
+                                    .font(.headline)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
+                        .padding()
+                    }
                 }
             } else {
-                VStack(spacing: 16) {
-                    Text(viewModel.errorMessage ?? "Lỗi không xác định")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.red)
-                    Button("Thử lại") {
-                        viewModel.getRegistedAuctionRoomById()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                LoadingCenterView()
             }
         }
         .ignoresSafeArea(.all, edges: .top)
@@ -299,15 +281,37 @@ struct AuctionRoomDetailScreen: View {
         .sheet(isPresented: $isPriceInputPopup, content: {
             VStack(alignment: .trailing, spacing: 20) {
                 BorderTextField {
-                    TextField("Nhập giá tiền", text: $priceInputTextField)
+                    TextField("Nhập giá tiền", text: $viewModel.priceInput)
                         .keyboardType(.numberPad)
                 }
                 .frame(height: 50)
                 .padding(.horizontal)
                 
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: 20) {
+                        ForEach(viewModel.recommendAmounts, id: \.self) { recommendAmount in
+                            Button {
+                                viewModel.setAmount(amount: recommendAmount)
+                            } label: {
+                                Text(Int(recommendAmount), format: .currency(code: "VND"))
+                                    .font(.headline)
+                                    .padding(6)
+                                    .background(.gray.opacity(0.2))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                .frame(width: UIScreen.main.bounds.size.width - 40)
+                .frame(height: 30)
+                .padding()
+                .scrollIndicators(.hidden)
+                
                 Button {
                     self.isPriceInputPopup = false
-                    viewModel.sendMessage(bidAmount: Int(priceInputTextField) ?? 0)
+                    viewModel.sendMessage()
                 } label: {
                     Text("Xác nhận")
                         .font(.headline)
@@ -330,6 +334,9 @@ struct AuctionRoomDetailScreen: View {
                 }
             }))
         }
+        .onChange(of: viewModel.priceInput) { _, _ in
+            viewModel.setRecommendAmount()
+        }
     }
     
     func minuteString(time: Int) -> String {
@@ -341,28 +348,28 @@ struct AuctionRoomDetailScreen: View {
         let seconds = Int(time) % 60
         return String(format:"%02i", seconds)
     }
-        
-//    private func formattedPriceBinding() -> Binding<String> {
-//        Binding<String>(
-//            get: {
-//                if let priceInput = priceInputTextField {
-//                    // Use the currency formatter to display the formatted value
-//                    return NumberFormatter.currencyFormatter.string(from: NSNumber(value: priceInput)) ?? ""
-//                } else {
-//                    return "" // Return an empty string if no input
-//                }
-//            },
-//            set: { newValue in
-//                // Parse numeric value from the input
-//                let filtered = newValue.filter { $0.isNumber } // Extract numeric characters
-//                if let numericValue = Double(filtered) {
-//                    priceInputTextField = numericValue // Update the state with the numeric value
-//                } else {
-//                    priceInputTextField = nil // Reset if input cannot be parsed
-//                }
-//            }
-//        )
-//    }
+    
+    //    private func formattedPriceBinding() -> Binding<String> {
+    //        Binding<String>(
+    //            get: {
+    //                if let priceInput = priceInputTextField {
+    //                    // Use the currency formatter to display the formatted value
+    //                    return NumberFormatter.currencyFormatter.string(from: NSNumber(value: priceInput)) ?? ""
+    //                } else {
+    //                    return "" // Return an empty string if no input
+    //                }
+    //            },
+    //            set: { newValue in
+    //                // Parse numeric value from the input
+    //                let filtered = newValue.filter { $0.isNumber } // Extract numeric characters
+    //                if let numericValue = Double(filtered) {
+    //                    priceInputTextField = numericValue // Update the state with the numeric value
+    //                } else {
+    //                    priceInputTextField = nil // Reset if input cannot be parsed
+    //                }
+    //            }
+    //        )
+    //    }
 }
 
 extension NumberFormatter {

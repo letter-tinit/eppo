@@ -19,7 +19,7 @@ struct AuctionDetailsHeader: View {
     // MARK: - BODY
     
     var body: some View {
-        HStack {
+        HStack(alignment: .bottom) {
             Button {
                 dismiss()
             } label: {
@@ -44,11 +44,27 @@ struct AuctionDetailsHeader: View {
             Button {
                 self.isPriceInputPopup.toggle()
             } label: {
-                Text("Ra Giá")
-                    .font(.headline)
-                    .frame(width: 52)
-                    .foregroundStyle(.orange)
-                    .shadow(color: .white, radius: 0.4)
+                HStack(alignment: .bottom, spacing: 0) {
+                    VStack(spacing: 0) {
+                        Text("Ra")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                        Text("Giá")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                    }
+                    
+                    Image(systemName: "dollarsign")
+                        .font(.title)
+                }
+                .foregroundStyle(.black)
+                .frame(width: 50)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(
+                    LinearGradient(colors: [.orange, .yellow, .red], startPoint: .bottomLeading, endPoint: .topTrailing)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 6))
             }
         }
         .padding(.horizontal, 20)

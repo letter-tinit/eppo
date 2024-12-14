@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>27</string>
+					<string>25</string>
 					<key>EndingLineNumber</key>
-					<string>1489</string>
+					<string>79</string>
 					<key>StartingColumnNumber</key>
-					<string>9</string>
+					<string>19</string>
 					<key>StartingLineNumber</key>
-					<string>1489</string>
+					<string>79</string>
 					<key>Timestamp</key>
-					<string>755780775.380103</string>
+					<string>755866205.381736</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -27,22 +27,22 @@
 					<key>payload</key>
 					<dict>
 						<key>relative-path</key>
-						<string>Eppo/Manager/APIManager.swift</string>
+						<string>Eppo/ViewModel/Profile/ProfileViewModel.swift</string>
 					</dict>
 				</dict>
 			</dict>
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>confirmDeliverited</string>
+				<string>shared</string>
 				<key>leading</key>
-				<string>    }
-    
-    func </string>
-				<key>trailing</key>
-				<string>(orderId: Int, images: [UIImage]) -&gt; AnyPublisher&lt;ApiResponse&lt;String&gt;, Error&gt; {
-        let url = APIConstants.Order.confirmDeliverite + String(describing: orderId)
+				<string>        }
         
+        APIManager.</string>
+				<key>trailing</key>
+				<string>.getTransactionHistory(pageIndex: 1, pageSize: 999, walletId: walletId)
+            .timeout(.seconds(1), scheduler: DispatchQueue.main)
+            .sink { completion in
 </string>
 			</dict>
 			<key>type</key>
@@ -54,15 +54,17 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>8</string>
+					<string>47</string>
 					<key>EndingLineNumber</key>
-					<string>90</string>
+					<string>59</string>
+					<key>LocationEncoding</key>
+					<string>1</string>
 					<key>StartingColumnNumber</key>
-					<string>0</string>
+					<string>20</string>
 					<key>StartingLineNumber</key>
-					<string>90</string>
+					<string>59</string>
 					<key>Timestamp</key>
-					<string>755780784.863917</string>
+					<string>755866219.193971</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -71,22 +73,112 @@
 					<key>payload</key>
 					<dict>
 						<key>relative-path</key>
-						<string>Eppo/Manager/APIManager.swift</string>
+						<string>Eppo/View/Owner/OwnerProfileScreen.swift</string>
 					</dict>
 				</dict>
 			</dict>
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>        </string>
+				<string>CustomSettingNavigationLink</string>
 				<key>leading</key>
-				<string>        static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
-        static let updateStatus = baseURL + "api/v1/Order/UpdateOrderStatus"
-</string>
+				<string>                    Divider()
+                    
+                    </string>
 				<key>trailing</key>
-				<string>static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
-        static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
-        static let preparedOrder = baseURL + "api/v1/Order/UpdatePreparedOrderSuccess/"
+				<string>(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: TransactionHistoryScreen(viewModel: ProfileViewModel()))
+                    
+                    Divider()
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>51</string>
+					<key>EndingLineNumber</key>
+					<string>89</string>
+					<key>LocationEncoding</key>
+					<string>1</string>
+					<key>StartingColumnNumber</key>
+					<string>24</string>
+					<key>StartingLineNumber</key>
+					<string>89</string>
+					<key>Timestamp</key>
+					<string>755866222.580943</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>Eppo/View/Profile/ProfileScreen.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>CustomSettingNavigationLink</string>
+				<key>leading</key>
+				<string>                        Divider()
+                        
+                        </string>
+				<key>trailing</key>
+				<string>(image: "doc.badge.clock", title: "Lịch sử giao dịch", destination: TransactionHistoryScreen(viewModel: viewModel))
+                        
+                        Divider()
+</string>
+			</dict>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>43</string>
+					<key>EndingLineNumber</key>
+					<string>63</string>
+					<key>StartingColumnNumber</key>
+					<string>22</string>
+					<key>StartingLineNumber</key>
+					<string>63</string>
+					<key>Timestamp</key>
+					<string>755866228.232129</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>Eppo/View/Transaction/TransactionHistoryScreen.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>getTransactionHistory</string>
+				<key>leading</key>
+				<string>        .ignoresSafeArea(.container, edges: .top)
+        .onAppear {
+            viewModel.</string>
+				<key>trailing</key>
+				<string>()
+        }
+    }
 </string>
 			</dict>
 			<key>type</key>

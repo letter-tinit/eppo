@@ -59,12 +59,14 @@ import Combine
     }
     
     func auctionRegistration() {
+        isLoading = true
         guard let room = room else {
             return
         }
         
         APIManager.shared.auctionRegistration(roomId: room.roomId)
             .sink { completion in
+                self.isLoading = false
                 switch completion {
                 case .finished:
                     self.message = "Đăng ký thành công"
