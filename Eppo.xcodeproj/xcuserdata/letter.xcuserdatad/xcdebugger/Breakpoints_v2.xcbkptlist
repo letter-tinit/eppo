@@ -78,8 +78,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1524"
             endingLineNumber = "1524"
-            landmarkName = "APIManager"
-            landmarkType = "3">
+            landmarkName = "confirmDeliverited(orderId:images:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
