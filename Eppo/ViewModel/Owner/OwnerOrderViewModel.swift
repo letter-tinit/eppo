@@ -93,6 +93,31 @@ class OwnerOrderViewModel {
         }
     }
     
+    func isLatestOrder(order: OwnerOrder) -> Bool {
+        guard let latestOrder = ownerOrders.last else {
+            return false
+        }
+        
+        return order == latestOrder
+    }
+    
+    func isFirstOrder(order: OwnerOrder) -> Bool {
+        guard let latestOrder = ownerOrders.last else {
+            return false
+        }
+        
+        return order == latestOrder
+    }
+    
+    func isBoundaryOrder(order: OwnerOrder) -> Bool {
+        guard let latestOrder = ownerOrders.last,
+              let firstOrder  = ownerOrders.first else {
+            return false
+        }
+        
+        return (order == latestOrder) || (order == firstOrder)
+    }
+    
     deinit {
         self.cancellables.forEach {$0.cancel()}
     }

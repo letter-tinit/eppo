@@ -243,16 +243,19 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
                     print("Đã cập nhật trạng thái thành công")
-                    self.isRequestSucesss = true
                 case .failure(let error):
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error)")
                     print("Unexpected error: \(error)")
                 }
             }, receiveValue: { response in
                 // Xử lý response thành công
-                print("Đã cập nhật trạng thái thành công: \(response)")
+                if (200..<299).contains(response.statusCode) {
+                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
+                    self.isRequestSucesss = true
+                } else {
+                    showAlert(activeAlert: .first, message: response.message)
+                }
             })
             .store(in: &cancellables)
     }
@@ -312,13 +315,18 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
                     break
                 case .failure(let error):
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error.localizedDescription)")
                     print(error.localizedDescription)
                 }
-            } receiveValue: { _ in}
+            } receiveValue: { responseData in
+                if (200..<299).contains(responseData.statusCode) {
+                    showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
+                } else {
+                    showAlert(activeAlert: .first, message: "Có lỗi xảy ra: \(responseData.message)")
+                }
+            }
             .store(in: &cancellables)
     }
     

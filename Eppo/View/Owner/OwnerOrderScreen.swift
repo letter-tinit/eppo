@@ -17,43 +17,46 @@ struct OwnerOrderScreen: View {
             
             ZStack {
                 List {
-                    ForEach (viewModel.ownerOrders, id: \.self) { ownerOrder in
-                        OwnerOrderItem(order: ownerOrder)
-                            .swipeActions {
-                                if ownerOrder.status == 3 {
-                                    NavigationLink {
-                                        DeliveriteConfirmedScreen(orderId: ownerOrder.id)
-                                    } label: {
-                                        Text("Xác nhận giao")
+                    Section {
+                        ForEach (viewModel.ownerOrders, id: \.self) { ownerOrder in
+                            OwnerOrderItem(order: ownerOrder)
+                                .listRowSeparator(viewModel.isLatestOrder(order: ownerOrder) ? .hidden : .automatic, edges: .bottom)
+                                .swipeActions {
+                                    if ownerOrder.status == 3 {
+                                        NavigationLink {
+                                            DeliveriteConfirmedScreen(orderId: ownerOrder.id)
+                                        } label: {
+                                            Text("Xác nhận giao")
+                                        }
+                                        .tint(.orange)
+                                    } else if ownerOrder.status == 2 {
+                                        Button {
+                                            viewModel.finishPrepare(orderId: ownerOrder.id)
+                                        } label: {
+                                            Text("Chuẩn bị xong")
+                                        }
+                                        .tint(.green)
+                                        // MARK: - Chỉ đơn thuê mới được thu hồi
+                                    } else if ownerOrder.status == 4 && ownerOrder.typeEcommerceId == 2 {
+                                        NavigationLink {
+                                            DeliveriteConfirmedScreen(orderId: ownerOrder.id, isRefund: true)
+                                        } label: {
+                                            Text("Thu hồi")
+                                        }
+                                        .tint(.purple)
+                                        // MARK: - Đơn thuê tự động xác nhận khi chưa thanh toán nên bị exclude
+                                    } else if ownerOrder.status == 1 && ownerOrder.typeEcommerceId != 2 {
+                                        Button {
+                                            // chuyển trạng thái từ 1 sang 2
+                                            viewModel.confirmed(orderId: ownerOrder.id)
+                                        } label: {
+                                            Text("Xác nhận")
+                                        }
+                                        .tint(.red)
+                                        // MARK: - Các trường hợp khác khôn có hành động
                                     }
-                                    .tint(.orange)
-                                } else if ownerOrder.status == 2 {
-                                    Button {
-                                        viewModel.finishPrepare(orderId: ownerOrder.id)
-                                    } label: {
-                                        Text("Chuẩn bị xong")
-                                    }
-                                    .tint(.green)
-                                    // MARK: - Chỉ đơn thuê mới được thu hồi
-                                } else if ownerOrder.status == 4 && ownerOrder.typeEcommerceId == 2 {
-                                    NavigationLink {
-                                        DeliveriteConfirmedScreen(orderId: ownerOrder.id, isRefund: true)
-                                    } label: {
-                                        Text("Thu hồi")
-                                    }
-                                    .tint(.purple)
-                                    // MARK: - Đơn thuê tự động xác nhận khi chưa thanh toán nên bị exclude
-                                } else if ownerOrder.status == 1 && ownerOrder.typeEcommerceId != 2 {
-                                    Button {
-                                        // chuyển trạng thái từ 1 sang 2
-                                        viewModel.confirmed(orderId: ownerOrder.id)
-                                    } label: {
-                                        Text("Xác nhận")
-                                    }
-                                    .tint(.red)
-                                    // MARK: - Các trường hợp khác khôn có hành động
                                 }
-                            }
+                        }
                     }
                 }
                 .listStyle(.inset)

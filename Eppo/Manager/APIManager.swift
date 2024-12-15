@@ -1600,19 +1600,7 @@ class APIManager {
                 
                 print("Response Status Code: \(statusCode)")
                 
-                if statusCode >= 200 && statusCode <= 300 {
-                    return responseData
-                } else {
-                    if let jsonObject = try? JSONSerialization.jsonObject(with: responseData, options: []),
-                       let jsonDict = jsonObject as? [String: Any],
-                       let errorMessage = jsonDict["error"] as? String {
-                        print("Error Message: \(errorMessage)")
-                        throw APIError.custom(message: errorMessage)
-                    } else {
-                        print("Unable to parse error message.")
-                        throw APIError.custom(message: "Giải mã lỗi thất bại\nXin lỗi vì sự bất tiện này")
-                    }
-                }
+                return responseData
             }
             .decode(type: SimpleResponse.self, decoder: JSONDecoder.customDateDecoder)
             .mapError { error in
