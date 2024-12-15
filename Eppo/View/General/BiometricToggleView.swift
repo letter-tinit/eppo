@@ -21,6 +21,7 @@ struct BiometricToggleView: View {
     @State private var biometricImageName: String = "touchid"
     @State var biometricToggleEnabled: Bool
     @State private var isConfirmBiometric = false
+    @State var isCallbackToggle = false
     @State private var isAlertShowing = false
     @State private var activeAlert: BiometricToggleViewActiveAlert = .remind
     
@@ -47,11 +48,15 @@ struct BiometricToggleView: View {
                 Text("Xác thực sinh trắc học")
             }
             .onChange(of: biometricToggleEnabled) { _, isEnabled in
-                if isEnabled {
-                    enableBiometrics()
+                if !isCallbackToggle {
+                    if isEnabled {
+                        enableBiometrics()
+                    } else {
+                        // Action when the toggle is turned off
+                        showAlert(activeAlert: .cancelError)
+                    }
                 } else {
-                    // Action when the toggle is turned off
-                    showAlert(activeAlert: .cancelError)
+                    isCallbackToggle = false
                 }
             }
         }
@@ -65,13 +70,15 @@ struct BiometricToggleView: View {
             switch activeAlert {
             case .remind:
                 return Alert(title: Text("Các dữ liệu sinh trắc cũ của thiết bị này (nếu có) sẽ bị ghi đè. Bạn có chắc muốn bật xác thực sinh trắc không?"), primaryButton: .destructive(Text("Huỷ"), action: {
+                    isCallbackToggle = true
                     biometricToggleEnabled = false
                 }), secondaryButton: .default(Text("Bật"), action: {
                     enableBiometricAuthentication()
                 }))
             case .cancelError:
                 return Alert(title: Text("Các dữ liệu sinh trắc cũ của thiết bị này (nếu có) sẽ xoá. Bạn có chắc muốn tắt xác thực sinh trắc không?"), primaryButton: .default(Text("Huỷ"), action: {
-                    biometricToggleEnabled = false
+                    isCallbackToggle = true
+                    biometricToggleEnabled = true
                 }), secondaryButton: .destructive(Text("Tắt"), action: {
                     disableBiometricAuthentication()
                 }))
