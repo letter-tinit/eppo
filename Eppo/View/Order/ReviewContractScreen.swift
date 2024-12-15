@@ -36,7 +36,7 @@ struct ReviewContractScreen: View {
                 
                 HStack {
                     Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản trong hợp đồng ở trên")
-                        .font(.headline)
+                        .font(.caption)
                         .fontWeight(.medium)
                         .multilineTextAlignment(.leading)
                     

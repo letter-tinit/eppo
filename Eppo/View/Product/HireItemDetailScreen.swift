@@ -213,31 +213,30 @@ struct HireItemDetailScreen: View {
                     Text("\(viewModel.numberOfMonth) Tháng")
                     
                 }
-                .padding(20)
+                .padding(6)
                 
                 NavigationLink {
                     HireOrderScreen(viewModel: viewModel)
                 } label: {
                     VStack(alignment: .leading) {
                         Text("Thuê cây")
+                            .font(.system(size: 20, weight: .semibold, design: .rounded))
                         if let price = viewModel.plant?.finalPrice {
-                            HStack(spacing: 0) {
-                                Text(price, format: .currency(code: "VND"))
-                                Text("/tháng")
-                            }
+                            Text(String(price.formatted(.currency(code: "VND")))  + "/tháng")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
                         } else {
                             Text("Đang tải")
+                                .font(.system(size: 20, weight: .semibold, design: .rounded))
                         }
                     }
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
-                    .frame(width: UIScreen.main.bounds.size.width / 2)
+                    .frame(maxWidth: .infinity)
                     .padding(.top, 20)
                     .padding(.bottom, 20)
                     .background(.red)
                 }
             }
-            .frame(width: UIScreen.main.bounds.size.width, height: 100)
+            .frame(width: UIScreen.main.bounds.size.width, height: 80)
             .shadow(radius: 2, y: 2)
         }
         .labelsHidden()

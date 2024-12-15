@@ -141,7 +141,9 @@ struct ItemDetailScreen: View {
             .onAppear {
                 viewModel.getPlantById(id: id)
             }
+            Divider()
             
+
             HStack(alignment: .top, spacing: 0) {
                 Button {
                 } label: {
@@ -190,13 +192,15 @@ struct ItemDetailScreen: View {
                 } label: {
                     VStack {
                         Text("Mua")
+                            .font(.system(size: 20, weight: .semibold, design: .rounded))
                         if let price = viewModel.plant?.finalPrice {
                             Text(price, format: .currency(code: "VND"))
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
                         } else {
                             Text("Đang tải")
+                                .font(.system(size: 20, weight: .semibold, design: .rounded))
                         }
                     }
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .frame(width: UIScreen.main.bounds.size.width / 2)
                     .padding(.top, 10)

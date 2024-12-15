@@ -179,12 +179,12 @@ struct DeliveriteConfirmedScreen: View {
         .alert(isPresented: $isAlertShowing) {
             switch activeAlert {
             case .first:
-//                return Alert(title: Text(errorMessage), dismissButton: .cancel({
-//                    if isRequestSucesss {
-//                        dismiss()
-//                    }
-//                }))
-                return Alert(title: Text(errorMessage), dismissButton: .cancel())
+                return Alert(title: Text(errorMessage), dismissButton: .cancel({
+                    if isRequestSucesss {
+                        dismiss()
+                    }
+                }))
+//                return Alert(title: Text(errorMessage), dismissButton: .cancel())
             case .second:
                 return Alert(title: Text("Xác nhận"), message: Text(errorMessage), primaryButton: .default(Text("Thành công"), action: {
                     // THÀNH CÔNG
@@ -224,13 +224,14 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    self.isRequestSucesss = true
+                    break
                 case .failure(let error):
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error)")
                     print("Unexpected error: \(error)")
                 }
             }, receiveValue: { response in
                 showAlert(activeAlert: .first, message: response.message)
+                self.isRequestSucesss = true
             })
             .store(in: &cancellables)
     }
@@ -255,6 +256,7 @@ struct DeliveriteConfirmedScreen: View {
                     self.isRequestSucesss = true
                 } else {
                     showAlert(activeAlert: .first, message: response.message)
+                    self.isRequestSucesss = true
                 }
             })
             .store(in: &cancellables)
@@ -291,8 +293,7 @@ struct DeliveriteConfirmedScreen: View {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    print("Đã cập nhật trạng thái thành công")
-                    self.isRequestSucesss = true
+                    break
                 case .failure(let error):
                     print("Unexpected error: \(error)")
                     showAlert(activeAlert: .first, message: "Lỗi không xác định: \(error)")
@@ -300,8 +301,10 @@ struct DeliveriteConfirmedScreen: View {
             }, receiveValue: { response in
                 if (200..<299).contains(response.statusCode) {
                     showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
+                    self.isRequestSucesss = true
                 } else {
                     showAlert(activeAlert: .first, message: response.message)
+                    self.isRequestSucesss = true
                 }
             })
             .store(in: &cancellables)
@@ -323,8 +326,10 @@ struct DeliveriteConfirmedScreen: View {
             } receiveValue: { responseData in
                 if (200..<299).contains(responseData.statusCode) {
                     showAlert(activeAlert: .first, message: "Đã ghi nhận trạng thái thành công")
+                    self.isRequestSucesss = true
                 } else {
                     showAlert(activeAlert: .first, message: "Có lỗi xảy ra: \(responseData.message)")
+                    self.isRequestSucesss = true
                 }
             }
             .store(in: &cancellables)
