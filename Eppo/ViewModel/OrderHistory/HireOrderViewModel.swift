@@ -57,6 +57,25 @@ class HireOrderViewModel {
             .store(in: &cancellables)
     }
     
+    func notReceivedOrder(orderId: Int) {
+        APIManager.shared.notReceiveOrder(orderId: orderId)
+            .sink { [weak self] completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self?.activeAlert = .error
+                    self?.errorMessage = error.localizedDescription
+                    self?.isAlertShowing = true
+                }
+            } receiveValue: { [weak self] response in
+                self?.activeAlert = .error
+                self?.errorMessage = response.message
+                self?.isAlertShowing = true
+            }
+            .store(in: &cancellables)
+    }
+    
     func receiveOrder(orderId: Int, newStatus: Int) {
         isLoading = true
         
