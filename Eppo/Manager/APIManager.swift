@@ -28,6 +28,16 @@ enum APIError: Error {
     case unexpectedError
 }
 
+enum APIErrorAlternative: Error {
+    case networkError
+    case serverError(statusCode: Int)
+    case decodingError
+    case noData
+    case custom(message: String)
+    case unexpectedError
+    case timeout
+}
+
 struct APIErrorResponse: Codable, Error {
     let message: String
 }
@@ -66,7 +76,6 @@ struct APIConstants {
         static let getRegistedAuctionRoomById = baseURL + "api/v1/GetList/UserRoom/RoomId"
         static let getHistoryBid = baseURL + "api/HistoryBid/GetHistoryBidsByRoomId"
         static let getHistoryAuction = baseURL + "api/v1/GetList/History/AllRoom"
-
     }
     
     struct Category {
@@ -95,6 +104,7 @@ struct APIConstants {
         static let failedRefund = baseURL + "api/v1/Order/UpdateReturnOrderFail"
         static let feedbacks = baseURL + "api/v1/GetList/Feedback/Order/Delivered/Plant"
         static let createFeedback = baseURL + "api/v1/GetList/Feedback/Create/Feedback"
+        static let notReceived = baseURL + "api/v1/Order/CustomerNotReceivedOrder"
     }
     
     struct User {
@@ -193,13 +203,7 @@ class APIManager {
         guard let url = urlComponets.url else {
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
-        
-//        let url = APIConstants.Auth.forgetPassword
-//        
-//        let parameters: [String: String] = [
-//            "email": email
-//        ]
-//        
+
         return AF.request(url, method: .post)
             .validate(statusCode: 200..<300) // Automatically validate successful status codes
             .publishData()
@@ -1998,5 +2002,57 @@ class APIManager {
         ]
         
         return headers
+    }
+    
+    // MARK: - GENERIC
+    
+    private func request<T: Decodable>(
+        _ url: URL,
+        method: HTTPMethod = .get,
+        bodyParams: [String: String]? = nil,
+        headers: HTTPHeaders? = nil,
+        responseType: T.Type
+    ) -> AnyPublisher<T, APIErrorAlternative> {
+        return AF.request(url, method: method, parameters: bodyParams, encoding: JSONEncoding.default, headers: headers)
+            .publishDecodable(type: T.self)
+            .value()
+            .mapError { afError in
+                switch afError {
+                case .responseValidationFailed(reason: .unacceptableStatusCode(let statusCode)):
+                    return .serverError(statusCode: statusCode)
+                case .sessionTaskFailed(let underlyingError as NSError) where underlyingError.code == NSURLErrorTimedOut:
+                    return .timeout
+                default:
+                    return .networkError
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func notReceiveOrder(orderId: Int) ->  AnyPublisher<SimpleResponse, APIErrorAlternative> {
+        var urlComponents = URLComponents(string: APIConstants.Order.notReceived)
+        
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "orderId", value: String(describing: orderId))
+        ]
+        
+        let headers = setupHeaderToken()
+        
+        guard let url = urlComponents?.url else {
+            return Fail(error: APIErrorAlternative.unexpectedError).eraseToAnyPublisher()
+        }
+        
+        return request(url, method: .put, headers: headers , responseType: SimpleResponse.self)
+            .tryMap { response in
+                if (200..<299).contains(response.statusCode) {
+                    return response
+                } else {
+                    throw APIErrorAlternative.custom(message: response.message)
+                }
+            }
+            .mapError { error in
+                return error as? APIErrorAlternative ?? .networkError
+            }
+            .eraseToAnyPublisher()
     }
 }

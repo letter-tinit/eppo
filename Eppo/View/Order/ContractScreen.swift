@@ -18,7 +18,7 @@ struct ContractScreen: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                CustomHeaderView(title: "Hợp đồng cho thuê")
+                CustomHeaderView(title: "Điều khoản cho thuê")
                 
                 //            if let url = URL(string: viewModel.contractUrl ?? "") {
                 //                PDFWebView(url: url)
@@ -35,7 +35,7 @@ struct ContractScreen: View {
                 Spacer()
                 
                 HStack(alignment: .top) {
-                    Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản trong hợp đồng ở trên")
+                    Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản ở trên")
                         .font(.caption)
                         .fontWeight(.medium)
                         .lineLimit(nil)

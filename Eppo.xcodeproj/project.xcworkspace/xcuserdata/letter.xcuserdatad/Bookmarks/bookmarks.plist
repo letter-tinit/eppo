@@ -186,15 +186,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>30</string>
+					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>958</string>
+					<string>969</string>
 					<key>StartingColumnNumber</key>
-					<string>9</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>958</string>
+					<string>968</string>
 					<key>Timestamp</key>
-					<string>755867935.459711</string>
+					<string>756095398.324312</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -210,15 +210,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>getTransactionHistory</string>
+				<string>            "walletId": walletId
+</string>
 				<key>leading</key>
-				<string>    }
-    
-    func </string>
+				<string>            "page": pageIndex,
+            "size": pageSize,
+</string>
 				<key>trailing</key>
-				<string>(pageIndex: Int, pageSize: Int, walletId: Int) -&gt; AnyPublisher&lt;[TransactionAPI], Error&gt;{
-        let url = APIConstants.Transaction.getHistory
+				<string>        ]
         
+        let headers = setupHeaderToken()
 </string>
 			</dict>
 			<key>type</key>

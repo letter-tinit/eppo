@@ -87,20 +87,41 @@ struct BuyOrderRowView: View {
             }
             
             if isReceived {
-                Button {
-                    viewModel.receiveOrder(orderId: orderId, newStatus: 4)
-                } label: {
-                    Text("Đã nhận hàng")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
-                        .frame(width: 140, height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .foregroundStyle(.darkBlue)
-                        )
-                        .foregroundStyle(.white)
+                HStack {
+                    Button {
+                        viewModel.notReceivedOrder(orderId: orderId)
+                    } label: {
+                        Text("Chưa nhận hàng")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .frame(width: 136, height: 36)
+                            .background(.white)
+                            .foregroundStyle(.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .stroke(.red, lineWidth: 2)
+                            }
+                    }
+                    .padding(.horizontal, 10)
+                    
+                    Spacer()
+                    
+                    Button {
+                        viewModel.receiveOrder(orderId: orderId, newStatus: 4)
+                    } label: {
+                        Text("Đã nhận hàng")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .frame(width: 140, height: 40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .foregroundStyle(.darkBlue)
+                            )
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 10)
                 }
-                .padding(.horizontal, 10)
             }
         }
         .scaledToFit()
