@@ -191,7 +191,7 @@ class CartViewModel {
                   ],
                   status: 1,
                   isActive: true,
-                  typeEcommerceId: 101),
+                  typeEcommerceId: 101, code: "43"),
             
             Plant(id: 2,
                   name: "Snake Plant",
@@ -205,7 +205,7 @@ class CartViewModel {
                   ],
                   status: 1,
                   isActive: true,
-                  typeEcommerceId: 102),
+                  typeEcommerceId: 102, code: "43"),
             
 //            Plant(id: 3,
 //                  name: "Spider Plant",
@@ -247,7 +247,7 @@ class CartViewModel {
                   ],
                   status: 1,
                   isActive: true,
-                  typeEcommerceId: 105)
+                  typeEcommerceId: 105, code: "43")
         ]
     }
 

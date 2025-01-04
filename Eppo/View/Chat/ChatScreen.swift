@@ -46,6 +46,9 @@ struct ChatScreen: View {
             viewModel.getMessages()
             viewModel.connectWebSocket()
         }
+        .onDisappear {
+            viewModel.closeWebSocket()
+        }
     }
 }
 // MARK: - PREVIEW

@@ -1,6 +1,6 @@
 //
 // Created by Treasure Letter ♥
-// 
+//
 // https://github.com/letter-tinit
 //
 
@@ -8,25 +8,22 @@ import SwiftUI
 
 struct ShopPlantScreen: View {
     // MARK: - PROPERTY
-    @State private var viewModel: ShopPlantViewModelProtocol = ShopPlantViewModel()
+    @State private var viewModel: ShopPlantViewModelProtocol
+    
+    init(userName: String, imageUrl: String, code: String) {
+        viewModel = ShopPlantViewModel(userName: userName, imageUrl: imageUrl, code: code)
+    }
+    
     let adaptiveColumn = [
         GridItem(.adaptive(minimum: 160))
     ]
-
+    
     // MARK: - BODY
-
+    
     var body: some View {
-//        Picker(selection: $viewModel.plantTypeSelection) {
-//            ForEach(PlantTypeSelection.allCases, id: \.self) { plantTypeSelection in
-//                Text(plantTypeSelection.rawValue)
-//            }
-//        } label: {
-//            Text("Loại cây")
-//        }
-//        .pickerStyle(.segmented)
         VStack {
-            ShopPlantHeader()
-
+            ShopPlantHeader(userName: viewModel.userName, imageUrl: viewModel.imageUrl)
+            
             HStack {
                 Spacer()
                 
@@ -100,6 +97,7 @@ struct ShopPlantScreen: View {
             
             Spacer()
         }
+        .navigationBarBackButtonHidden()
         .ignoresSafeArea(.container, edges: .vertical)
         .onAppear {
             viewModel.getPlants()
@@ -112,14 +110,25 @@ struct ShopPlantScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ShopPlantScreen()
+    NavigationStack {
+        ShopPlantScreen(userName: "Tín", imageUrl: "", code: "47")
+    }
 }
 
 struct ShopPlantHeader: View {
+    @Environment(\.dismiss) private var dismiss
+    var userName: String
+    var imageUrl: String
+    
+    init(userName: String, imageUrl: String) {
+        self.userName = userName
+        self.imageUrl = imageUrl
+    }
+    
     var body: some View {
         HStack(alignment: .bottom) {
             Button {
-                
+                dismiss()
             } label: {
                 Image(systemName: "arrow.backward")
                     .resizable()
@@ -129,7 +138,7 @@ struct ShopPlantHeader: View {
             
             Spacer()
             
-            Text("Nguyễn Trung Tín")
+            Text(userName)
                 .font(.system(size: 24, weight: .semibold))
                 .frame(width: 240)
                 .lineLimit(1)
@@ -137,7 +146,7 @@ struct ShopPlantHeader: View {
             
             Spacer()
             
-            CircleImageView(image: Image("avatar"), size: 30)
+            CustomCircleAsyncImage(imageUrl: imageUrl, size: 30)
             
         }
         .foregroundStyle(.white)

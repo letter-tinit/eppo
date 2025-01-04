@@ -83,6 +83,40 @@ struct HireOrderScreen: View {
                                 .padding(.vertical, 10)
                             
                             HStack {
+                                Text("Ngày thuê")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                Spacer()
+                                Text(viewModel.selectedDate, format: .dateTime.day().month().year())
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            }
+                            .foregroundStyle(.green)
+                            
+                            HStack {
+                                Text("Ngày trả")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                Spacer()
+                                Text(viewModel.returnDate() ?? Date.now, format: .dateTime.day().month().year())
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            }
+                            .foregroundStyle(.red   )
+
+                            HStack {
+                                Text("Số tháng thuê")
+                                    .font(.subheadline)
+                                    .fontWeight(.regular)
+                                
+                                Spacer()
+                                
+                                Text(viewModel.numberOfMonth, format: .number.grouping(.never))
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            HStack {
                                 Text("Giá Thuê")
                                     .font(.subheadline)
                                     .fontWeight(.regular)

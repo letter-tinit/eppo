@@ -80,6 +80,38 @@ struct ItemDetailScreen: View {
                             .font(.subheadline)
                     }
                     .padding(.horizontal)
+                                        
+                    Divider()
+                    
+                    HStack(alignment: .bottom) {
+                        Image(systemName: "house.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30)
+                            .foregroundStyle(
+                                LinearGradient(colors: [.lightBlue, .green, .darkBlue], startPoint: .bottomLeading, endPoint: .topTrailing)
+                            )
+                        
+                        Text("Nhà vườn:")
+                            .font(.headline)
+                            .fontWeight(.regular)
+                            .foregroundStyle(.gray)
+                        
+                        Spacer()
+                        
+                        NavigationLink {
+                            ShopPlantScreen(userName: viewModel.plant?.plantUser?.fullName ?? "Không xác định", imageUrl: viewModel.plant?.plantUser?.imageUrl ?? "NA", code: viewModel.plant?.code ?? "0")
+                        } label: {
+                            HStack(alignment: .bottom) {
+                                Text(viewModel.plant?.plantUser?.fullName ?? "Không xác định")
+                                    .font(.headline)
+                                    .foregroundStyle(.darkBlue)
+                                
+                                CustomCircleAsyncImage(imageUrl: viewModel.plant?.plantUser?.imageUrl, size: 30)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
                     
                     Divider()
                     
@@ -113,37 +145,38 @@ struct ItemDetailScreen: View {
                         .foregroundStyle(.textDarkBlue)
                 }
             }
-//            .overlay(alignment: .topTrailing) {
-//                Button {
-//                    addToCart()
-//                    viewModel.isAlertShowing = true
-//                } label: {
-//                    Image(systemName: "cart")
-//                        .resizable()
-//                        .fixedSize()
-//                        .font(.system(size: 30, weight: .medium))
-//                        .padding(.trailing, 30)
-//                        .padding(.top, 20)
-//                        .foregroundStyle(.red)
-//                        .overlay(alignment: .topTrailing) {
-//                            Text(UserSession.shared.cart.count, format: .number.grouping(.never))
-//                                .font(.caption)
-//                                .foregroundStyle(.white)
-//                                .fontWeight(.semibold)
-//                                .padding(5)
-//                                .background(Circle().foregroundStyle(.red))
-//                                .padding(.trailing)
-//                                .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
-//                        }
-//                }
-//            }
+            //            .overlay(alignment: .topTrailing) {
+            //                Button {
+            //                    addToCart()
+            //                    viewModel.isAlertShowing = true
+            //                } label: {
+            //                    Image(systemName: "cart")
+            //                        .resizable()
+            //                        .fixedSize()
+            //                        .font(.system(size: 30, weight: .medium))
+            //                        .padding(.trailing, 30)
+            //                        .padding(.top, 20)
+            //                        .foregroundStyle(.red)
+            //                        .overlay(alignment: .topTrailing) {
+            //                            Text(UserSession.shared.cart.count, format: .number.grouping(.never))
+            //                                .font(.caption)
+            //                                .foregroundStyle(.white)
+            //                                .fontWeight(.semibold)
+            //                                .padding(5)
+            //                                .background(Circle().foregroundStyle(.red))
+            //                                .padding(.trailing)
+            //                                .opacity(UserSession.shared.cart.isEmpty ? 0 : 1)
+            //                        }
+            //                }
+            //            }
             .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onAppear {
                 viewModel.getPlantById(id: id)
             }
             
             HStack(alignment: .top, spacing: 0) {
-                Button {
+                NavigationLink {
+                    ChatScreen()
                 } label: {
                     Image(systemName: "message")
                         .font(.title)
@@ -236,5 +269,7 @@ struct ItemDetailScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    ItemDetailScreen(id: 1)
+    NavigationStack {
+        ItemDetailScreen(id: 10)
+    }
 }

@@ -23,7 +23,7 @@ struct OrderDetailsScreen: View {
             VStack {
                 CustomHeaderView(title: "Thanh Toán")
                 ScrollView(.vertical) {
-                    VStack {
+                    VStack(spacing: 20) {
                         Section {
                             HStack(alignment: .top) {
                                 Text("Chọn địa chỉ")
@@ -45,30 +45,12 @@ struct OrderDetailsScreen: View {
                         .padding(.horizontal)
                         .frame(maxWidth: .infinity)
                         
-                        VStack {
+                        LazyVStack {
                             ForEach(viewModel.selectedOrder) { plant in
                                 CartOrderItemView(viewModel: viewModel, plant: plant)
                                     .background(Color.clear)
                             }
-                            
-                            Divider()
-                                .padding(.horizontal, -14)
-                                .padding(.vertical, 10)
-                            
-                            HStack {
-                                Text("Tổng tiền")
-                                    .font(.subheadline)
-                                    .fontWeight(.regular)
-                                Spacer()
-                                Text(viewModel.totalPrice() + viewModel.totalShippingFee, format: .currency(code: "VND"))
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                            }
                         }
-                        .padding(14)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .padding(.horizontal)
                         
                         List {
                             Picker(selection: $selectedPaymentMethod) {
@@ -155,7 +137,6 @@ struct OrderDetailsScreen: View {
             }
             viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
             viewModel.totalShippingFee = 0.0
-            viewModel.selectedOrder = viewModel.getSamplePlants()
 
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
@@ -167,5 +148,7 @@ struct OrderDetailsScreen: View {
 }
 
 #Preview {
-    OrderDetailsScreen(viewModel: CartViewModel())
+    NavigationStack {
+        OrderDetailsScreen(viewModel: CartViewModel())
+    }
 }

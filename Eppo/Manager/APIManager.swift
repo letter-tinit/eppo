@@ -47,6 +47,8 @@ struct APIConstants {
         static let getByType = baseURL + "api/v1/GetList/Plants/Filter/ByTypeEcommerceId"
         static let getByTypeAndCate = baseURL + "api/v1/GetList/Plants/Filter/TypeEcommerceIdAndCategoryId"
         static let getById = baseURL + "api/v1/Plant/"
+        static let getBySaleByCode = baseURL + "api/v1/GetList/Plants/Sale/OfOwner/ByCode"
+        static let getByRentalByCode = baseURL + "api/v1/GetList/Plants/Rental/OfOwner/ByCode"
         static let createPlant = baseURL + "api/v1/Plants/CreatePlant/ByToken"
         static let ownerPlant = baseURL + "api/v1/GetList/Plants/PlantOwner/ByTypeEcommerceId"
         static let accept = baseURL + "api/v1/GetList/Plants/Accept"
@@ -78,14 +80,14 @@ struct APIConstants {
     }
     
     struct Order {
-        static let createOrder = baseURL + "api/v1/Order"
-        static let createOrderRental = baseURL + "api/v1/Order/CreateOrderRental"
+        static let createOrder = baseURL + "api/v1/GetList/Plants/Create/OrderBuy"
+        static let createOrderRental = baseURL + "api/v1/GetList/Plants/Create/OrderRental"
         static let updatePaymentOrderRental = baseURL + "api/v1/Order/UpdatePaymentOrderRental"
         static let getHireOrderHistory = baseURL + "api/v1/Order/GetOrdersRentalByUser"
         static let getBuyOrderHistory = baseURL + "api/v1/Order/GetOrdersBuyByUser"
         static let cancelOrder = baseURL + "api/v1/Order/CancelOrder/"
         static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
-        static let getDeposit = baseURL + "api/CountValues/CalculateDeposit"
+        static let getDeposit = baseURL + "api/v1/GetList/Plants/DepositRental"
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
         static let updateStatus = baseURL + "api/v1/Order/UpdateOrderStatus"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
@@ -299,6 +301,56 @@ class APIManager {
             URLQueryItem(name: "pageIndex", value: String(pageIndex)),
             URLQueryItem(name: "pageSize", value: String(pageSize)),
             URLQueryItem(name: "typeEcommerceId", value: String(typeEcommerceId))
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getSalePlantByCode(pageIndex: Int, pageSize: Int, code: String) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getBySaleByCode) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "code", value: code)
+        ]
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        return AF.request(url, method: .get)
+            .publishDecodable(type: CategoryPlantResponse.self)
+            .value()
+            .mapError { error in
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getRentalPlantByCode(pageIndex: Int, pageSize: Int, code: String) -> AnyPublisher<CategoryPlantResponse, Error> {
+        guard var urlComponents = URLComponents(string: APIConstants.Plant.getByRentalByCode) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        urlComponents.queryItems = [
+            URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+            URLQueryItem(name: "pageSize", value: String(pageSize)),
+            URLQueryItem(name: "code", value: code)
         ]
         
         guard let url = urlComponents.url else {
@@ -1232,7 +1284,7 @@ class APIManager {
     }
     
     func updateUserInformation(userInput: User, avatar: UIImage?) -> AnyPublisher<UserResponse, APIError> {
-        let url = "https://sep490ne-001-site1.atempurl.com/api/v1/GetUser/Users/Update/Information/Id"
+        let url = "https://sep490pass-001-site1.ptempurl.com/api/v1/GetUser/Users/Update/Information/Id"
         let headers = setupHeaderToken()
         
         // Tạo multipart form data

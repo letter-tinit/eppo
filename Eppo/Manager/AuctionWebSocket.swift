@@ -27,7 +27,7 @@
 //    
 //    // MARK: - Kết Nối WebSocket
 //    func connectWebSocket() {
-//        guard let url = URL(string: "wss://sep490ne-001-site1.atempurl.com/ws/auction") else {
+//        guard let url = URL(string: "wss://sep490pass-001-site1.ptempurl.com/ws/auction") else {
 //            print("Invalid WebSocket URL")
 //            return
 //        }

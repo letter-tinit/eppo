@@ -87,6 +87,38 @@ struct HireItemDetailScreen: View {
                     
                     Divider()
                     
+                    HStack(alignment: .bottom) {
+                        Image(systemName: "house.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30)
+                            .foregroundStyle(
+                                LinearGradient(colors: [.lightBlue, .green, .darkBlue], startPoint: .bottomLeading, endPoint: .topTrailing)
+                            )
+                        
+                        Text("Nhà vườn:")
+                            .font(.headline)
+                            .fontWeight(.regular)
+                            .foregroundStyle(.gray)
+                        
+                        Spacer()
+                        
+                        NavigationLink {
+                            ShopPlantScreen(userName: viewModel.plant?.plantUser?.fullName ?? "Không xác định", imageUrl: viewModel.plant?.plantUser?.imageUrl ?? "NA", code: viewModel.plant?.code ?? "0")
+                        } label: {
+                            HStack(alignment: .bottom) {
+                                Text(viewModel.plant?.plantUser?.fullName ?? "Không xác định")
+                                    .font(.headline)
+                                    .foregroundStyle(.darkBlue)
+                                
+                                CustomCircleAsyncImage(imageUrl: viewModel.plant?.plantUser?.imageUrl, size: 30)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    Divider()
+                    
                     // MARK: - DESCRIPTION
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Mô tả")
@@ -269,5 +301,7 @@ struct HireItemDetailScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    HireItemDetailScreen(id: 1)
+    NavigationStack {
+        HireItemDetailScreen(id: 10)
+    }
 }

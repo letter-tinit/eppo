@@ -31,7 +31,7 @@ struct CartScreen: View {
             switch viewModel.selectedCart {
             case .buy:
                 if !viewModel.orderDetails.isEmpty {
-                    VStack {
+                    VStack(spacing: 0) {
                         HStack {
                             Button {
                                 viewModel.toggleAllSelections()
@@ -323,5 +323,7 @@ struct CartScreen: View {
 
 // MARK: - PREVIEW
 #Preview {
-    CartScreen()
+    NavigationStack {
+        CartScreen()
+    }
 }

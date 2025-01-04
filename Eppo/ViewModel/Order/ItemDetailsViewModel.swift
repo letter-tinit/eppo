@@ -398,6 +398,10 @@ enum ActiveAlert {
         }
     }
     
+    func returnDate() -> Date? {
+        return Calendar.current.date(byAdding: .month, value: numberOfMonth, to: selectedDate)
+    }
+    
     deinit {
         cancellables.removeAll()
     }

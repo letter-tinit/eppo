@@ -18,6 +18,8 @@ struct Plant: Codable, Identifiable, Hashable {
     let status: Int
     let isActive: Bool
     let typeEcommerceId: Int
+    let code: String
+    var plantUser: PlantUser?
 
     // computed property for mutability
     var isSelected: Bool = false {
@@ -37,6 +39,8 @@ struct Plant: Codable, Identifiable, Hashable {
         case status = "status"
         case isActive = "isActive"
         case typeEcommerceId = "typeEcommerceId"
+        case code = "code"
+        case plantUser = "plantUser"
     }
 }
 
@@ -59,4 +63,11 @@ struct PlantResponse: Codable {
 struct PlantCreationResponse: Codable {
     let statusCode: Int
     let message: String
+}
+
+struct PlantUser: Codable, Hashable {
+    let fullName: String
+    let phoneNumber: String
+    let email: String
+    let imageUrl: String
 }
