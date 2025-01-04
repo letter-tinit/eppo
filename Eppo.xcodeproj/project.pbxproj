@@ -194,6 +194,9 @@
 		2CF3EDCA2CFA0E1500018265 /* OwnerHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF3EDC92CFA0E1500018265 /* OwnerHomeViewModel.swift */; };
 		2CF3EDCC2CFA38DC00018265 /* RatingSubmitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF3EDCB2CFA38DC00018265 /* RatingSubmitViewModel.swift */; };
 		2CFC7CAD2CC77F6200D277EA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFC7CAC2CC77F6200D277EA /* User.swift */; };
+		60241A482D28D43700BFC486 /* PDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A472D28D43700BFC486 /* PDFViewer.swift */; };
+		60241A4A2D28D50D00BFC486 /* SamplePDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A492D28D50D00BFC486 /* SamplePDFView.swift */; };
+		60241A4C2D28D90500BFC486 /* CustomDownloadHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -385,6 +388,9 @@
 		2CF3EDC92CFA0E1500018265 /* OwnerHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerHomeViewModel.swift; sourceTree = "<group>"; };
 		2CF3EDCB2CFA38DC00018265 /* RatingSubmitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingSubmitViewModel.swift; sourceTree = "<group>"; };
 		2CFC7CAC2CC77F6200D277EA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		60241A472D28D43700BFC486 /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
+		60241A492D28D50D00BFC486 /* SamplePDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePDFView.swift; sourceTree = "<group>"; };
+		60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDownloadHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -939,6 +945,9 @@
 				2CDC94C42D035A3B00129C1E /* PopoverRow.swift */,
 				2CDC94C62D035A9E00129C1E /* PopoverBSRule.swift */,
 				2C47E1AF2D0AA978007CFDD5 /* BiometricToggleView.swift */,
+				60241A472D28D43700BFC486 /* PDFViewer.swift */,
+				60241A492D28D50D00BFC486 /* SamplePDFView.swift */,
+				60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1087,12 +1096,15 @@
 				2C71901D2D058032001302AB /* ProtectionSystemScreen.swift in Sources */,
 				2C6E8DE22CFEF72F0092E25A /* WaitingPlantViewModel.swift in Sources */,
 				2CF209B02CF422BA00221F1A /* LoadingCenterView.swift in Sources */,
+				60241A4C2D28D90500BFC486 /* CustomDownloadHeaderView.swift in Sources */,
 				2CC5A2292C5A019300D0035D /* LoginScreen.swift in Sources */,
 				2C907EF02CE2581B005CDBD5 /* CreateOrderRequest.swift in Sources */,
 				2C605DE82C9B08880030895B /* MyChatBox.swift in Sources */,
 				2C45B5ED2CDC95C0008670F1 /* OwnerHome.swift in Sources */,
+				60241A482D28D43700BFC486 /* PDFViewer.swift in Sources */,
 				2CFC7CAD2CC77F6200D277EA /* User.swift in Sources */,
 				2C7900562CA7A01B0015B320 /* CustomButtonImageLabel.swift in Sources */,
+				60241A4A2D28D50D00BFC486 /* SamplePDFView.swift in Sources */,
 				2C30BCA92CEEFF510077FB14 /* CustomCircleAsyncImage.swift in Sources */,
 				2C45B5EE2CDC95C0008670F1 /* OwnerItemAdditionScreen.swift in Sources */,
 				2CB7EC032C9F0924000E1407 /* FooterToolBar.swift in Sources */,
@@ -1355,7 +1367,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;
@@ -1398,7 +1410,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Eppo/Eppo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_ASSET_PATHS = "\"eppo/Preview Content\"";
 				DEVELOPMENT_TEAM = U5KX54M7F5;
 				ENABLE_PREVIEWS = YES;

@@ -177,6 +177,81 @@ class CartViewModel {
             .reduce(0, +)
     }
     
+    func getSamplePlants() -> [Plant] {
+        return [
+            Plant(id: 1,
+                  name: "Aloe Vera",
+                  title: "Aloe Vera Succulent Plant",
+                  finalPrice: 14.99,
+                  description: "Aloe Vera is known for its soothing properties and is commonly used in skincare products. It’s easy to care for and can grow in most environments.",
+                  mainImage: "https://example.com/images/aloe_vera_main.jpg",
+                  imagePlants: [
+                    ImagePlantResponse(id: 1, imageUrl: "https://example.com/images/aloe_vera_1.jpg"),
+                    ImagePlantResponse(id: 2, imageUrl: "https://example.com/images/aloe_vera_2.jpg")
+                  ],
+                  status: 1,
+                  isActive: true,
+                  typeEcommerceId: 101),
+            
+            Plant(id: 2,
+                  name: "Snake Plant",
+                  title: "Sansevieria Snake Plant",
+                  finalPrice: 19.99,
+                  description: "The Snake Plant is a resilient plant known for its air-purifying abilities and low maintenance. Perfect for any indoor space.",
+                  mainImage: "https://example.com/images/snake_plant_main.jpg",
+                  imagePlants: [
+                    ImagePlantResponse(id: 1, imageUrl: "https://example.com/images/snake_plant_1.jpg"),
+                    ImagePlantResponse(id: 2, imageUrl: "https://example.com/images/snake_plant_2.jpg")
+                  ],
+                  status: 1,
+                  isActive: true,
+                  typeEcommerceId: 102),
+            
+//            Plant(id: 3,
+//                  name: "Spider Plant",
+//                  title: "Chlorophytum Spider Plant",
+//                  finalPrice: 12.50,
+//                  description: "The Spider Plant is an easy-to-grow indoor plant known for its air-purifying qualities and its ability to propagate with ease.",
+//                  mainImage: "https://example.com/images/spider_plant_main.jpg",
+//                  imagePlants: [
+//                    ImagePlantResponse(id: 1, imageUrl: "https://example.com/images/spider_plant_1.jpg"),
+//                    ImagePlantResponse(id: 2, imageUrl: "https://example.com/images/spider_plant_2.jpg")
+//                  ],
+//                  status: 1,
+//                  isActive: true,
+//                  typeEcommerceId: 103),
+//            
+//            Plant(id: 4,
+//                  name: "Peace Lily",
+//                  title: "Spathiphyllum Peace Lily",
+//                  finalPrice: 29.99,
+//                  description: "The Peace Lily is a popular houseplant known for its beautiful white flowers and air-purifying properties. It thrives in low light and is easy to care for.",
+//                  mainImage: "https://example.com/images/peace_lily_main.jpg",
+//                  imagePlants: [
+//                    ImagePlantResponse(id: 1, imageUrl: "https://example.com/images/peace_lily_1.jpg"),
+//                    ImagePlantResponse(id: 2, imageUrl: "https://example.com/images/peace_lily_2.jpg")
+//                  ],
+//                  status: 1,
+//                  isActive: true,
+//                  typeEcommerceId: 104),
+            
+            Plant(id: 5,
+                  name: "Fiddle Leaf Fig",
+                  title: "Ficus Lyrata Fiddle Leaf Fig",
+                  finalPrice: 49.99,
+                  description: "The Fiddle Leaf Fig is a stunning ornamental plant with large, glossy leaves. It’s ideal for adding a tropical touch to your home or office.",
+                  mainImage: "https://example.com/images/fiddle_leaf_fig_main.jpg",
+                  imagePlants: [
+                    ImagePlantResponse(id: 1, imageUrl: "https://example.com/images/fiddle_leaf_fig_1.jpg"),
+                    ImagePlantResponse(id: 2, imageUrl: "https://example.com/images/fiddle_leaf_fig_2.jpg")
+                  ],
+                  status: 1,
+                  isActive: true,
+                  typeEcommerceId: 105)
+        ]
+    }
+
+    
     deinit {
         cancellables.forEach { $0.cancel() }
     }

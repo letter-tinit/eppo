@@ -155,6 +155,8 @@ struct OrderDetailsScreen: View {
             }
             viewModel.createOrderRequest = CreateOrderRequest(totalPrice: viewModel.totalPrice(), deliveryFee: 0, deliveryAddress: "ASDASD", paymentId: 1, orderDetails: viewModel.selectedOrder)
             viewModel.totalShippingFee = 0.0
+            viewModel.selectedOrder = viewModel.getSamplePlants()
+
         }
         .alert(isPresented: $viewModel.isAlertShowing) {
             Alert(title: Text("\(viewModel.message)"), dismissButton: .cancel(Text("Đóng"), action: {
