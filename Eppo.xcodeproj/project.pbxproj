@@ -197,6 +197,8 @@
 		60241A482D28D43700BFC486 /* PDFViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A472D28D43700BFC486 /* PDFViewer.swift */; };
 		60241A4A2D28D50D00BFC486 /* SamplePDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A492D28D50D00BFC486 /* SamplePDFView.swift */; };
 		60241A4C2D28D90500BFC486 /* CustomDownloadHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */; };
+		608D17CD2D2925D400229685 /* ShopPlantScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608D17CC2D2925D400229685 /* ShopPlantScreen.swift */; };
+		608D17CF2D29260200229685 /* ShopPlantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608D17CE2D29260200229685 /* ShopPlantViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -391,6 +393,8 @@
 		60241A472D28D43700BFC486 /* PDFViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewer.swift; sourceTree = "<group>"; };
 		60241A492D28D50D00BFC486 /* SamplePDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePDFView.swift; sourceTree = "<group>"; };
 		60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDownloadHeaderView.swift; sourceTree = "<group>"; };
+		608D17CC2D2925D400229685 /* ShopPlantScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPlantScreen.swift; sourceTree = "<group>"; };
+		608D17CE2D29260200229685 /* ShopPlantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopPlantViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -712,6 +716,7 @@
 				2CEAF0EB2CF8A3D400C0B880 /* Profile */,
 				2C61AC9F2CEC8BED001E2DF5 /* Owner */,
 				2CF1BAC22CE709870021D051 /* OrderHistory */,
+				608D17CE2D29260200229685 /* ShopPlantViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -948,6 +953,7 @@
 				60241A472D28D43700BFC486 /* PDFViewer.swift */,
 				60241A492D28D50D00BFC486 /* SamplePDFView.swift */,
 				60241A4B2D28D90500BFC486 /* CustomDownloadHeaderView.swift */,
+				608D17CC2D2925D400229685 /* ShopPlantScreen.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1079,6 +1085,7 @@
 				2C0807CD2CE0712A00598AD0 /* NotificationResponse.swift in Sources */,
 				2C129E5D2CF0D3FA002AC952 /* OwnerContractAPI.swift in Sources */,
 				2C6C176D2C91E3F6004DB795 /* TimerView.swift in Sources */,
+				608D17CD2D2925D400229685 /* ShopPlantScreen.swift in Sources */,
 				2C5920ED2CA794FA004E996F /* BuyOrderRowView.swift in Sources */,
 				2CA3568E2CE3708B00FEB033 /* AddressScreen.swift in Sources */,
 				2C47E1B02D0AA978007CFDD5 /* BiometricToggleView.swift in Sources */,
@@ -1235,6 +1242,7 @@
 				2C6E8DE02CFEEE010092E25A /* OwnerWaitingPlantScreen.swift in Sources */,
 				2C78DDBB2CDDE4A600400C77 /* ItemHireScreen.swift in Sources */,
 				2C45B5F72CDCAFAE008670F1 /* Category.swift in Sources */,
+				608D17CF2D29260200229685 /* ShopPlantViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
