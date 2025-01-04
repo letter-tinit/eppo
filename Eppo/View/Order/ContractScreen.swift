@@ -5,6 +5,8 @@
 //
 
 import SwiftUI
+import UIKit
+import PDFKit
 import WebKit
 
 struct ContractScreen: View {
@@ -36,8 +38,8 @@ struct ContractScreen: View {
                 
                 HStack(alignment: .top) {
                     Text(verbatim: "Bằng việc bấm vào nút \"Chấp nhận điều khoản\", bạn đã đồng ý với các điều khoản trong hợp đồng ở trên")
-                        .font(.headline)
-                        .fontWeight(.medium)
+                        .font(.subheadline)
+                        .fontWeight(.regular)
                         .lineLimit(nil)
                         .multilineTextAlignment(.leading)
                     
@@ -46,7 +48,10 @@ struct ContractScreen: View {
                     Toggle("", isOn: $viewModel.isSigned)
                         .labelsHidden()
                 }
-                .padding()
+                .frame(height: 70)
+                .padding(.horizontal)
+                
+                Spacer()
                 
                 Button {
                     dismiss()
@@ -62,7 +67,7 @@ struct ContractScreen: View {
                     }
                     
                 } // LOGIN BUTTON
-                .padding()
+                .padding(.horizontal)
                 .padding(.bottom, 80)
                 .disabled(!viewModel.isSigned)
             }
@@ -82,6 +87,21 @@ struct ContractScreen: View {
             }))
         }
     }
+    
+//    func printPDF(from url: URL) {
+//        guard let printController = UIPrintInteractionController.shared else { return }
+//        
+//        // Tạo PDF print formatter từ URL
+//        if let document = PDFDocument(url: url) {
+//            let printFormatter = document.printFormatter()
+//            
+//            // Cấu hình UIPrintInteractionController
+//            printController.printFormatter = printFormatter
+//            
+//            // Hiển thị giao diện in
+//            printController.present(animated: true, completionHandler: nil)
+//        }
+//    }
 }
 
 // Tạo một wrapper cho WKWebView

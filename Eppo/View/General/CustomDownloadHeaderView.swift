@@ -1,0 +1,63 @@
+//
+// Created by Letter ♥
+//
+// https://github.com/tinit4ever
+//
+
+import SwiftUI
+
+struct CustomDownloadHeaderView: View {
+    // MARK: - PROPERTY
+    var buttonWidth: CGFloat = 30
+    
+    var title: String
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    
+    // MARK: - BODY
+    
+    var body: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "arrow.backward")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonWidth, alignment: .leading)
+            }
+            
+            Spacer()
+            
+            Text(title)
+                .font(.system(size: 24, weight: .semibold))
+                .frame(width: 240)
+                .lineLimit(1)
+                .frame(alignment: .center)
+            
+            Spacer()
+            
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "arrow.down.circle")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: buttonWidth, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, 20)
+        .foregroundStyle(.white)
+        .frame(width: UIScreen.main.bounds.size.width, height: 90, alignment: .bottom)
+        .padding(.bottom, 10)
+        .background(
+            LinearGradient(colors: [.lightBlue, .darkBlue], startPoint: .leading, endPoint: .trailing)
+        )
+    }
+}
+
+// MARK: PREVIEW
+#Preview(traits: .fixedLayout(width: UIScreen.main.bounds.size.width, height: 100)) {
+    CustomDownloadHeaderView(title: "Giỏ hàng")
+}

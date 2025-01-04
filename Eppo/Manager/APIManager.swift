@@ -34,7 +34,7 @@ struct APIErrorResponse: Codable, Error {
 
 struct APIConstants {
     
-    static let baseURL = "https://sep490ne-001-site1.atempurl.com/"
+    static let baseURL = "https://sep490pass-001-site1.ptempurl.com/"
     
     struct Auth {
         static let login = baseURL + "api/v1/Users/Login"

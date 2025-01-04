@@ -298,6 +298,7 @@ struct CartScreen: View {
         .onAppear {
             self.viewModel.orderDetails = UserSession.shared.cart
             self.viewModel.hireOrderDetails = UserSession.shared.hireCart
+//            self.viewModel.orderDetails = viewModel.getSamplePlants()
         }
         .onChange(of: viewModel.orderDetails) {
             viewModel.selectedOrder = viewModel.orderDetails.filter { $0.isSelected }
