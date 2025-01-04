@@ -46,7 +46,7 @@ struct MainTabView: View {
                 
                 AuctionScreen()
                     .tabItem {
-                        Image(selectedTab == .auction ? "selected-auction" : "auction")
+                        Image(selectedTab == .auction ? "auction.color" : "auction.fill")
                         Text("Đấu giá")
                     }
                     .tag(Tab.auction)
