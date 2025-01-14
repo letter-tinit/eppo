@@ -46,9 +46,42 @@ struct OrderDetailsScreen: View {
                         .frame(maxWidth: .infinity)
                         
                         LazyVStack {
-                            ForEach(viewModel.selectedOrder) { plant in
-                                CartOrderItemView(viewModel: viewModel, plant: plant)
-                                    .background(Color.clear)
+//                            ForEach(viewModel.selectedOrder) { plant in
+//                                CartOrderItemView(viewModel: viewModel, plant: plant)
+//                                    .background(Color.clear)
+//                            }
+                            ForEach(viewModel.groupSelectedPlants, id: \.key) { group in
+                                Section {
+                                    ForEach(group.value) { plant in
+                                        CartOrderItemView(viewModel: viewModel, plant: plant)
+                                            .background(Color.clear)
+                                    }
+                                    .padding(8)
+                                    .background(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .padding(.horizontal)
+                                } header: {
+                                    NavigationLink {
+                                        ShopPlantScreen(
+                                            userName: group.value[0].plantUser?.fullName ?? "Không xác định",
+                                            imageUrl: group.value[0].plantUser?.imageUrl ?? "Unknow",
+                                            code: group.value[0].code
+                                        )
+                                    } label: {
+                                        HStack(alignment: .bottom) {
+                                            CustomCircleAsyncImage(imageUrl: group.value[0].plantUser?.imageUrl, size: 24)
+                                            
+                                            Text(group.value[0].plantUser?.fullName ?? "Không xác định")
+                                                .font(.headline)
+                                                .foregroundStyle(.darkBlue)
+                                            
+                                            Spacer()
+                                        }
+                                        .contentShape(Rectangle())
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 10)
+                                    }
+                                }                                
                             }
                         }
                         
@@ -132,6 +165,7 @@ struct OrderDetailsScreen: View {
         .background(Color(uiColor: UIColor.systemGray6))
         .ignoresSafeArea(.container, edges: .top)
         .onAppear {
+//            viewModel.selectedOrder = viewModel.getSamplePlants()
             if viewModel.addresses.isEmpty {
                 viewModel.getAddress()
             }

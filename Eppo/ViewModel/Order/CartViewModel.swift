@@ -23,6 +23,14 @@ class CartViewModel {
     var selectedCart: CartState = .buy
     
     
+    var groupedPlants: [(key: String, value: [Plant])] {
+        let grouped = Dictionary(grouping: orderDetails, by: { $0.code })
+        return grouped.sorted(by: { $0.key < $1.key })
+    }
+    var groupSelectedPlants: [(key: String, value: [Plant])] {
+        let grouped = Dictionary(grouping: selectedOrder, by: { $0.code })
+        return grouped.sorted(by: { $0.key < $1.key })
+    }
     var orderDetails: [Plant]
     var selectedOrder: [Plant] = []
     var allItemsSelected: Bool {
@@ -121,6 +129,12 @@ class CartViewModel {
     }
 
     // MARK: - FUNCTIONS
+    
+    func deletePlant(id: Int) {
+        if let index = orderDetails.firstIndex(where: { $0.id == id }) {
+            orderDetails.remove(at: index)
+        }
+    }
     
     func deleteItem(at offsets: IndexSet) {
         UserSession.shared.cart.remove(atOffsets: offsets)
@@ -250,17 +264,6 @@ class CartViewModel {
                   typeEcommerceId: 105, code: "43")
         ]
     }
-    
-    func groupedPlant() -> [String: [Plant]] {
-//        guard let cart = UserSession.shared.cart else {
-//            return [:]
-//        }
-        
-        let cart = UserSession.shared.cart
-        
-        return Dictionary(grouping: cart, by: { $0.code })
-    }
-
     
     deinit {
         cancellables.forEach { $0.cancel() }
