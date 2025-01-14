@@ -80,7 +80,6 @@ struct CartScreen: View {
                             // MARK: - SECTION
                             Section {
                                 ForEach($viewModel.orderDetails, id: \.self) { plant in
-                                    
                                     CartItemView(plant: plant)
                                         .listRowInsets(EdgeInsets())
                                         .background(Color(uiColor: .systemGray6))
@@ -298,7 +297,7 @@ struct CartScreen: View {
         .onAppear {
             self.viewModel.orderDetails = UserSession.shared.cart
             self.viewModel.hireOrderDetails = UserSession.shared.hireCart
-//            self.viewModel.orderDetails = viewModel.getSamplePlants()
+            self.viewModel.orderDetails = viewModel.getSamplePlants()
         }
         .onChange(of: viewModel.orderDetails) {
             viewModel.selectedOrder = viewModel.orderDetails.filter { $0.isSelected }

@@ -40,9 +40,16 @@ struct OwnerItemAdditionScreen: View {
                             }
                             .frame(height: 50)
                             
-                            Text("Giá sản phẩm").font(.headline)
+                            Text("Giá cây (giao dịch)").font(.headline)
                             BorderTextField {
                                 TextField("Nhập giá tiền", text: $viewModel.price)
+                                    .keyboardType(.numberPad)
+                            }
+                            .frame(height: 50)
+                            
+                            Text("Giá cây (giá trị thực)").font(.headline)
+                            BorderTextField {
+                                TextField("Nhập giá tiền", text: $viewModel.basePrice)
                                     .keyboardType(.numberPad)
                             }
                             .frame(height: 50)

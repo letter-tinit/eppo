@@ -191,7 +191,7 @@ class CartViewModel {
                   ],
                   status: 1,
                   isActive: true,
-                  typeEcommerceId: 101, code: "43"),
+                  typeEcommerceId: 101, code: "41"),
             
             Plant(id: 2,
                   name: "Snake Plant",
@@ -249,6 +249,16 @@ class CartViewModel {
                   isActive: true,
                   typeEcommerceId: 105, code: "43")
         ]
+    }
+    
+    func groupedPlant() -> [String: [Plant]] {
+//        guard let cart = UserSession.shared.cart else {
+//            return [:]
+//        }
+        
+        let cart = UserSession.shared.cart
+        
+        return Dictionary(grouping: cart, by: { $0.code })
     }
 
     

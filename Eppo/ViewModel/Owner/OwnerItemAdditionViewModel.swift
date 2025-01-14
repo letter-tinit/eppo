@@ -25,6 +25,7 @@ class OwnerItemAdditionViewModel: ObservableObject {
     @Published var itemTitle: String = ""
     @Published var itemDescription: String = ""
     @Published var price: String = ""
+    @Published var basePrice: String = ""
     @Published var width: String = ""
     @Published var length: String = ""
     @Published var height: String = ""
@@ -101,6 +102,7 @@ class OwnerItemAdditionViewModel: ObservableObject {
             "length": length, // Ví dụ giá trị
             "height": height, // Ví dụ giá trị
             "finalPrice": price, // Ví dụ giá trị
+            "price": price, // Ví dụ giá trị
             "plantName": itemName, // Ví dụ tên cây
             "title": itemTitle, // Ví dụ tiêu đề
             "categoryId": categoryId, // Ví dụ category ID

@@ -258,6 +258,9 @@ struct ItemDetailScreen: View {
             viewModel.message = "Đơn hàng đã có trong giỏ hàng của bạn rồi"
         } else {
             UserSession.shared.cart.append(plant)
+            
+            UserSession.shared.cart.sort { $0.code < $1.code }
+            
             viewModel.message = "Đã thêm đơn hàng vào giỏ"
         }
     }

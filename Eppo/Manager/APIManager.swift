@@ -101,6 +101,7 @@ struct APIConstants {
     
     struct User {
         static let getMyInfor = baseURL + "api/v1/GetUser/Users/Information/UserID"
+        static let update = baseURL + "api/v1/GetUser/Users/Update/Information/Id"
     }
     
     
@@ -881,10 +882,21 @@ class APIManager {
             .validate(statusCode: 200..<300)
             .publishData() // Use `publishData` to inspect the response data
             .tryMap { response in
-                if let statusCode = response.response?.statusCode, statusCode == 400 {
+                guard let statusCode = response.response?.statusCode else {
                     // Return a custom error message for status code 400
+                    throw APIError.custom(message: "Lỗi dữ liệu trả về")
+                }
+                
+                if statusCode == 400 {
                     throw APIError.custom(message: "Đơn hàng của bạn đã tạo rồi, hãy kiểm tra lại lịch sử đặt hàng")
                 }
+                
+                if let data = response.data {
+                    print("Response Data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
+                } else {
+                    print("Response Data is nil")
+                }
+                
                 return response.data ?? Data()
             }
             .decode(type: OrderResponse.self, decoder: JSONDecoder())
@@ -1284,7 +1296,7 @@ class APIManager {
     }
     
     func updateUserInformation(userInput: User, avatar: UIImage?) -> AnyPublisher<UserResponse, APIError> {
-        let url = "https://sep490pass-001-site1.ptempurl.com/api/v1/GetUser/Users/Update/Information/Id"
+        let url = APIConstants.User.update
         let headers = setupHeaderToken()
         
         // Tạo multipart form data
