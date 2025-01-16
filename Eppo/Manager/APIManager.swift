@@ -114,6 +114,7 @@ struct APIConstants {
     struct Contract {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
+        static let newVersionCreate = baseURL + "api/v1/GetList/Contracts/Create/CreateContractv2"
         static let createOwner = baseURL + "api/v1/GetList/Contracts/Create/Contract/Ownership"
         static let updateContact = baseURL + "api/v1/GetList/Contracts/IsSigned/Contract/Id?contractId="
     }
@@ -847,7 +848,7 @@ class APIManager {
     }
     
     func createContract(createContractRequest: ContractRequest) -> AnyPublisher<ContractResponse, Error> {
-        let url = APIConstants.Contract.create
+        let url = APIConstants.Contract.newVersionCreate
         
         let headers = setupHeaderToken()
         

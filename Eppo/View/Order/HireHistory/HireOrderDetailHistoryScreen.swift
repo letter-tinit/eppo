@@ -195,7 +195,7 @@ struct HireOrderDetailHistoryScreen: View {
                             Section {
                                 VStack(alignment: .leading, spacing: 10) {
                                     HStack {
-                                        Text("Ngày ước tính trả")
+                                        Text("Ngày ước thu hồi trước")
                                             .fontWeight(.regular)
                                             .foregroundStyle(.gray)
                                         Spacer()
@@ -227,25 +227,25 @@ struct HireOrderDetailHistoryScreen: View {
                                     }
                                     .font(.headline)
                                     
-                                    HStack {
-                                        Text("Hợp đồng trả trước")
-                                            .fontWeight(.regular)
-                                            .foregroundStyle(.gray)
-                                        Spacer()
-                                        
-                                        NavigationLink {
-                                            
-                                        } label: {
-                                            HStack {
-                                                Text("Nhấn để xem")
-                                                
-                                                Image(systemName: "list.clipboard")
-                                            }
-                                            .fontWeight(.semibold)
-                                            .foregroundStyle(.blue)
-                                        }
-                                    }
-                                    .font(.headline)
+//                                    HStack {
+//                                        Text("Hợp đồng trả trước")
+//                                            .fontWeight(.regular)
+//                                            .foregroundStyle(.gray)
+//                                        Spacer()
+//                                        
+//                                        NavigationLink {
+//                                            
+//                                        } label: {
+//                                            HStack {
+//                                                Text("Nhấn để xem")
+//                                                
+//                                                Image(systemName: "list.clipboard")
+//                                            }
+//                                            .fontWeight(.semibold)
+//                                            .foregroundStyle(.blue)
+//                                        }
+//                                    }
+//                                    .font(.headline)
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
