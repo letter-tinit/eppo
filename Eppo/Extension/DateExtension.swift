@@ -14,4 +14,13 @@ extension Date {
         formatter.timeZone = TimeZone(abbreviation: "UTC") // Đảm bảo sử dụng múi giờ UTC
         return formatter.string(from: self)
     }
+    
+    static func - (lhs: Date, rhs: Date) -> TimeInterval {
+        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+    
+    func addingDays(_ days: Int) -> Date? {
+        return Calendar.current.date(byAdding: .day, value: days, to: self)
+    }
+
 }

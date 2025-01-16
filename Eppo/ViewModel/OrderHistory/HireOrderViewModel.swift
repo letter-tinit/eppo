@@ -10,6 +10,12 @@ import Alamofire
 import Combine
 import Observation
 
+enum HireOrderViewModelActiveAlert {
+    case remind
+    case finish
+    case error
+}
+
 @Observable
 class HireOrderViewModel {
     var selectedOrderState: HireOrderState = .waitingForConfirm
@@ -20,6 +26,8 @@ class HireOrderViewModel {
     var isAlertShowing: Bool = false
     var activeAlert: BuyOrderAlert = .remind
     var errorMessage: String?
+    var preReturnResponseData: PreReturnDetail?
+    var deposit: Double = 0.0
 
     func getHireOrderHistory() {
         isLoading = true
@@ -108,6 +116,117 @@ class HireOrderViewModel {
                 }
             } receiveValue: {}
             .store(in: &cancellables)
+    }
+    
+    // MARK: - RATAKE
+    
+    func requestData(orderId: Int, plantId: Int) {
+        isLoading = true
+        
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        APIManager.shared.getPreReturnDetails(orderId: orderId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+                dispatchGroup.leave()
+            } receiveValue: { [weak self] response in
+                self?.preReturnResponseData = response.data
+            }
+            .store(in: &self.cancellables)
+        
+        dispatchGroup.enter()
+        APIManager.shared.getDeposit(plantId: plantId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+                dispatchGroup.leave()
+            } receiveValue: { [weak self] response in
+                if let deposit = response.data {
+                    self?.deposit = deposit
+                }
+            }
+            .store(in: &self.cancellables)
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.isLoading = false
+        }
+    }
+    
+    func getPreReturnDetails(orderId: Int) {
+        isLoading = true
+        
+        APIManager.shared.getPreReturnDetails(orderId: orderId)
+            .sink { completion in
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { [weak self] response in
+                self?.preReturnResponseData = response.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getDepositByPlantId(plantId: Int) {
+        APIManager.shared.getDeposit(plantId: plantId)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { [weak self] response in
+                if let deposit = response.data {
+                    self?.deposit = deposit
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func confirmPreReturn(orderId: Int) {
+        isLoading = true
+        
+        APIManager.shared.confirmRefund(orderId: orderId)
+            .sink { [weak self] result in
+                guard let self = self else { return }
+                self.isLoading = false
+                switch result {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    self.showAlert(.error, message: error.localizedDescription)
+                }
+            } receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                preReturnResponseData?.order.orderDetails[0].isReturnSoon = (200..<299).contains(response.statusCode)
+                showAlert(.error, message: response.message)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func showAlert(_ activeAlert: BuyOrderAlert, message: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.isAlertShowing.toggle()
+            self.activeAlert = activeAlert
+            self.errorMessage = message
+        }
     }
     
     deinit {

@@ -127,6 +127,11 @@ struct APIConstants {
     struct Conversation {
         static let getAll = baseURL + "api/Conversation/GetByUser"
     }
+    
+    struct Retake {
+        static let getPreReturnDetails = baseURL + "api/v1/GetList/OrderRental/View/Return/Id"
+        static let confirmRefund = baseURL + "api/v1/GetList/OrderRental/Update/Return/Id"
+    }
 }
 
 class APIManager {
@@ -2074,5 +2079,57 @@ class APIManager {
         ]
         
         return headers
+    }
+    
+    // MARK: - RETAKE
+    func getPreReturnDetails(orderId: Int) -> AnyPublisher<ApiResponse<PreReturnDetail>, Error> {
+        guard var URLComponents = URLComponents(string: APIConstants.Retake.getPreReturnDetails) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        URLComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(describing: orderId))
+        ]
+        
+        guard let url = URLComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: ApiResponse<PreReturnDetail>.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                return error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - RETAKE
+    func confirmRefund(orderId: Int) -> AnyPublisher<ApiResponse<NoDataResponse>, Error> {
+        guard var URLComponents = URLComponents(string: APIConstants.Retake.confirmRefund) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        URLComponents.queryItems = [
+            URLQueryItem(name: "orderId", value: String(describing: orderId))
+        ]
+        
+        guard let url = URLComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .put, headers: headers)
+            .validate()
+            .publishDecodable(type: ApiResponse<NoDataResponse>.self)
+            .value()
+            .mapError { error in
+                return error
+            }
+            .eraseToAnyPublisher()
     }
 }

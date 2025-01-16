@@ -179,12 +179,12 @@ struct DeliveriteConfirmedScreen: View {
         .alert(isPresented: $isAlertShowing) {
             switch activeAlert {
             case .first:
-//                return Alert(title: Text(errorMessage), dismissButton: .cancel({
-//                    if isRequestSucesss {
-//                        dismiss()
-//                    }
-//                }))
-                return Alert(title: Text(errorMessage), dismissButton: .cancel())
+                return Alert(title: Text(errorMessage), dismissButton: .cancel({
+                    if isRequestSucesss {
+                        dismiss()
+                    }
+                }))
+//                return Alert(title: Text(errorMessage), dismissButton: .cancel())
             case .second:
                 return Alert(title: Text("Xác nhận"), message: Text(errorMessage), primaryButton: .default(Text("Thành công"), action: {
                     // THÀNH CÔNG

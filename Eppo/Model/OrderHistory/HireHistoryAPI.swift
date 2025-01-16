@@ -24,6 +24,7 @@ struct HireHistoryOrder: Codable, Identifiable {
     let finalPrice: Double
     let orderDetails: [HireHistoryOrderDetail]
     let paymentStatus: String
+    let status: Int
 
     enum CodingKeys: String, CodingKey {
         case id = "orderId"
@@ -32,6 +33,7 @@ struct HireHistoryOrder: Codable, Identifiable {
         case finalPrice = "finalPrice"
         case orderDetails = "orderDetails"
         case paymentStatus = "paymentStatus"
+        case status = "status"
     }
 }
 
@@ -41,6 +43,7 @@ struct HireHistoryResponse: Codable {
     let message: String
     let data: [HireHistoryOrder]
 }
+
 //
 //// Ví dụ tạo một đối tượng Response với dữ liệu giả
 //let response = Response(
