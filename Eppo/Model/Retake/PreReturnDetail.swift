@@ -25,6 +25,7 @@ struct PreReturnOrderDetail: Codable {
     let depositDescription: String
     var isReturnSoon: Bool
     let priceRentalReturnObject: Double
+    let feeRecoveryObject: Double
     let plant: Plant
 }
 

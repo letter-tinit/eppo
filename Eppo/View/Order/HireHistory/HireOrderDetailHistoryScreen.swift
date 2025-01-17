@@ -227,25 +227,38 @@ struct HireOrderDetailHistoryScreen: View {
                                     }
                                     .font(.headline)
                                     
-//                                    HStack {
-//                                        Text("Hợp đồng trả trước")
-//                                            .fontWeight(.regular)
-//                                            .foregroundStyle(.gray)
-//                                        Spacer()
-//                                        
-//                                        NavigationLink {
-//                                            
-//                                        } label: {
-//                                            HStack {
-//                                                Text("Nhấn để xem")
-//                                                
-//                                                Image(systemName: "list.clipboard")
-//                                            }
-//                                            .fontWeight(.semibold)
-//                                            .foregroundStyle(.blue)
-//                                        }
-//                                    }
-//                                    .font(.headline)
+                                    HStack {
+                                        Text("Tiết kiệm")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                        
+                                        Text(orderDetail.feeRecoveryObject, format: .currency(code: "VND"))
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.red)
+                                        
+                                    }
+                                    .font(.headline)
+                                    
+                                    HStack {
+                                        Text("Hợp đồng trả trước")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                        
+                                        NavigationLink {
+                                            ViewPreReturnContractScreen(viewModel: ViewPreReturnContractViewModel(orderId: preReturnResponseData.orderId, code: plant.code))
+                                        } label: {
+                                            HStack {
+                                                Text("Nhấn để xem")
+                                                
+                                                Image(systemName: "list.clipboard")
+                                            }
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.blue)
+                                        }
+                                    }
+                                    .font(.headline)
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)

@@ -9,6 +9,13 @@ import Foundation
 import Combine
 import Observation
 
+enum OwnerOrderState: String, CaseIterable {
+    case processing = "Đang xử lý"
+    case finishDelivered = "Đã giao"
+    case earlyReturnRequest = "Yêu cầu trả sớm"
+    case finishRefund = "Đã thu hồi"
+}
+
 @Observable
 class OwnerOrderViewModel {
     var isStatusPickerPopup: Bool = false
@@ -17,6 +24,9 @@ class OwnerOrderViewModel {
     var errorMessage = ""
     var cancellables: Set<AnyCancellable> = []
     var ownerOrders: [OwnerOrder] = []
+    
+    // MARK: - RETAKE PROPERTIES
+    var orderState: OwnerOrderState = .processing
     
     func getOwnerOrders() {
         isLoading = true
@@ -89,7 +99,52 @@ class OwnerOrderViewModel {
     func updateData() {
 //        DispatchQueue.main.asyncAfter(deadline:.now() + 0) { [weak self] in
         DispatchQueue.main.async { [weak self] in
-            self?.getOwnerOrders()
+            guard let self = self else { return }
+            self.getOwnerOrdersByState()
+        }
+    }
+    
+    // MARK: - RETAKE FUNCTION
+    
+    func getOwnerOrdersByState() {
+        isLoading = true
+        
+        var orderStateValue: Int = 1
+        
+        switch orderState {
+        case .processing:
+            orderStateValue = 1
+        case .finishDelivered:
+            orderStateValue = 4
+        case .earlyReturnRequest:
+            orderStateValue = 4
+        case .finishRefund:
+            orderStateValue = 6
+        }
+        
+        APIManager.shared.getOwnerOrdersByState(pageIndex: 1, pageSize: 999, status: orderStateValue, isReturnSoon: isReturnSoon())
+            .sink { [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    self.ownerOrders.removeAll()
+                    print(error.localizedDescription)
+                }
+            } receiveValue: { ownerOrderResponse in
+                self.ownerOrders.removeAll()
+                self.ownerOrders = ownerOrderResponse.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func isReturnSoon() -> Bool? {
+        if ((orderState == .earlyReturnRequest) || (orderState == .finishRefund)) {
+            return true
+        } else {
+            return nil
         }
     }
     

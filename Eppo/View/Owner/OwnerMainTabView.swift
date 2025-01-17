@@ -34,6 +34,12 @@ struct OwnerMainTabView: View {
                         Label("Cây", systemImage: "tree.fill")
                     }
                     .tag(OwnerTab.home)
+                //                OwnerOrderManagementScreen()
+                //                    .tabItem {
+                //                        Spacer(minLength: 20)
+                //                        Label("Đơn hàng", systemImage: "list.clipboard.fill")
+                //                    }
+                //                    .tag(OwnerTab.order)
                 
                 OwnerWaitingPlantScreen()
                     .tabItem {
@@ -41,7 +47,7 @@ struct OwnerMainTabView: View {
                     }
                     .tag(OwnerTab.waitingPlant)
                 
-                OwnerOrderScreen()
+                OwnerOrderManagementScreen()
                     .tabItem {
                         Spacer(minLength: 20)
                         Label("Đơn hàng", systemImage: "list.clipboard.fill")

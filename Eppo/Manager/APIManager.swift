@@ -89,6 +89,7 @@ struct APIConstants {
         static let getShippingFee = baseURL + "api/v1/Count/FreeShip/PlantId"
         static let getDeposit = baseURL + "api/v1/GetList/Plants/DepositRental"
         static let ownerOrders = baseURL + "api/v1/Order/GetOrdersByOwner"
+        static let ownerOrdersFilterByStatus = baseURL + "api/OrdersBuy/GetOrdersByOwner"
         static let updateStatus = baseURL + "api/v1/Order/UpdateOrderStatus"
         static let confirmDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderSuccess/"
         static let failDeliverite = baseURL + "api/v1/Order/UpdateDeliverOrderFail/"
@@ -113,6 +114,7 @@ struct APIConstants {
     
     struct Contract {
         static let getById = baseURL + "api/v1/GetList/Contracts/Id"
+        static let earlyReturn = baseURL + "api/v1/GetList/Contracts/Owner-Customer/Id"
         static let create = baseURL + "api/v1/GetList/Contracts/Create/Contract"
         static let newVersionCreate = baseURL + "api/v1/GetList/Contracts/Create/CreateContractv2"
         static let createOwner = baseURL + "api/v1/GetList/Contracts/Create/Contract/Ownership"
@@ -848,7 +850,7 @@ class APIManager {
     }
     
     func createContract(createContractRequest: ContractRequest) -> AnyPublisher<ContractResponse, Error> {
-        let url = APIConstants.Contract.newVersionCreate
+        let url = APIConstants.Contract.create
         
         let headers = setupHeaderToken()
         
@@ -2127,6 +2129,74 @@ class APIManager {
         return AF.request(url, method: .put, headers: headers)
             .validate()
             .publishDecodable(type: ApiResponse<NoDataResponse>.self)
+            .value()
+            .mapError { error in
+                return error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getOwnerOrdersByState(pageIndex: Int, pageSize: Int, status: Int, isReturnSoon: Bool?) -> AnyPublisher<OwnerOrderResponse, Error> {
+//        let url = APIConstants.Order.ownerOrdersFilterByStatus
+        guard var urlComponents = URLComponents(string: APIConstants.Order.ownerOrdersFilterByStatus) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        // Set query parameters
+        
+        if let isReturnSoon = isReturnSoon {
+            urlComponents.queryItems = [
+                URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+                URLQueryItem(name: "pageSize", value: String(pageSize)),
+                URLQueryItem(name: "status", value: String(status)),
+                URLQueryItem(name: "isReturnSoon", value: String(isReturnSoon))
+            ]
+        } else {
+            urlComponents.queryItems = [
+                URLQueryItem(name: "pageIndex", value: String(pageIndex)),
+                URLQueryItem(name: "pageSize", value: String(pageSize)),
+                URLQueryItem(name: "status", value: String(status))
+            ]
+            
+        }
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: OwnerOrderResponse.self, decoder: JSONDecoder.customDateDecoder)
+            .value()
+            .mapError { error in
+                debugPrint(error)
+                // Xử lý lỗi hoặc trả về lỗi mặc định
+                return error as Error
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func getEarlyReturnContract(orderId: Int, code: String) -> AnyPublisher<ApiResponse<ContractURLResponse>, Error> {
+        guard var urlComponets = URLComponents(string: APIConstants.Contract.earlyReturn) else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        urlComponets.queryItems = [
+            URLQueryItem(name: "orderId", value: String(describing: orderId)),
+            URLQueryItem(name: "code", value: code)
+        ]
+        
+        guard let url = urlComponets.url else {
+            return Fail(error: APIError.badUrl).eraseToAnyPublisher()
+        }
+        
+        let headers = setupHeaderToken()
+        
+        return AF.request(url, method: .get, headers: headers)
+            .validate()
+            .publishDecodable(type: ApiResponse<ContractURLResponse>.self)
             .value()
             .mapError { error in
                 return error
