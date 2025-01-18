@@ -15,6 +15,8 @@ struct PreReturnDetail: Codable {
     var order: PreReturnOrder
     let contract: ContractURLResponse
     let plant: Plant
+    let numberMonth: Int
+    let numberDateRental: Int
 }
 
 struct PreReturnOrderDetail: Codable {

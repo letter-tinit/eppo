@@ -15,6 +15,7 @@ struct DeliveredHireOrderRowView: View {
     var totalPrice: Double
     var paymentStatus: String
     var deliveriteFree: Double
+    var deposit: Double
     var numberOfMonth: Int
     let orderDetail: HireHistoryOrderDetail
     var isCancellable: Bool = false
@@ -62,23 +63,16 @@ struct DeliveredHireOrderRowView: View {
                         .fontWeight(.semibold)
                     Text("Số tháng: \(numberOfMonth)")
                         .foregroundStyle(.gray)
-                    Text("Phí ship: \(deliveriteFree.formatted(.currency(code: "VND")))")
+                    Text("Tiền cọc: \(deposit.formatted(.currency(code: "VND")))")
                         .foregroundStyle(.gray)
+                    Text("Phí vận chuyển: \(deliveriteFree.formatted(.currency(code: "VND")))")
+                        .foregroundStyle(.gray)
+                    Text("Thành tiền: \(totalPrice.formatted(.currency(code: "VND")))")
+                        .foregroundStyle(.black)
                 }
                 .font(.subheadline)
                 
                 Spacer()
-                
-                Text("Thành tiền:")
-                    .font(.subheadline)
-                    .foregroundStyle(.black)
-
-                
-                // Total Price
-                Text(totalPrice, format: .currency(code: "VND"))
-                    .font(.subheadline)
-                    .foregroundStyle(.red)
-                    .fontWeight(.semibold)
             }
             .padding(.horizontal, 10)
             

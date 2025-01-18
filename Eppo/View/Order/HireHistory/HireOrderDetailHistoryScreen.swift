@@ -228,7 +228,46 @@ struct HireOrderDetailHistoryScreen: View {
                                     .font(.headline)
                                     
                                     HStack {
-                                        Text("Tiết kiệm")
+                                        Text("Phí cọc cây")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                        
+                                        Text(viewModel.deposit, format: .currency(code: "VND"))
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.black)
+                                        
+                                    }
+                                    .font(.headline)
+                                    
+                                    HStack {
+                                        Text("Số tháng thuê")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                        
+                                        Text(viewModel.preReturnResponseData?.numberMonth ?? 0, format: .number.grouping(.never))
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.black)
+                                        
+                                    }
+                                    .font(.headline)
+                                    
+                                    HStack {
+                                        Text("Số ngày đã thuê")
+                                            .fontWeight(.regular)
+                                            .foregroundStyle(.gray)
+                                        Spacer()
+                                        
+                                        Text(viewModel.preReturnResponseData?.numberDateRental ?? 0, format: .number.grouping(.never))
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.black)
+                                        
+                                    }
+                                    .font(.headline)
+                                    
+                                    HStack {
+                                        Text("Phí thu hồi tiết kiệm")
                                             .fontWeight(.regular)
                                             .foregroundStyle(.gray)
                                         Spacer()

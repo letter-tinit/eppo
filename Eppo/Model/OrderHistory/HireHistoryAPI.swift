@@ -14,6 +14,7 @@ struct HireHistoryOrderDetail: Codable {
     let rentalEndDate: Date
     let numberMonth: Int
     let plant: Plant
+    let deposit: Double
 }
 
 // Định nghĩa struct cho Order

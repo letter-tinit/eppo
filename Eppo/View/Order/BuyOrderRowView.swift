@@ -48,7 +48,7 @@ struct BuyOrderRowView: View {
                 // Quantity
                 VStack(alignment: .leading) {
                     Text("Số sản phẩm: \(orderDetails.count)")
-                    Text("Phí ship: \(deliveriteFree.formatted(.currency(code: "VND")))")
+                    Text("Phí vận chuyển: \(deliveriteFree.formatted(.currency(code: "VND")))")
                 }
                 .font(.subheadline)
             .foregroundStyle(.gray)

@@ -37,6 +37,7 @@ enum ActiveAlert {
     var contractUrl: String?
     var isSigned: Bool = false
     var isLinkActive = false
+    var isDismiss: Bool = false
     
     // MARK: - BuyItemDetailScreen
     var selectedPaymentMethod: PaymentMethod = .cashOnDelivery
